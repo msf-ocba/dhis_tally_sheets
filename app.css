@@ -1,0 +1,67 @@
+body {
+	margin: 3%;
+	height: 70%;
+}
+
+.entryfield, .sectionTable th  {
+	text-align: center;
+	width: 100%;
+}
+
+input#dsTitle {
+	width: 100%;
+}
+
+table.formSection, table.sectionTable {
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: separate;
+    border-spacing: 0px 1px;
+}
+
+.sectionTable th, .sectionTable td {
+    font-size: 14;
+    padding: 0.3em !important;
+	vertical-align: middle !important;
+    border: 1px solid #000;
+}
+
+.no-border {
+	border: 0px solid #000 !important;
+}
+
+span {
+    line-height: 1em;
+    vertical-align: middle;
+}
+
+.hidden {
+	display: none;
+}
+
+table.sectionTable > tbody > tr > th:not(.no-border) {
+	background-color: #C8DCEB;
+	-webkit-print-color-adjust: exact;
+	background-image:url("img/header.png") !important;
+    background-repeat:repeat;
+    line-height: 1.5em;
+}
+
+@media print {
+
+	table.sectionTable > tbody > tr > th:not(.no-border) {
+		background-color: #C8DCEB;
+		-webkit-print-color-adjust: exact;
+    	background-image:url("img/header.png") !important;
+    	background-repeat:repeat;
+	    line-height: 1.5em;
+	}
+	
+	.msfocba-hide-on-print {
+		display: none !important;
+	}
+	
+	input#dsTitle {
+		border: 0px;
+	}
+}

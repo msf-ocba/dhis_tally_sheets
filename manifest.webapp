@@ -1,0 +1,22 @@
+{
+	"version":"1.0",
+	"name":"Print Tally Sheets",
+	"description":"Print Tally Sheets",
+	"launch_path":"index.html",
+	"icons":{"16":null,
+	"48":"img/Logo_48.png",
+	"128":null
+	},
+	"developer":{
+	"url":"",
+	"name":"Victor Garcia - MSFOCBA",
+	"email":"victor.garcia@barcelona.msf.org"
+	},
+	"installs_allowed_from":null,
+	"default_locale":"en",
+	"activities": {
+		"dhis": {
+	  		"href": "*"
+		}
+	}
+}
