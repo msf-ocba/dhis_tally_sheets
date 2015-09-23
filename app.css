@@ -48,6 +48,10 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
 }
 
 @media print {
+	
+	body {
+		margin: 0%;
+	}
 
 	table.sectionTable > tbody > tr > th:not(.no-border) {
 		background-color: #C8DCEB;
@@ -56,11 +60,7 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
     	background-repeat:repeat;
 	    line-height: 1.5em;
 	}
-	
-	.msfocba-hide-on-print {
-		display: none !important;
-	}
-	
+		
 	input#dsTitle {
 		border: 0px;
 	}

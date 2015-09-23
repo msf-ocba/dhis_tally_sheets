@@ -17,16 +17,10 @@
 		<script src="app.js" type="text/javascript"> </script>
 		<link href="app.css" rel="stylesheet">
 		
-		<style type="text/css">
-			#editor {
-				width: 100%;
-				
-			}
-		</style>
 	</head>
 	<body ng-controller="TallySheetsController">
 		
-		<select id="dataSetSelector" class="selectpicker msfocba-hide-on-print" data-live-search="true">
+		<select id="dataSetSelector" class="selectpicker hidden-print" data-live-search="true">
 			<option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
 			<option ng-repeat="dataSet in dataSetList | orderBy : dataSet.displayName" 
 				value="{{ dataSet.id }}" on-finish-render="ngRepeatFinished">
@@ -34,9 +28,9 @@
 			</option>
 		</select>
 		
-		<button onclick="window.print()" class="btn btn-primary msfocba-hide-on-print">{{ 'PRINT' | translate }}</button>
+		<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
 		
-		<button ng-click="goHome()" class="btn btn-danger msfocba-hide-on-print">
+		<button ng-click="goHome()" class="btn btn-danger hidden-print">
 			<span class="glyphicon glyphicon-home"></span> 
 				{{ 'HOME' | translate}}
 		</button>
