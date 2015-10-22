@@ -39,16 +39,16 @@ tallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 	$scope.formatDatasets = function(){
 		// Remove section filters
 		$(".sectionFilter").parent().replaceWith("<th class='no-border'></th>");
+
+		// Remove categoryoptions headers
+		$(".hidden").remove();
 		
 		// Replace empty cells in header
 		$(".sectionTable tbody th").parent().find("td").replaceWith("<th class='no-border'></th>");
 				
 		// Set entryfields as readonly
 		$(".entryfield").prop("readonly", true);
-		
-		// Set some layout to tables
-		//$(".sectionTable").addClass("table table-condensed table-bordered table-striped");
-		
+
 		// Modify titles of sections to place them as section header
 		var sectionLinks = $("div[id^='tabs-'] > ul > li > a");
 		sectionLinks.each( function(){
@@ -58,16 +58,37 @@ tallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 			$("#" + sectionId).prepend("<h3>" + $(this).html() + "</h3>");
 			$(this).parent().remove();
 		});
-		
+
+		// Make rows resizable
 		$(".sectionTable tr").each( function(){
 			$(this).find("td").last().resizable();
 		});
 		$(".sectionTable input").remove();
+
+		// Add border to section table (for printing in MS Excel)
+		$(".sectionTable").prop('border','1');
 		
 		// Put section in a panel
 		$(".formSection").addClass("panel panel-default");
 		
 	};
+
+	$scope.exportToTable = function(table, name) {
+		var uri = 'data:application/vnd.ms-excel;base64,'
+			, template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+			, base64 = function (s) {
+				return window.btoa(unescape(encodeURIComponent(s)))
+			}
+			, format = function (s, c) {
+				return s.replace(/{(\w+)}/g, function (m, p) {
+					return c[p];
+				})
+			}
+
+		if (!table.nodeType) table = document.getElementById(table)
+		var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+		window.location.href = uri + base64(format(template, ctx))
+	}
 	
 	$scope.goHome = function(){
 	  	window.location.replace(dhisUrl);

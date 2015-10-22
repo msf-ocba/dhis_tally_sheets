@@ -1,6 +1,7 @@
 {
 	"IN_PROGRESS": "CARGANDO",
 	"PRINT": "Imprimir",
+  	"EXPORT_EXCEL": "Exportar a MS Excel",
 	"HOME": "Inicio",
 	"SELECT_DATASET": "Selecciona un set de datos"
 }

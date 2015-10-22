@@ -29,7 +29,8 @@
 		</select>
 		
 		<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
-		
+		<button ng-click="exportToTable('datasetform', 'W3C Example Table')" class="btn btn-primary hidden-print">
+			{{ 'EXPORT_EXCEL' | translate}}</button>
 		<button ng-click="goHome()" class="btn btn-danger hidden-print">
 			<span class="glyphicon glyphicon-home"></span> 
 				{{ 'HOME' | translate}}
