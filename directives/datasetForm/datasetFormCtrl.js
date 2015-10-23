@@ -3,30 +3,39 @@ TallySheets.directive('datasetForm', function(){
         restrict: 'E',
         templateUrl: 'directives/datasetForm/datasetFormView.html',
         scope: {
-            datasetId: '=',
-            datasetName: '='
+            dataset: '='
         }
     };
 });
 
 TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function($scope, DataSetEntryForm){
 
-    $scope.formId = "datasetForm" + $scope.datasetId;
+    $scope.$watch(function(){ return $scope.dataset.id}, function(newVal, oldVal, scope){
+        updateForm(scope.dataset.id, scope.dataset.name);
+    });
 
-    if($scope.datasetId != '0') {
-        $scope.progressbarDisplayed = true;
-        DataSetEntryForm.get({dataSetId: $scope.datasetId}).$promise.then(function(dataSetHtml){
-            var codeHtml = dataSetHtml.codeHtml;
+    var updateForm = function(datasetId, datasetName){
 
-            // Replace unique id='tabs'
-            codeHtml = codeHtml.replace(/id="tabs"/g, 'id="tabs-' + $scope.datasetId + '"' );
+        //Delete previous dataset, if any
+        $("#" + $scope.formId).children().remove();
 
-            $("#" + $scope.formId).children().remove();
-            $("#" + $scope.formId).append("<h2><input class='dsTitle' value='" + $scope.datasetName + "'></h2>");
-            $("#" + $scope.formId).append(codeHtml);
-            formatDataset();
-            $scope.progressbarDisplayed = false;
-        });
+        // Assign a new id (for new dataset)
+        $scope.formId = "datasetForm" + datasetId;
+
+        if(datasetId != '0') {
+            $scope.progressbarDisplayed = true;
+            DataSetEntryForm.get({dataSetId: datasetId}).$promise.then(function(dataSetHtml){
+                var codeHtml = dataSetHtml.codeHtml;
+
+                // Replace unique id='tabs'
+                codeHtml = codeHtml.replace(/id="tabs"/g, 'id="tabs-' + datasetId + '"' );
+
+                $("#" + $scope.formId).append("<h2><input class='dsTitle' value='" + datasetName + "'></h2>");
+                $("#" + $scope.formId).append(codeHtml);
+                formatDataset();
+                $scope.progressbarDisplayed = false;
+            });
+        }
     }
 
     var formatDataset = function(){

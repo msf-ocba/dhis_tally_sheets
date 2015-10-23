@@ -8,6 +8,8 @@ var dhisUrl = $.parseJSON( $.ajax({
 	async: false
 }).responseText).activities.dhis.href.replace( '/dhis-web-maintenance-appmanager', '' );
 
+//dhisUrl = "http://localhost:8989/dhis";
+
 var ApiUrl = dhisUrl + '/api';
 
 TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", function($scope, DataSetsUID, DataSetEntryForm){
@@ -44,6 +46,9 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 	$scope.goHome = function(){
 	  	window.location.replace(dhisUrl);
 	};
+
+	// Initialize the app with one dataset selector
+	$scope.addDatasetSelector();
 
 }]);
 

@@ -24,35 +24,39 @@
 	</head>
 	<body ng-controller="TallySheetsController">
 
-		<div class="row">
-			<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
-			<button ng-click="exportToTable('tallysheetForm', 'W3C Example Table')" class="btn btn-primary hidden-print">
-				{{ 'EXPORT_EXCEL' | translate}}</button>
-			<button ng-click="goHome()" class="btn btn-danger hidden-print">
-				<span class="glyphicon glyphicon-home"></span>
-				{{ 'HOME' | translate}}
-			</button>
+		<div id="mainMenu" class="panel panel-default hidden-print">
+			<div class="panel-body">
+				<span class="row">
+					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
+					<button ng-click="exportToTable('tallysheetForm', 'W3C Example Table')" class="btn btn-success hidden-print">
+						{{ 'EXPORT_EXCEL' | translate}}</button>
+					<button id="homeBtn" ng-click="goHome()" class="btn btn-danger hidden-print">
+						<span class="glyphicon glyphicon-home"></span>
+						{{ 'HOME' | translate}}
+					</button>
+				</span>
+
+				<div class="row"><br></div>
+
+				<span class="row">
+					<span ng-repeat="(index,selector) in dsSelectorList">
+						<dataset-selector selector-id="selector.id" bind-to-dataset="selector.dataset"></dataset-selector>
+						<button ng-click="deleteDatesetSelector(index)" class="btn btn-default hidden-print">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</span>
+					<button ng-click="addDatasetSelector()" class="btn btn-primary btn-xs hidden-print">
+						{{ 'ADD_FORM' | translate }}
+					</button>
+				</span>
+			</div>
 		</div>
 
-		<br>
-
-		<div class="row">
-			<span ng-repeat="(index,selector) in dsSelectorList">
-				<dataset-selector selector-id="selector.id" bind-to-dataset="selector.dataset"></dataset-selector>
-				<button ng-click="deleteDatesetSelector(index)" class="btn btn-danger hidden-print">X</button>
-			</span>
-			<button ng-click="addDatasetSelector()" class="btn btn-primary hidden-print">
-				{{ 'ADD_FORM' | translate }}
-			</button>
-		</div>
-
-		<br>
 		<br>
 
 		<span id="tallysheetForm">
 			<span ng-repeat="(index,selector) in dsSelectorList">
-				<dataset-form ng-if="!!selector.dataset.id" dataset-id="selector.dataset.id"
-							  dataset-name="selector.dataset.name"></dataset-form>
+				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset"></dataset-form>
 			</span>
 		</span>
 	</body>

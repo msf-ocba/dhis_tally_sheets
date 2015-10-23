@@ -47,6 +47,14 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
     line-height: 1.5em;
 }
 
+#homeBtn {
+	float: right;
+}
+
+#mainMenu {
+	background-color: #FFF0F0;
+}
+
 @media print {
 	
 	body {
