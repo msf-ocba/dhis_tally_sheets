@@ -3,5 +3,6 @@
 	"PRINT": "Imprimir",
   	"EXPORT_EXCEL": "Exportar a MS Excel",
 	"HOME": "Inicio",
-	"SELECT_DATASET": "Selecciona un set de datos"
+	"SELECT_DATASET": "Selecciona un set de datos",
+  	"ADD_FORM": "Añadir formulario"
 }

@@ -8,7 +8,7 @@ body {
 	width: 100%;
 }
 
-input#dsTitle {
+input.dsTitle {
 	width: 100%;
 }
 
@@ -61,7 +61,7 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
 	    line-height: 1.5em;
 	}
 		
-	input#dsTitle {
+	input.dsTitle {
 		border: 0px;
 	}
 }

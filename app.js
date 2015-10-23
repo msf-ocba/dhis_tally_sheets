@@ -1,5 +1,5 @@
 
-var tallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate']);
+var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate']);
 
 var dhisUrl = $.parseJSON( $.ajax({
 	type: "GET",
@@ -10,68 +10,19 @@ var dhisUrl = $.parseJSON( $.ajax({
 
 var ApiUrl = dhisUrl + '/api';
 
-tallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", function($scope, DataSetsUID, DataSetEntryForm){
-	
-	DataSetsUID.get().$promise.then(function(result){
-		$scope.dataSetList = result.dataSets;
-	});
-	
-	var showDataSet = function(dsId, dsName){
-		
-		if(dsId != '0') {
-			$scope.progressbarDisplayed = true;
-			DataSetEntryForm.get({dataSetId: dsId}).$promise.then(function(dataSetHtml){
-				var codeHtml = dataSetHtml.codeHtml;
-				
-				// Replace unique id='tabs'
-				codeHtml = codeHtml.replace(/id="tabs"/g, 'id="tabs-' + dsId + '"' );
-				
-				$("#datasetform").children().remove();
-				$("#datasetform").append("<h2><input id='dsTitle' value='" + dsName + "'></h2>");
-				$("#datasetform").append(codeHtml);			
-				$scope.formatDatasets();
-				$scope.progressbarDisplayed = false;
-			});
-		}
-		
+TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", function($scope, DataSetsUID, DataSetEntryForm){
+
+	var dsSelectorLastId = -1;
+	$scope.dsSelectorList = [];
+
+	$scope.addDatasetSelector = function(){
+		dsSelectorLastId++;
+		$scope.dsSelectorList.push({id: dsSelectorLastId, dataset:{}});
 	}
-	
-	$scope.formatDatasets = function(){
-		// Remove section filters
-		$(".sectionFilter").parent().replaceWith("<th class='no-border'></th>");
 
-		// Remove categoryoptions headers
-		$(".hidden").remove();
-		
-		// Replace empty cells in header
-		$(".sectionTable tbody th").parent().find("td").replaceWith("<th class='no-border'></th>");
-				
-		// Set entryfields as readonly
-		$(".entryfield").prop("readonly", true);
-
-		// Modify titles of sections to place them as section header
-		var sectionLinks = $("div[id^='tabs-'] > ul > li > a");
-		sectionLinks.each( function(){
-			var sectionId = $(this).attr("href");
-			if (sectionId.startsWith("#")) {sectionId = sectionId.substring(1);}
-			
-			$("#" + sectionId).prepend("<h3>" + $(this).html() + "</h3>");
-			$(this).parent().remove();
-		});
-
-		// Make rows resizable
-		$(".sectionTable tr").each( function(){
-			$(this).find("td").last().resizable();
-		});
-		$(".sectionTable input").remove();
-
-		// Add border to section table (for printing in MS Excel)
-		$(".sectionTable").prop('border','1');
-		
-		// Put section in a panel
-		$(".formSection").addClass("panel panel-default");
-		
-	};
+	$scope.deleteDatesetSelector = function(selectPosition){
+		$scope.dsSelectorList.splice(selectPosition, 1);
+	}
 
 	$scope.exportToTable = function(table, name) {
 		var uri = 'data:application/vnd.ms-excel;base64,'
@@ -93,44 +44,16 @@ tallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 	$scope.goHome = function(){
 	  	window.location.replace(dhisUrl);
 	};
-	
-	$scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-		// Refresh bootstrap-select
-		$('.selectpicker').selectpicker('refresh');
-		$('.selectpicker').selectpicker('render');
-	});
-	
-	var onSampleResized = function (e) {
-        var columns = $(e.currentTarget).find("td");
-        var rows = $(e.currentTarget).find("tr");
-        var Cloumnsize;
-        var rowsize;
-        columns.each(function () {
-            Cloumnsize += $(this).attr('id') + "" + $(this).width() + "" + $(this).height() + ";";
-        });
-        rows.each(function () {
-            rowsize += $(this).attr('id') + "" + $(this).width() + "" + $(this).height() + ";";
-        });
-        document.getElementById("hf_columndata").value = Cloumnsize;
-        document.getElementById("hf_rowdata").value = rowsize;
-    };
-           
-	$("#dataSetSelector").change(function(){
-		var dsId = $("#dataSetSelector option:selected").val();
-		var dsName = $("#dataSetSelector option:selected").html().trim();
-		
-		showDataSet(dsId, dsName);
-	});
-	
+
 }]);
 
-tallySheets.factory("DataSetsUID",['$resource', function ($resource) {
+TallySheets.factory("DataSetsUID",['$resource', function ($resource) {
 	return $resource( ApiUrl + "/dataSets.json?fields=id,displayName&paging=false&translate=true", 
 		{},
 		{ get: { method: "GET"} });
 }]);
 
-tallySheets.factory("DataSetEntryForm",['$resource', function ($resource) {
+TallySheets.factory("DataSetEntryForm",['$resource', function ($resource) {
 	return $resource( dhisUrl + "/dhis-web-dataentry/loadForm.action", 
 		{ dataSetId:'@dataSetId' },
 		{ get: { method: "GET", transformResponse: function (response) {
@@ -139,7 +62,7 @@ tallySheets.factory("DataSetEntryForm",['$resource', function ($resource) {
 	});
 }]);
 
-tallySheets.directive('onFinishRender', function ($timeout) {
+TallySheets.directive('onFinishRender', function ($timeout) {
 return {
     restrict: 'A',
     link: function (scope, element, attr) {
@@ -151,14 +74,14 @@ return {
     }
 }});
 
-tallySheets.directive('d2Progressbar', function(){
+TallySheets.directive('d2Progressbar', function(){
 	return{
 		restrict: 'E',
 		templateUrl: 'directives/progressBar/progressBar.html'
 	};
 }); 
 
-tallySheets.config(function ($translateProvider) {
+TallySheets.config(function ($translateProvider) {
 	  
 	  $translateProvider.useStaticFilesLoader({
         prefix: 'languages/',

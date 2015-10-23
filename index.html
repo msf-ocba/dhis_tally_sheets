@@ -16,31 +16,45 @@
 		
 		<script src="app.js" type="text/javascript"> </script>
 		<link href="app.css" rel="stylesheet">
+
+		<!-- Load directives and modules -->
+		<script src="directives/datasetSelector/datasetSelectorCtrl.js" type="text/javascript"></script>
+		<script src="directives/datasetForm/datasetFormCtrl.js" type="text/javascript"></script>
 		
 	</head>
 	<body ng-controller="TallySheetsController">
-		
-		<select id="dataSetSelector" class="selectpicker hidden-print" data-live-search="true">
-			<option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
-			<option ng-repeat="dataSet in dataSetList | orderBy : dataSet.displayName" 
-				value="{{ dataSet.id }}" on-finish-render="ngRepeatFinished">
-					{{ dataSet.displayName }}
-			</option>
-		</select>
-		
-		<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
-		<button ng-click="exportToTable('datasetform', 'W3C Example Table')" class="btn btn-primary hidden-print">
-			{{ 'EXPORT_EXCEL' | translate}}</button>
-		<button ng-click="goHome()" class="btn btn-danger hidden-print">
-			<span class="glyphicon glyphicon-home"></span> 
+
+		<div class="row">
+			<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
+			<button ng-click="exportToTable('tallysheetForm', 'W3C Example Table')" class="btn btn-primary hidden-print">
+				{{ 'EXPORT_EXCEL' | translate}}</button>
+			<button ng-click="goHome()" class="btn btn-danger hidden-print">
+				<span class="glyphicon glyphicon-home"></span>
 				{{ 'HOME' | translate}}
-		</button>
-		
+			</button>
+		</div>
+
+		<br>
+
+		<div class="row">
+			<span ng-repeat="(index,selector) in dsSelectorList">
+				<dataset-selector selector-id="selector.id" bind-to-dataset="selector.dataset"></dataset-selector>
+				<button ng-click="deleteDatesetSelector(index)" class="btn btn-danger hidden-print">X</button>
+			</span>
+			<button ng-click="addDatasetSelector()" class="btn btn-primary hidden-print">
+				{{ 'ADD_FORM' | translate }}
+			</button>
+		</div>
+
 		<br>
 		<br>
-		
-		<d2-progressbar></d2-progressbar>
-		<span id="datasetform"></span>
+
+		<span id="tallysheetForm">
+			<span ng-repeat="(index,selector) in dsSelectorList">
+				<dataset-form ng-if="!!selector.dataset.id" dataset-id="selector.dataset.id"
+							  dataset-name="selector.dataset.name"></dataset-form>
+			</span>
+		</span>
 	</body>
 </html>
 	
