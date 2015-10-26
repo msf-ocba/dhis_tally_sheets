@@ -28,7 +28,7 @@
 			<div class="panel-body">
 				<span class="row">
 					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
-					<button ng-click="exportToTable('tallysheetForm', 'W3C Example Table')" class="btn btn-success hidden-print">
+					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">
 						{{ 'EXPORT_EXCEL' | translate}}</button>
 					<button id="homeBtn" ng-click="goHome()" class="btn btn-danger hidden-print">
 						<span class="glyphicon glyphicon-home"></span>
@@ -56,7 +56,8 @@
 
 		<span id="tallysheetForm">
 			<span ng-repeat="(index,selector) in dsSelectorList">
-				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset"></dataset-form>
+				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset"
+						selector-id="{{selector.id}}"></dataset-form>
 			</span>
 		</span>
 	</body>

@@ -26,9 +26,13 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 		$scope.dsSelectorList.splice(selectPosition, 1);
 	}
 
-	$scope.exportToTable = function(table, name) {
+	$scope.exportToTable = function(tableId) {
 		var uri = 'data:application/vnd.ms-excel;base64,'
-			, template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+			, template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+				'xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head>' +
+				'<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}' +
+				'</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>' +
+				'</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
 			, base64 = function (s) {
 				return window.btoa(unescape(encodeURIComponent(s)))
 			}
@@ -38,9 +42,33 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 				})
 			}
 
-		if (!table.nodeType) table = document.getElementById(table)
-		var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-		window.location.href = uri + base64(format(template, ctx))
+		var table = $("#" + tableId).clone();
+
+		// Remove non-printable section from the table
+		table.find(".hidden-print").remove();
+
+		// Replace input fields with their values (for correct excel formatting)
+		table.find("input").each(function(){
+			var value = $(this).val();
+			$(this).replaceWith(value);
+		});
+
+		// Add border to section table (for printing in MS Excel)
+		table.find(".sectionTable").prop('border','1');
+
+		// Take the name of the first dataset as filename
+		var name = table.find("h2").first().html() + '.xls';
+
+		var ctx = {worksheet: 'MSF-OCBA HMIS' || 'Worksheet', table: table.html()}
+
+		// Create a fake link to download the file
+		var link = angular.element('<a/>');
+		link.attr({
+			href: uri + base64(format(template, ctx)),
+			target: '_blank',
+			download: name
+		})[0].click();
+
 	}
 	
 	$scope.goHome = function(){
