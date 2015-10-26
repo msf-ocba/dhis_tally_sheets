@@ -56,7 +56,8 @@
 
 		<span id="tallysheetForm">
 			<span ng-repeat="(index,selector) in dsSelectorList">
-				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset"></dataset-form>
+				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset"
+						selector-id="{{selector.id}}"></dataset-form>
 			</span>
 		</span>
 	</body>

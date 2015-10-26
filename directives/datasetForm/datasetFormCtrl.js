@@ -3,7 +3,8 @@ TallySheets.directive('datasetForm', function(){
         restrict: 'E',
         templateUrl: 'directives/datasetForm/datasetFormView.html',
         scope: {
-            dataset: '='
+            dataset: '=',
+            selectorId: '@'
         }
     };
 });
@@ -20,7 +21,7 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         $("#" + $scope.formId).children().remove();
 
         // Assign a new id (for new dataset)
-        $scope.formId = "datasetForm" + datasetId;
+        $scope.formId = "datasetForm" + $scope.selectorId;
 
         if(datasetId != '0') {
             $scope.progressbarDisplayed = true;
@@ -39,27 +40,29 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
     }
 
     var formatDataset = function(){
+
+        var datasetForm = $("#" + $scope.formId);
         // Remove section filters
-        $(".sectionFilter").parent().replaceWith("<th class='no-border'></th>");
+        datasetForm.find(".sectionFilter").parent().replaceWith("<th class='no-border'></th>");
 
         // Remove categoryoptions headers
-        $(".hidden").remove();
+        datasetForm.find(".hidden").remove();
 
         // Replace empty cells in header
-        $(".sectionTable tbody th").parent().find("td").replaceWith("<th class='no-border'></th>");
+        datasetForm.find(".sectionTable tbody th").parent().find("td").replaceWith("<th class='no-border'></th>");
 
         // Set entryfields as readonly
-        $(".entryfield").prop("readonly", true);
+        datasetForm.find(".entryfield").prop("readonly", true);
 
         // Modify titles of sections to place them as section header
-        var sectionLinks = $("div[id^='tabs-'] > ul > li > a");
+        var sectionLinks = datasetForm.find("div[id^='tabs-'] > ul > li > a");
         sectionLinks.each( function(){
             var sectionId = $(this).attr("href");
             if (sectionId.startsWith("#")) {sectionId = sectionId.substring(1);}
 
             // Add a Section Header at the beginning of the table
             // Also, if the dataset has sections, add a 'delete' button to allow removing the section
-            $("#" + sectionId).prepend("<h3>" +
+            datasetForm.find("#" + sectionId).prepend("<h3>" +
                 "<button class='remove-section btn btn-default btn-sm hidden-print' sectionId=" + sectionId + ">" +
                 "<span class='glyphicon glyphicon-remove'></span></button>  " +
                 $(this).html() +
@@ -68,22 +71,22 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         });
 
         // Make rows resizable
-        $(".sectionTable tr").each( function(){
+        datasetForm.find(".sectionTable tr").each( function(){
             $(this).find("td").last().resizable();
         });
-        $(".sectionTable input").remove();
+        datasetForm.find(".sectionTable input").remove();
 
         // Put section in a panel
-        $(".formSection").addClass("panel panel-default");
+        datasetForm.find(".formSection").addClass("panel panel-default");
 
-    };
-
-    $(document).on('click', '.remove-section', function(event){
-        var sectionId = $(this).attr('sectionId');
-        $("#" + sectionId).hide(400, function(){
-            $("#" + sectionId).remove();
+        // Add listeners
+        datasetForm.on('click', '.remove-section', function(event){
+            var sectionId = $(this).attr('sectionId');
+            datasetForm.find("#" + sectionId).hide(400, function(){
+                datasetForm.find("#" + sectionId).remove();
+            });
         });
-    });
+    };
 
     var onSampleResized = function (e) {
         var columns = $(e.currentTarget).find("td");
