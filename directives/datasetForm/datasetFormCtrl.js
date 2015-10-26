@@ -57,7 +57,13 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
             var sectionId = $(this).attr("href");
             if (sectionId.startsWith("#")) {sectionId = sectionId.substring(1);}
 
-            $("#" + sectionId).prepend("<h3>" + $(this).html() + "</h3>");
+            // Add a Section Header at the beginning of the table
+            // Also, if the dataset has sections, add a 'delete' button to allow removing the section
+            $("#" + sectionId).prepend("<h3>" +
+                "<button class='remove-section btn btn-default btn-sm hidden-print' sectionId=" + sectionId + ">" +
+                "<span class='glyphicon glyphicon-remove'></span></button>  " +
+                $(this).html() +
+                "</h3>");
             $(this).parent().remove();
         });
 
@@ -67,13 +73,17 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         });
         $(".sectionTable input").remove();
 
-        // Add border to section table (for printing in MS Excel)
-        $(".sectionTable").prop('border','1');
-
         // Put section in a panel
         $(".formSection").addClass("panel panel-default");
 
     };
+
+    $(document).on('click', '.remove-section', function(event){
+        var sectionId = $(this).attr('sectionId');
+        $("#" + sectionId).hide(400, function(){
+            $("#" + sectionId).remove();
+        });
+    });
 
     var onSampleResized = function (e) {
         var columns = $(e.currentTarget).find("td");
