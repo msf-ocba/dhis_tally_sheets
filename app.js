@@ -125,11 +125,12 @@ TallySheets.config(function ($translateProvider) {
     });
 	  
 	  $translateProvider.registerAvailableLanguageKeys(
-			    ['es', 'fr', 'en'],
+			    ['es', 'fr', 'en', 'pt'],
 			    {
 			        'en*': 'en',
 			        'es*': 'es',
 					'fr*': 'fr',
+					'pt*': 'pt',
 			        '*': 'en' // must be last!
 			    }
 			);
