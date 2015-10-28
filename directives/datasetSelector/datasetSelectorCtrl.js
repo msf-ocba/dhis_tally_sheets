@@ -11,8 +11,6 @@ TallySheets.directive('datasetSelector', function(){
 
 TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', function($scope, $rootScope, DataSetsUID){
 
-    console.log($scope.selectorId);
-
     $scope.id = "dsSelector" + $scope.selectorId;
 
     DataSetsUID.get().$promise.then(function(result){
