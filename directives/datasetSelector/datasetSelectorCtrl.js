@@ -11,9 +11,9 @@ TallySheets.directive('datasetSelector', function(){
 
 TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', function($scope, $rootScope, DataSetsUID){
 
-    console.log($scope.selectorId);
-
     $scope.id = "dsSelector" + $scope.selectorId;
+
+    $scope.selectorLoaded = false;
 
     DataSetsUID.get().$promise.then(function(result){
         $scope.dataSetList = result.dataSets;
@@ -23,6 +23,7 @@ TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSets
         // Refresh bootstrap-select
         $('.selectpicker').selectpicker('refresh');
         $('.selectpicker').selectpicker('render');
+        $scope.selectorLoaded = true;
     });
 
     $(document).on('change', '#' + $scope.id ,function(){

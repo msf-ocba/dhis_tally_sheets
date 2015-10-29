@@ -3,6 +3,6 @@
 	"PRINT": "Print",
   	"EXPORT_EXCEL": "Export to MS Excel",
 	"HOME": "Home",
-	"SELECT_DATASET": "Select a dataset".
+	"SELECT_DATASET": "Select a dataset",
   	"ADD_FORM": "Add form"
 }
