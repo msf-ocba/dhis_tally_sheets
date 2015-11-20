@@ -1,15 +1,7 @@
 
 var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate']);
 
-var dhisUrl = $.parseJSON( $.ajax({
-	type: "GET",
-	dataType: "json",
-	url: 'manifest.webapp',
-	async: false
-}).responseText).activities.dhis.href.replace( '/dhis-web-maintenance-appmanager', '' );
-
-//dhisUrl = "http://localhost:8989/dhis";
-
+var dhisUrl = window.location.href.split('api/apps/')[0] + '/';;
 var ApiUrl = dhisUrl + '/api';
 
 TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", function($scope, DataSetsUID, DataSetEntryForm){
