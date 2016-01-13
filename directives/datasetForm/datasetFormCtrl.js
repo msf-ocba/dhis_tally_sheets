@@ -74,7 +74,15 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         datasetForm.find(".sectionTable tr").each( function(){
             $(this).find("td").last().resizable();
         });
+
+        // Add class "greyfield" to cells (td object)
+        datasetForm.find(".sectionTable input:disabled").closest("td").addClass("greyfield");
+
+        // Delete entryfields
         datasetForm.find(".sectionTable input").remove();
+
+        // Write an "X" in greyfields to represent that they are blocked
+        datasetForm.find(".sectionTable td.greyfield").html("X");
 
         // Put section in a panel
         datasetForm.find(".formSection").addClass("panel panel-default");

@@ -3,7 +3,7 @@ body {
 	height: 70%;
 }
 
-.entryfield, .sectionTable th  {
+.greyfield, .sectionTable th  {
 	text-align: center;
 	width: 100%;
 }
