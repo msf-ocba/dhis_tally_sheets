@@ -4,5 +4,8 @@
   "EXPORT_EXCEL": "Exportar para Excel",
   "HOME": "Principal",
   "SELECT_DATASET": "Selecione um conjunto de dados",
-  "ADD_FORM": "Adicionar forma"
+  "ADD_FORM": "Adicionar forma",
+  "HEADERS": "Adicionar cabeçalho",
+  "FACILITY": "Centro sanitário",
+	"PERIOD": "Período"
 }

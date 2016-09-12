@@ -9,6 +9,9 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 	var dsSelectorLastId = -1;
 	$scope.dsSelectorList = [];
 
+	// Set "headers" to true by default
+	$scope.headers = true;
+
 	$scope.addDatasetSelector = function(){
 		dsSelectorLastId++;
 		$scope.dsSelectorList.push({id: dsSelectorLastId, dataset:{}});
@@ -38,6 +41,7 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 
 		// Remove non-printable section from the table
 		table.find(".hidden-print").remove();
+		table.find(".ng-hide").remove();
 
 		// Replace input fields with their values (for correct excel formatting)
 		table.find("input").each(function(){
@@ -65,7 +69,7 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 		$("#idlink")[0].remove();
 
 	}
-	
+
 	$scope.goHome = function(){
 	  	window.location.replace(dhisUrl);
 	};
@@ -76,13 +80,13 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 }]);
 
 TallySheets.factory("DataSetsUID",['$resource', function ($resource) {
-	return $resource( ApiUrl + "/dataSets.json?fields=id,displayName&paging=false&translate=true", 
+	return $resource( ApiUrl + "/dataSets.json?fields=id,displayName&paging=false&translate=true",
 		{},
 		{ get: { method: "GET"} });
 }]);
 
 TallySheets.factory("DataSetEntryForm",['$resource', function ($resource) {
-	return $resource( dhisUrl + "/dhis-web-dataentry/loadForm.action", 
+	return $resource( dhisUrl + "/dhis-web-dataentry/loadForm.action",
 		{ dataSetId:'@dataSetId' },
 		{ get: { method: "GET", transformResponse: function (response) {
 			return {codeHtml: response};}
@@ -107,15 +111,15 @@ TallySheets.directive('d2Progressbar', function(){
 		restrict: 'E',
 		templateUrl: 'directives/progressBar/progressBar.html'
 	};
-}); 
+});
 
 TallySheets.config(function ($translateProvider) {
-	  
+
 	  $translateProvider.useStaticFilesLoader({
         prefix: 'languages/',
         suffix: '.json'
     });
-	  
+
 	  $translateProvider.registerAvailableLanguageKeys(
 			    ['es', 'fr', 'en', 'pt'],
 			    {
@@ -126,7 +130,7 @@ TallySheets.config(function ($translateProvider) {
 			        '*': 'en' // must be last!
 			    }
 			);
-	  
+
 	  $translateProvider.fallbackLanguage(['en']);
 
 	  jQuery.ajax({ url: ApiUrl + '/userSettings/keyUiLocale/', contentType: 'text/plain', method: 'GET', dataType: 'text', async: false}).success(function (uiLocale) {
@@ -139,5 +143,5 @@ TallySheets.config(function ($translateProvider) {
     }).fail(function () {
   	  $translateProvider.determinePreferredLanguage();
 	  });
-	  
+
 });
