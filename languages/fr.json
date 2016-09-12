@@ -4,5 +4,8 @@
   	"EXPORT_EXCEL": "Exporter à MS Excel",
 	"HOME": "Accueil",
 	"SELECT_DATASET": "Sélectionnez un ensemble de données",
-  	"ADD_FORM": "Ajouter formulaire"
+  	"ADD_FORM": "Ajouter formulaire",
+	"HEADERS": "Ajouter en-tête",
+	"FACILITY": "Structure de santé",
+	"PERIOD": "Periode rapportée"
 }

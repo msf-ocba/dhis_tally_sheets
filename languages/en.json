@@ -4,5 +4,8 @@
   	"EXPORT_EXCEL": "Export to MS Excel",
 	"HOME": "Home",
 	"SELECT_DATASET": "Select a dataset",
-  	"ADD_FORM": "Add form"
+  	"ADD_FORM": "Add form",
+	"HEADERS": "Include headers",
+	"FACILITY": "Health facility",
+	"PERIOD": "Reporting period"
 }
