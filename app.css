@@ -16,13 +16,13 @@ table.formSection, table.sectionTable {
 	width: 100%;
 	table-layout: fixed;
 	border-collapse: separate;
-    border-spacing: 0px 1px;
+  border-spacing: 0px 1px;
 }
 
 .sectionTable th, .sectionTable td {
     font-size: 14;
     padding: 0.3em !important;
-	vertical-align: middle !important;
+		vertical-align: middle !important;
     border: 1px solid #000;
 }
 
@@ -31,8 +31,13 @@ table.formSection, table.sectionTable {
 }
 
 span {
-    line-height: 1em;
     vertical-align: middle;
+		line-height: 100%;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
 }
 
 .hidden {
@@ -87,7 +92,7 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
 }
 
 @media print {
-	
+
 	body {
 		margin: 0%;
 	}
@@ -99,7 +104,7 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
     	background-repeat:repeat;
 	    line-height: 1.5em;
 	}
-		
+
 	input.dsTitle {
 		border: 0px;
 	}

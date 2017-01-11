@@ -5,22 +5,22 @@
 		<script src="include/angular-1.4.0/angular-resource.min.js" type="text/javascript"> </script>
 		<script src="include/angular-1.4.0/angular-translate.min.js" type="text/javascript"> </script>
 		<script src="include/angular-1.4.0/angular-translate-loader-static-files.min.js" type="text/javascript"> </script>
-		
+
 		<script src="include/jquery-2.1.4/jquery-2.1.4.min.js" type="text/javascript"> </script>
 		<script src="include/jquery-ui-1.11.4/jquery-ui.js" type="text/javascript"> </script>
 		<script src="include/bootstrap-3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="include/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 		<link rel="stylesheet" href="include/jquery-ui-1.11.4/jquery-ui.css">
-		<link rel="stylesheet" href="include/bootstrap-3.3.4/css/bootstrap.min.css">		
-		<link rel="stylesheet" href="include/bootstrap-select/css/bootstrap-select.min.css">		
-		
+		<link rel="stylesheet" href="include/bootstrap-3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="include/bootstrap-select/css/bootstrap-select.min.css">
+
 		<script src="app.js" type="text/javascript"> </script>
 		<link href="app.css" rel="stylesheet">
 
 		<!-- Load directives and modules -->
 		<script src="directives/datasetSelector/datasetSelectorCtrl.js" type="text/javascript"></script>
 		<script src="directives/datasetForm/datasetFormCtrl.js" type="text/javascript"></script>
-		
+
 	</head>
 	<body ng-controller="TallySheetsController">
 
@@ -35,6 +35,12 @@
 						{{ 'HOME' | translate}}
 					</button>
 				</span>
+
+				<div class="row"><br></div>
+
+				<span class="row">
+		        	<label>{{ 'HEADERS' | translate }}</label> <input type="checkbox" ng-model="headers" aria-label="...">
+		    </span>
 
 				<div class="row"><br></div>
 
@@ -55,6 +61,13 @@
 		<br>
 
 		<span id="tallysheetForm">
+
+			<div ng-show="headers">
+				<h3><input type= "text" class="dsTitle" value="{{ 'FACILITY' | translate }}:"></h3>
+				<h3><input type= "text" class="dsTitle" value="{{ 'PERIOD' | translate }}:"></h3>
+				<label class="hidden">&nbsp</label> 	<!-- Blank line for excel export format -->
+			</div>
+
 			<span ng-repeat="(index,selector) in dsSelectorList">
 				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset"
 						selector-id="{{selector.id}}"></dataset-form>
@@ -62,4 +75,3 @@
 		</span>
 	</body>
 </html>
-	

@@ -1,5 +1,5 @@
 {
-	"version":"1.2",
+	"version":"1.2dev",
 	"name":"Print Tally Sheets",
 	"description":"Print Tally Sheets",
 	"launch_path":"index.html",

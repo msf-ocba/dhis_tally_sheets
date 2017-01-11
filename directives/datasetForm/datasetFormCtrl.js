@@ -48,6 +48,13 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         // Remove categoryoptions headers
         datasetForm.find(".hidden").remove();
 
+        // Remove "Comments" section
+        datasetForm.find( ".formSection:contains('Comments'), " +
+            ".formSection:contains('Comentarios'), " +
+            ".formSection:contains('Commentaires'), " +
+            ".formSection:contains('Comentários')" )
+            .parent("div").remove();
+
         // Replace empty cells in header
         datasetForm.find(".sectionTable tbody th").parent().find("td").replaceWith("<th class='no-border'></th>");
 
