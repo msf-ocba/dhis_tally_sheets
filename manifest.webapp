@@ -1,7 +1,7 @@
 {
 	"version":"1.3",
-	"name":"Print Tally Sheets",
-	"description":"Print Tally Sheets",
+	"name":"HMIS Tally sheets",
+	"description":"HMIS Tally sheets",
 	"launch_path":"index.html",
 	"icons":{"16":null,
 	"48":"img/Logo_48.png",
