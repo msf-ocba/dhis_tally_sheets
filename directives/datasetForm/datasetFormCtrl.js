@@ -61,6 +61,23 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         // Set entryfields as readonly
         datasetForm.find(".entryfield").prop("readonly", true);
 
+        // Remove total columns
+        var headerSections = datasetForm.find(".sectionTable thead");
+        headerSections.each(function() {
+            var firstHeaders = $(this).find("tr").first().find("th");
+            if (firstHeaders.length > 2) {
+                firstHeaders.last().remove();
+            }
+        });
+        
+        var bodyRows = datasetForm.find(".sectionTable tbody tr");
+        bodyRows.each(function() {
+            var rows = $(this).find("td");
+            if (rows.length > 2) {
+                rows.last().remove();
+            }
+        })
+
         // Modify titles of sections to place them as section header
         var sectionLinks = datasetForm.find("div[id^='tabs-'] > ul > li > a");
         sectionLinks.each( function(){
