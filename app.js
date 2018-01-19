@@ -55,19 +55,15 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 		// Take the name of the first dataset as filename
 		var name = table.find("h2").first().html() + '.xls';
 
-		var ctx = {worksheet: 'MSF-OCBA HMIS' || 'Worksheet', table: table.html()}
+        var tbl = document.getElementById(tableId);
+        var sheet = XLSX.utils.table_to_sheet(tbl);
+        var workbook = { SheetNames: ["tallysheet"], Sheets: {"tallysheet": sheet} }
 
-		// Create a fake link to download the file
-		var link = angular.element('<a class="hidden" id="idlink"></a>');
-		link.attr({
-			href: uri + base64(format(template, ctx)),
-			target: '_blank',
-			download: name
-		});
-		$("body").prepend(link[0].outerHTML);
-		$("#idlink")[0].click();
-		$("#idlink")[0].remove();
-
+        var wopts = { bookType:'xlsx', bookSST:false, type:'array' };        
+        var wbout = XLSX.write(workbook, wopts);
+        
+        /* the saveAs call downloads a file on the local machine */
+        saveAs(new Blob([wbout],{type:"application/octet-stream"}), "tally_sheet.xlsx");
 	}
 
 	$scope.goHome = function(){
