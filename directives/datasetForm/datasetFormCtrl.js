@@ -52,7 +52,8 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         datasetForm.find( ".formSection:contains('Comments'), " +
             ".formSection:contains('Comentarios'), " +
             ".formSection:contains('Commentaires'), " +
-            ".formSection:contains('Comentários')" )
+            ".formSection:contains('Comentários'), " +
+            ".formSection:contains('Notas')" )
             .parent("div").remove();
 
         // Replace empty cells in header
