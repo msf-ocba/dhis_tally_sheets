@@ -1,8 +1,8 @@
 
 var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate']);
 
-var dhisUrl = window.location.href.split('api/apps/')[0] + '/';;
-var ApiUrl = dhisUrl + '/api';
+var dhisUrl = window.location.href.split('api/apps/')[0] ;
+var ApiUrl = dhisUrl + 'api';
 
 TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", function($scope, DataSetsUID, DataSetEntryForm){
 
@@ -86,7 +86,7 @@ TallySheets.factory("DataSetsUID",['$resource', function ($resource) {
 }]);
 
 TallySheets.factory("DataSetEntryForm",['$resource', function ($resource) {
-	return $resource( dhisUrl + "/dhis-web-dataentry/loadForm.action",
+	return $resource( dhisUrl + "dhis-web-dataentry/loadForm.action",
 		{ dataSetId:'@dataSetId' },
 		{ get: { method: "GET", transformResponse: function (response) {
 			return {codeHtml: response};}
