@@ -47,7 +47,7 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
 
         // Remove categoryoptions headers
         datasetForm.find(".hidden").remove();
-
+        datasetForm.find(".indicatorArea").remove();
         // Remove "Comments" section
         datasetForm.find( ".formSection:contains('Comments'), " +
             ".formSection:contains('Comentarios'), " +
@@ -66,7 +66,7 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         var headerSections = datasetForm.find(".sectionTable thead");
         headerSections.each(function() {
             var firstHeaders = $(this).find("tr").first().find("th");
-            if (firstHeaders.length > 2) {
+            if (firstHeaders.length > 3) { ///
                 firstHeaders.last().remove();
             }
         });
@@ -74,7 +74,7 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         var bodyRows = datasetForm.find(".sectionTable tbody tr");
         bodyRows.each(function() {
             var rows = $(this).find("td");
-            if (rows.length > 2) {
+            if (rows.length > 3) {
                 rows.last().remove();
             }
         })
