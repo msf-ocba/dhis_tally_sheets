@@ -16,7 +16,17 @@ TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSets
     $scope.selectorLoaded = false;
 
     DataSetsUID.get().$promise.then(function(result){
-        $scope.dataSetList = result.dataSets;
+        $scope.dataSetList = result.dataSets.filter(ds =>{
+           var visible=true;
+           
+            for (att in  ds.attributeValues) { 
+               
+            if (ds.attributeValues[att].value=='true' && ds.attributeValues[att].attribute.id=='Re2UlY7OGO4') {
+                           
+                visible=false}
+            }
+            return visible
+        });
     });
 
     $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {

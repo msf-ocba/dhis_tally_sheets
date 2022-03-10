@@ -33,6 +33,7 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
 
                 $("#" + $scope.formId).append("<h2><input class='dsTitle' value='" + datasetName + "'></h2>");
                 $("#" + $scope.formId).append(codeHtml);
+                
                 formatDataset();
                 $scope.progressbarDisplayed = false;
             });
@@ -47,14 +48,10 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
 
         // Remove categoryoptions headers
         datasetForm.find(".hidden").remove();
+        
         datasetForm.find(".indicatorArea").remove();
-        // Remove "Comments" section
-        datasetForm.find( ".formSection:contains('Comments'), " +
-            ".formSection:contains('Comentarios'), " +
-            ".formSection:contains('Commentaires'), " +
-            ".formSection:contains('Comentários'), " +
-            ".formSection:contains('Notas')" )
-            .parent("div").remove();
+        
+   
 
         // Replace empty cells in header
         datasetForm.find(".sectionTable tbody th").parent().find("td").replaceWith("<th class='no-border'></th>");
@@ -66,17 +63,21 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         var headerSections = datasetForm.find(".sectionTable thead");
         headerSections.each(function() {
             var firstHeaders = $(this).find("tr").first().find("th");
-            if (firstHeaders.length > 3) { ///
-                firstHeaders.last().remove();
+            if (firstHeaders.length > 4) { // Elimina la ultima columna de las tablas si hay mas de 4
+                //firstHeaders.last().remove();
             }
         });
         
         var bodyRows = datasetForm.find(".sectionTable tbody tr");
         bodyRows.each(function() {
             var rows = $(this).find("td");
-            if (rows.length > 3) {
-                rows.last().remove();
+            if (rows.length > 4) {// Elimina la ultima columna de las tablas si hay mas de 4
+              //  rows.last().remove();
             }
+           // console.log(rows);
+           // console.log("total");
+           // console.log(rows.indexOf("Total"));
+
         })
 
         // Modify titles of sections to place them as section header
@@ -95,6 +96,35 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
             $(this).parent().remove();
         });
 
+/*
+             // Remove "Comments" section
+             datasetForm.find( ".formSection:contains('Comments'), " +
+             ".formSection:contains('Comentarios'), " +
+             ".formSection:contains('Commentaires'), " +
+             ".formSection:contains('Comentários'), " +
+             ".formSection:contains('Notas')" )
+             .parent("div").remove();
+*/
+
+
+
+
+ $("h3").filter(function() {
+    
+    return (
+        
+        this.innerHTML.indexOf("Comments") >-1 || 
+        this.innerHTML.indexOf("Comentarios") >-1 || 
+        this.innerHTML.indexOf("Commentaires") >-1 || 
+        this.innerHTML.indexOf("Comentários") >-1 || 
+        this.innerHTML.indexOf("Notas") >-1 
+
+) ;
+}).parent("div").remove();
+
+
+
+
         // Make rows resizable
         datasetForm.find(".sectionTable tr").each( function(){
             $(this).find("td").last().resizable();
@@ -103,8 +133,13 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
         // Add class "greyfield" to cells (td object)
         datasetForm.find(".sectionTable input:disabled").closest("td").addClass("greyfield");
 
+        // Delete commentlinks for Watsan
+        datasetForm.find(".commentlink").remove();
+
+
         // Delete entryfields
         datasetForm.find(".sectionTable input").remove();
+
 
         // Write an "X" in greyfields to represent that they are blocked
         datasetForm.find(".sectionTable td.greyfield").html("X");
@@ -119,6 +154,7 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
                 datasetForm.find("#" + sectionId).remove();
             });
         });
+        
     };
 
     var onSampleResized = function (e) {

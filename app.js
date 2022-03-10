@@ -80,9 +80,20 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 }]);
 
 TallySheets.factory("DataSetsUID",['$resource', function ($resource) {
-	return $resource( ApiUrl + "/dataSets.json?fields=id,displayName&paging=false&translate=true",
+	return $resource( ApiUrl + '/dataSets.json',
 		{},
-		{ get: { method: "GET"} });
+		{ get: { method: "GET",
+		params: {
+			fields: 'id,displayName,attributeValues[value,attribute]',
+			
+			translate: 'true',
+			paging: false
+		}}
+	
+	
+		});
+
+		  
 }]);
 
 TallySheets.factory("DataSetEntryForm",['$resource', function ($resource) {
