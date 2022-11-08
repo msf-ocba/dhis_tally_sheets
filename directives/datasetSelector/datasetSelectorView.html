@@ -1,5 +1,5 @@
 <span ng-controller="datasetSelectorCtrl">
-    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true">
+    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true" multiple>
         <option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
         <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'"
                 value="{{ dataSet.id }}" on-finish-render="ngRepeatFinished">
