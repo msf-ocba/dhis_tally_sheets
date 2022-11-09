@@ -20,7 +20,7 @@
 		<!-- Load directives and modules -->
 		<script src="directives/datasetSelector/datasetSelectorCtrl.js" type="text/javascript"></script>
 		<script src="directives/datasetForm/datasetFormCtrl.js" type="text/javascript"></script>
-
+		<script src="directives/languageSelector/languageSelectorCtrl.js" type="text/javascript"></script>
 	</head>
 	<body ng-controller="TallySheetsController">
 
@@ -54,6 +54,11 @@
 					<button ng-click="addDatasetSelector()" class="btn btn-primary btn-xs hidden-print">
 						{{ 'ADD_FORM' | translate }}
 					</button>
+
+					<span>
+						<language-selector selector-id="selector.id"></language-selector>
+						
+					</span>
 				</span>
 			</div>
 		</div>
@@ -61,7 +66,6 @@
 		<br>
 
 		<span id="tallysheetForm">
-
 			<div ng-show="headers">
 				<h3><input type= "text" class="dsTitle" value="{{ 'FACILITY' | translate }}:"></h3>
 				<h3><input type= "text" class="dsTitle" value="{{ 'PERIOD' | translate }}:"></h3>

@@ -1,11 +1,12 @@
 {
-	"IN_PROGRESS": "IN PROGRESS",
-	"PRINT": "Print",
-  	"EXPORT_EXCEL": "Export to MS Excel",
-	"HOME": "Home",
-	"SELECT_DATASET": "Select a dataset",
-  	"ADD_FORM": "Add form",
-	"HEADERS": "Include headers",
-	"FACILITY": "Health facility",
-	"PERIOD": "Reporting period"
+  "IN_PROGRESS": "IN PROGRESS",
+  "PRINT": "Print",
+  "EXPORT_EXCEL": "Export to MS Excel",
+  "HOME": "Home",
+  "SELECT_DATASET": "Select a dataset",
+  "SELECT_LANGUAGE": "Select a language",
+  "ADD_FORM": "Add form",
+  "HEADERS": "Include headers",
+  "FACILITY": "Health facility",
+  "PERIOD": "Reporting period"
 }
