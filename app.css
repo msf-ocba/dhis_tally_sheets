@@ -44,6 +44,11 @@ span {
 	display: none;
 }
 
+.flex {
+	display: flex;
+	gap: 4px;
+}
+
 table.sectionTable > tbody > tr > th:not(.no-border) {
 	background-color: #C8DCEB;
 	-webkit-print-color-adjust: exact;
