@@ -40,13 +40,18 @@ TallySheets.controller("datasetSelectorCtrl", [
       $scope.selectorLoaded = true;
     });
 
-    $(document).on("change", "#" + $scope.id, function () {
-      var dsId = $("option:selected", this).val();
-      var dsName = $("option:selected", this).html().trim();
+    var form = document.querySelector("#dsl");
+
+    $(form).on("change", "#" + $scope.id, function () {
+      const formData = new FormData(form);
+      const selectValue = formData.getAll("dataset");
+
+      var dsId = selectValue[selectValue.length - 1];
+      var dsName = $scope.dataSetList.find(
+        (dataSet) => dataSet.id === dsId
+      ).displayName;
 
       $scope.bindToDataset.id = dsId;
-      console.log(dsId);
-      console.log(dsName);
       $scope.bindToDataset.name = dsName;
 
       $rootScope.$apply();

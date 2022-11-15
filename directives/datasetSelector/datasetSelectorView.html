@@ -1,7 +1,7 @@
-<span ng-controller="datasetSelectorCtrl">
-    <select id="{{id}}" onchange="addDatasetSelector()" class="selectpicker hidden-print" data-live-search="true" multiple>
+<form id="dsl" ng-controller="datasetSelectorCtrl">
+    <select id="{{id}}" name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
         <option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
-        <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" value="{{ dataSet.id }}" on-finish-render="ngRepeatFinished">
+        <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" ng-value="dataSet.id" on-finish-render="ngRepeatFinished">
             {{ dataSet.displayName }}
         </option>
     </select>
@@ -17,4 +17,4 @@
             {{ dataSet.id }}
         </option>
     </select>
-</span>
+</form>

@@ -53,26 +53,6 @@
 					<button ng-click="addDatasetSelector()" class="btn btn-primary btn-xs hidden-print">
 						{{ 'ADD_FORM' | translate }}
 					</button>
-					<span>
-						<select id="{{id}}" selector-id="selector.id" bind-to-dataset="selector.dataset" change="addDatasetSelector()" class="selectpicker hidden-print" data-live-search="true" multiple>
-							<option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
-							<option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" value="{{ dataSet.id }}" on-finish-render="ngRepeatFinished">
-									{{ dataSet.displayName }}
-							</option>
-						</select>
-						<span ng-show="!selectorLoaded" class="loading-icon">
-								<span class="glyphicon glyphicon-hourglass"></span>
-						</span>
-						<select class="selectpicker hidden-print" data-live-search="false">
-							<option value="0"><i>{{ 'SELECT_LANGUAGE' | translate }}</i></option>
-							<option value="en">
-									English
-							</option>
-							<option value="{{ dataSet.id }}">
-									{{ dataSet.id }}
-							</option>
-						</select>
-					</span>
 				</span>
 			</div>
 		</div>
@@ -80,13 +60,13 @@
 		<br>
 
 		<span id="tallysheetForm">
-			<div ng-show="headers" ng-repeat="(index,selector) in dsSelectorList">
-				<h3><input type= "text" class="dsTitle" value="{{ 'FACILITY' | translate }}:"></h3>
-				<h3><input type= "text" class="dsTitle" value="{{ 'PERIOD' | translate }}:"></h3>
-				<label class="hidden">&nbsp</label> 	<!-- Blank line for excel export format -->
-			</div>
-
 			<span ng-repeat="(index,selector) in dsSelectorList">
+				<div ng-show="headers">
+					<h3><input type= "text" class="dsTitle" value="{{ 'FACILITY' | translate }}:"></h3>
+					<h3><input type= "text" class="dsTitle" value="{{ 'PERIOD' | translate }}:"></h3>
+					<label class="hidden">&nbsp</label> 	<!-- Blank line for excel export format -->
+				</div>
+				
 				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset" selector-id="{{selector.id}}"></dataset-form>
 			</span>
 		</span>

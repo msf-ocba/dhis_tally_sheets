@@ -17,9 +17,9 @@ TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function(
 
     var updateForm = function(datasetId, datasetName){
 
-        //Delete previous dataset, if any
-        $("#" + $scope.formId).children().remove();
-
+        // Delete previous dataset, if any
+        // $("#" + $scope.formId).children().remove();
+console.log(datasetId, datasetName);
         // Assign a new id (for new dataset)
         $scope.formId = "datasetForm" + $scope.selectorId;
 
