@@ -67,16 +67,22 @@ TallySheets.controller("TallySheetsController", [
         table: table.html(),
       };
 
-      // Create a fake link to download the file
-      var link = angular.element('<a class="hidden" id="idlink"></a>');
-      link.attr({
-        href: uri + base64(format(template, ctx)),
-        target: "_blank",
-        download: name,
+      var zip = new JSZip();
+      zip.file(name, format(template, ctx));
+      zip.generateAsync({ type: "base64" }).then(function (base64) {
+        location.href = "data:application/zip;base64," + base64;
       });
-      $("body").prepend(link[0].outerHTML);
-      $("#idlink")[0].click();
-      $("#idlink")[0].remove();
+
+      //Create a fake link to download the file
+      // var link = angular.element('<a class="hidden" id="idlink"></a>');
+      // link.attr({
+      //   href: uri + base64(format(template, ctx)),
+      //   target: "_blank",
+      //   download: name,
+      // });
+      // $("body").prepend(link[0].outerHTML);
+      // $("#idlink")[0].click();
+      // $("#idlink")[0].remove();
     };
 
     $scope.goHome = function () {
