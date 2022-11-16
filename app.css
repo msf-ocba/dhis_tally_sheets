@@ -49,6 +49,10 @@ span {
 	gap: 4px;
 }
 
+.inline {
+	display: inline;
+}
+
 table.sectionTable > tbody > tr > th:not(.no-border) {
 	background-color: #C8DCEB;
 	-webkit-print-color-adjust: exact;

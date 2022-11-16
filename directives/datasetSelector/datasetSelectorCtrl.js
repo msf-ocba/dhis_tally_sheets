@@ -13,13 +13,18 @@ TallySheets.controller("datasetSelectorCtrl", [
   "$scope",
   "$rootScope",
   "DataSetsUID",
-  function ($scope, $rootScope, DataSetsUID) {
+  "Headers",
+  function ($scope, $rootScope, DataSetsUID, Headers) {
     $scope.id = "dsSelector" + $scope.selectorId;
 
     $scope.selectorLoaded = false;
     DataSetsUID.get().$promise.then(function (result) {
       $scope.dataSetList = result.dataSets.filter((ds) => {
         var visible = true;
+
+        $scope.languages = ds.translations.filter(
+          (translation) => translation.property === "NAME"
+        );
 
         for (att in ds.attributeValues) {
           if (
@@ -50,6 +55,10 @@ TallySheets.controller("datasetSelectorCtrl", [
       var dsName = $scope.dataSetList.find(
         (dataSet) => dataSet.id === dsId
       ).displayName;
+
+    //   var dddd = Headers.getHeaderValue();
+    //   var dd = dddd();
+    //   console.log(dd);
 
       $scope.bindToDataset.id = dsId;
       $scope.bindToDataset.name = dsName;

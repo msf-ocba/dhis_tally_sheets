@@ -1,4 +1,4 @@
-<form id="dsl" ng-controller="datasetSelectorCtrl">
+<form id="dsl" ng-controller="datasetSelectorCtrl" class="inline">
     <select id="{{id}}" name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
         <option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
         <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" ng-value="dataSet.id" on-finish-render="ngRepeatFinished">
@@ -8,13 +8,10 @@
     <span ng-show="!selectorLoaded" class="loading-icon">
         <span class="glyphicon glyphicon-hourglass"></span>
     </span>
-    <select class="selectpicker hidden-print" data-live-search="false">
+    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="false">
         <option value="0"><i>{{ 'SELECT_LANGUAGE' | translate }}</i></option>
-        <option value="en">
-            English
-        </option>
-        <option value="{{ dataSet.id }}">
-            {{ dataSet.id }}
+        <option ng-value="dataSet.id" on-finish-render="ngRepeatFinished" ng-repeat="language in languages | orderBy : 'locale'">
+            {{ language.locale  }}
         </option>
     </select>
 </form>
