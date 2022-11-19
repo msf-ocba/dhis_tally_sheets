@@ -96,6 +96,38 @@ console.log(datasetId, datasetName);
             $(this).parent().remove();
         });
 
+        // Remove "Total" rows
+        datasetForm
+        .find(
+            "td:contains('Total'), " +
+            "td:contains('Total'), " +
+            "td:contains('Totale'), " +
+            "td:contains('Total'), "
+        )
+        .parent("tr")
+        .remove();
+
+        // Remove "Total" columns
+        datasetForm
+           .find(
+                "input.total-cell, " +
+                "td:contains('Total'), " +
+                "td:contains('Totale'), " +
+                "td:contains('Total'), "
+           )
+           .parent("td")
+           .remove();
+
+        datasetForm
+            .find(
+                "th.:contains('Total'), " +
+                "th:contains('Total'), " +
+                "th:contains('Totale'), " +
+                "th:contains('Total'), "
+            )
+            .parent("tr")
+            .remove();
+
 /*
              // Remove "Comments" section
              datasetForm.find( ".formSection:contains('Comments'), " +
