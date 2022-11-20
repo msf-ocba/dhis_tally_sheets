@@ -13,17 +13,19 @@ TallySheets.controller("datasetSelectorCtrl", [
   "$scope",
   "$rootScope",
   "DataSetsUID",
-  function ($scope, $rootScope, DataSetsUID) {
+  "Locales",
+  function ($scope, $rootScope, DataSetsUID, Locales) {
     $scope.id = "dsSelector" + $scope.selectorId;
 
     $scope.selectorLoaded = false;
+
+    Locales.get().$promise.then(function (result) {
+      $scope.languages = result;
+    });
+
     DataSetsUID.get().$promise.then(function (result) {
       $scope.dataSetList = result.dataSets.filter((ds) => {
         var visible = true;
-
-        $scope.languages = ds.translations.filter(
-          (translation) => translation.property === "NAME"
-        );
 
         for (att in ds.attributeValues) {
           if (
@@ -54,6 +56,14 @@ TallySheets.controller("datasetSelectorCtrl", [
       var dsName = $scope.dataSetList.find(
         (dataSet) => dataSet.id === dsId
       ).displayName;
+
+      var languageList = $scope.dataSetList
+        .find((dataSet) => dataSet.id === dsId)
+        .translations.filter((translation) => translation.property === "NAME");
+
+      $scope.languageList = $scope.languages.filter(
+        (lang) => languageList[0].locale.split("_")[0] === lang.locale
+      );
 
       $scope.bindToDataset.id = dsId;
       $scope.bindToDataset.name = dsName;

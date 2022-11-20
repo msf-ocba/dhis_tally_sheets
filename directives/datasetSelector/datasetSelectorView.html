@@ -1,17 +1,19 @@
-<form id="datasetSelector" ng-controller="datasetSelectorCtrl" class="inline">
-    <select id="{{id}}" name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
-        <option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
-        <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" ng-value="dataSet.id" on-finish-render="ngRepeatFinished">
-            {{ dataSet.displayName }}
-        </option>
-    </select>
+<span ng-controller="datasetSelectorCtrl">
+    <form id="datasetSelector" class="inline">
+        <select id="{{id}}" name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
+            <option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
+            <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" ng-value="dataSet.id" on-finish-render="ngRepeatFinished">
+                {{ dataSet.displayName }}
+            </option>
+        </select>
+    </form>
     <span ng-show="!selectorLoaded" class="loading-icon">
         <span class="glyphicon glyphicon-hourglass"></span>
     </span>
-    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="false">
+    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true" multiple>
         <option value="0"><i>{{ 'SELECT_LANGUAGE' | translate }}</i></option>
-        <option ng-value="dataSet.id" on-finish-render="ngRepeatFinished" ng-repeat="language in languages | orderBy : 'locale'">
-            {{ language.locale  }}
+        <option ng-value="dataSet.id" on-finish-render="ngRepeatFinished" ng-repeat="language in languageList | orderBy : 'locale'">
+            {{ language.name  }}
         </option>
     </select>
-</form>
+</span>

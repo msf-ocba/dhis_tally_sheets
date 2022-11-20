@@ -112,6 +112,27 @@ TallySheets.factory("DataSetsUID", [
   },
 ]);
 
+TallySheets.factory("Locales", [
+  "$resource",
+  function ($resource) {
+    return $resource(
+      ApiUrl + "/29/locales/dbLocales.json",
+      {},
+      {
+        get: {
+          method: "GET",
+          params: {
+            fields: "name,locale",
+            translate: "true",
+            paging: false,
+          },
+          isArray: true,
+        },
+      }
+    );
+  },
+]);
+
 TallySheets.factory("DataSetEntryForm", [
   "$resource",
   function ($resource) {
