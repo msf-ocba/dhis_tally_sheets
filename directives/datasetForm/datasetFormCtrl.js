@@ -56,12 +56,12 @@ TallySheets.controller("datasetFormCtrl", [
                 $scope.selectorId +
                 ">" +
                 header +
-                "<h2><input class='dsTitle' value=" +
-                scope.dataset.name +
-                "></h2>" +
+                "<h2><input id='title' class='dsTitle' value=''></h2>" +
                 codeHtml +
                 "</span>"
             );
+
+            document.getElementById("title").defaultValue = scope.dataset.name;
 
             $scope.progressbarDisplayed = false;
             formatDataset();
