@@ -47,12 +47,15 @@ TallySheets.controller("datasetSelectorCtrl", [
     });
 
     var form = document.querySelector("#datasetSelector");
+    $scope.selectedIds = [];
 
     $(form).on("change", "#" + $scope.id, function () {
       var formData = new FormData(form);
       var selectedValues = formData.getAll("dataset");
 
-      var dsId = selectedValues[selectedValues.length - 1];
+      var dsId = selectedValues.find(
+        (selected) => !$scope.selectedIds.includes(selected)
+      );
       var dsName = $scope.dataSetList.find(
         (dataSet) => dataSet.id === dsId
       ).displayName;
@@ -62,13 +65,15 @@ TallySheets.controller("datasetSelectorCtrl", [
         .translations.filter((translation) => translation.property === "NAME");
 
       $scope.languageList = $scope.languages.filter(
-        (lang) => languageList[0].locale.split("_")[0] === lang.locale
+        (lang) => languageList[0]?.locale.split("_")[0] === lang.locale
       );
 
       $scope.bindToDataset.id = dsId;
       $scope.bindToDataset.name = dsName;
       $scope.bindToDataset.selectedIds = selectedValues;
       $scope.bindToDataset.dataSets = $scope.dataSetList;
+
+      $scope.selectedIds = selectedValues;
 
       $rootScope.$apply();
     });
