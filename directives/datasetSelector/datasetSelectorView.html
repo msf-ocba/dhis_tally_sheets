@@ -1,4 +1,4 @@
-<form id="dsl" ng-controller="datasetSelectorCtrl" class="inline">
+<form id="datasetSelector" ng-controller="datasetSelectorCtrl" class="inline">
     <select id="{{id}}" name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
         <option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
         <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" ng-value="dataSet.id" on-finish-render="ngRepeatFinished">

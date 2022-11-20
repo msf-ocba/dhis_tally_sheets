@@ -13,8 +13,7 @@ TallySheets.controller("datasetSelectorCtrl", [
   "$scope",
   "$rootScope",
   "DataSetsUID",
-  "Headers",
-  function ($scope, $rootScope, DataSetsUID, Headers) {
+  function ($scope, $rootScope, DataSetsUID) {
     $scope.id = "dsSelector" + $scope.selectorId;
 
     $scope.selectorLoaded = false;
@@ -45,23 +44,21 @@ TallySheets.controller("datasetSelectorCtrl", [
       $scope.selectorLoaded = true;
     });
 
-    var form = document.querySelector("#dsl");
+    var form = document.querySelector("#datasetSelector");
 
     $(form).on("change", "#" + $scope.id, function () {
-      const formData = new FormData(form);
-      const selectValue = formData.getAll("dataset");
+      var formData = new FormData(form);
+      var selectedValues = formData.getAll("dataset");
 
-      var dsId = selectValue[selectValue.length - 1];
+      var dsId = selectedValues[selectedValues.length - 1];
       var dsName = $scope.dataSetList.find(
         (dataSet) => dataSet.id === dsId
       ).displayName;
 
-    //   var dddd = Headers.getHeaderValue();
-    //   var dd = dddd();
-    //   console.log(dd);
-
       $scope.bindToDataset.id = dsId;
       $scope.bindToDataset.name = dsName;
+      $scope.bindToDataset.selectedIds = selectedValues;
+      $scope.bindToDataset.dataSets = $scope.dataSetList;
 
       $rootScope.$apply();
     });

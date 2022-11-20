@@ -41,7 +41,7 @@
 				<div class="row"><br></div>
 
 				<span class="row">
-		      <label>{{ 'HEADERS' | translate }}</label> <input type="checkbox" ng-model="headers" aria-label="...">
+		      <label>{{ 'HEADERS' | translate }}</label> <input type="checkbox"  ng-model="headers" aria-label="...">
 		    </span>
 
 				<div class="row"><br></div>
@@ -64,12 +64,6 @@
 
 		<span id="tallysheetForm">
 			<span ng-repeat="(index,selector) in dsSelectorList">
-				<div ng-show="headers">
-					<h3><input type= "text" class="dsTitle" value="{{ 'FACILITY' | translate }}:"></h3>
-					<h3><input type= "text" class="dsTitle" value="{{ 'PERIOD' | translate }}:"></h3>
-					<label class="hidden">&nbsp</label> 	<!-- Blank line for excel export format -->
-				</div>
-
 				<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset" selector-id="{{selector.id}}"></dataset-form>
 			</span>
 		</span>

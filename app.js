@@ -8,15 +8,12 @@ var ApiUrl = dhisUrl + "api";
 
 TallySheets.controller("TallySheetsController", [
   "$scope",
-  "$rootScope",
-  "Headers",
-  function ($scope, Headers) {
+  function ($scope) {
     var dsSelectorLastId = -1;
     $scope.dsSelectorList = [];
 
     // Set "headers" to true by default
     $scope.headers = true;
-    //Headers.setHeaderValue($scope.headers);
 
     $scope.addDatasetSelector = function () {
       dsSelectorLastId++;
@@ -132,19 +129,6 @@ TallySheets.factory("DataSetEntryForm", [
     );
   },
 ]);
-
-TallySheets.factory("Headers", function () {
-  var data = {};
-
-  return {
-    getHeaderValue: function () {
-      return data;
-    },
-    setHeaderValue: function (header) {
-      data = header;
-    },
-  };
-});
 
 TallySheets.directive("onFinishRender", function ($timeout) {
   return {
