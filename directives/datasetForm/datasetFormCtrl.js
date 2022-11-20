@@ -51,7 +51,7 @@ TallySheets.controller("datasetFormCtrl", [
               'id="tabs-' + scope.dataset.id + '"'
             );
 
-            $("#datasetForms").append(
+            $("#datasetForms").prepend(
               "<span id=datasetForm" +
                 $scope.selectorId +
                 ">" +
@@ -63,8 +63,8 @@ TallySheets.controller("datasetFormCtrl", [
                 "</span>"
             );
 
-            formatDataset();
             $scope.progressbarDisplayed = false;
+            formatDataset();
           }
         );
         $scope.selectorId++;
