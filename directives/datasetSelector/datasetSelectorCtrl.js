@@ -64,8 +64,10 @@ TallySheets.controller("datasetSelectorCtrl", [
         .find((dataSet) => dataSet.id === dsId)
         .translations.filter((translation) => translation.property === "NAME");
 
-      $scope.languageList = $scope.languages.filter(
-        (lang) => languageList[0]?.locale.split("_")[0] === lang.locale
+      $scope.languageList = $scope.languages.filter((lang) =>
+        languageList?.some(
+          (language) => language.locale.split("_")[0] === lang.locale
+        )
       );
 
       $scope.bindToDataset.id = dsId;
