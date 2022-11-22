@@ -174,35 +174,25 @@ TallySheets.controller("datasetFormCtrl", [
 
       // Remove "Total" rows
       datasetForm
-        .find(
-          "td:contains('Total'), " +
-            "td:contains('Total'), " +
-            "td:contains('Totale'), " +
-            "td:contains('Total'), "
-        )
+        .find(".sectionTable tr td:contains('Total')")
         .parent("tr")
         .remove();
 
       // Remove "Total" columns
-      datasetForm
-        .find(
-          "input.total-cell, " +
-            "td:contains('Total'), " +
-            "td:contains('Totale'), " +
-            "td:contains('Total'), "
-        )
-        .parent("td")
-        .remove();
-
-      datasetForm
-        .find(
-          "th.:contains('Total'), " +
-            "th:contains('Total'), " +
-            "th:contains('Totale'), " +
-            "th:contains('Total'), "
-        )
-        .parent("tr")
-        .remove();
+      var headerSections = datasetForm.find(".sectionTable thead");
+      var tableWithTotal = datasetForm
+        .find(".sectionTable thead tr")
+        .find("th:contains('Total')")
+        .parent()
+        .parent()
+        .parent();
+      tableWithTotal.find("tbody tr").each(function () {
+        var rows = $(this).find("td");
+        if (headerSections.find("tr").find("th:contains('Total')")[0]) {
+          rows.last().remove();
+        }
+      });
+      headerSections.find("tr").find("th:contains('Total')").remove();
 
       /*
              // Remove "Comments" section
