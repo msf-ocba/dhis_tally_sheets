@@ -9,8 +9,6 @@ TallySheets.directive("datasetForm", function () {
   };
 });
 
-// var das = [];
-
 TallySheets.controller("datasetFormCtrl", [
   "$scope",
   "DataSetEntryForm",
@@ -26,19 +24,6 @@ TallySheets.controller("datasetFormCtrl", [
         return $scope.dataset.selectedIds;
       },
       function (newVal, oldVal, scope) {
-        // scope.dataset.selectedIds.map((id) => {
-        //   if (das.includes(id)) {
-        //     return;
-        //   }
-        //   updateForm(
-        //     id,
-        //     scope.dataset.dataSets.find((dataSet) => dataSet.id === id)
-        //       .displayName
-        //   );
-        //   das.push(id);
-        //   $scope.hi = das;
-        // });
-
         $scope.progressbarDisplayed = true;
 
         DataSetEntryForm.get({ dataSetId: scope.dataset.id }).$promise.then(
@@ -68,13 +53,14 @@ TallySheets.controller("datasetFormCtrl", [
           }
         );
         $scope.selectorId++;
-        // updateForm(scope.dataset.id, scope.dataset.name);
       }
     );
 
     var updateForm = function (datasetId, datasetName) {
       // Delete previous dataset, if any
-      // $("#" + $scope.formId).children().remove();
+      $("#" + $scope.formId)
+        .children()
+        .remove();
 
       // Assign a new id (for new dataset)
       $scope.formId = "datasetForm" + $scope.selectorId;

@@ -13,7 +13,7 @@
     <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true" multiple>
         <option value="0"><i>{{ 'SELECT_LANGUAGE' | translate }}</i></option>
         <option ng-value="dataSet.id" on-finish-render="ngRepeatFinished" ng-repeat="language in languageList | orderBy : 'locale'">
-            {{ language.name  }}
+            {{ language.name }}
         </option>
     </select>
 </span>
