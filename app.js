@@ -20,8 +20,8 @@ TallySheets.controller("TallySheetsController", [
       $scope.dsSelectorList.push({ id: dsSelectorLastId, dataset: {} });
     };
 
-    $scope.deleteDatesetSelector = function (selectPosition) {
-      $scope.dsSelectorList.splice(selectPosition, 1);
+    $scope.clearForm = function () {
+      $('#datasetForms').children().remove();;
     };
 
     $scope.exportToTable = function (tableId) {

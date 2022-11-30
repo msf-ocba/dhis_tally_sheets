@@ -58,11 +58,11 @@ TallySheets.controller("datasetSelectorCtrl", [
       );
       var dsName = $scope.dataSetList.find(
         (dataSet) => dataSet.id === dsId
-      ).displayName;
+      )?.displayName;
 
       var languageList = $scope.dataSetList
         .find((dataSet) => dataSet.id === dsId)
-        .translations.filter((translation) => translation.property === "NAME");
+        .translations?.filter((translation) => translation.property === "NAME");
 
       $scope.languageList = $scope.languages.filter((lang) =>
         languageList?.some(
@@ -73,7 +73,6 @@ TallySheets.controller("datasetSelectorCtrl", [
       $scope.bindToDataset.id = dsId;
       $scope.bindToDataset.name = dsName;
       $scope.bindToDataset.selectedIds = selectedValues;
-      $scope.bindToDataset.dataSets = $scope.dataSetList;
 
       $scope.selectedIds = selectedValues;
 
