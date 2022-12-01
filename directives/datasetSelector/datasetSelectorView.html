@@ -7,12 +7,14 @@
             </option>
         </select>
     </form>
-    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true" multiple>
-        <option disabled value="0"><i>{{ 'SELECT_LANGUAGE' | translate }}</i></option>
-        <option ng-value="dataSet.id" on-finish-render="ngRepeatFinished" ng-repeat="language in languageList | orderBy : 'locale'">
-            {{ language.name }}
-        </option>
-    </select>
+    <form id="languageSelector" class="inline">
+        <select id="{{id}}" name="language" class="selectpicker hidden-print" data-live-search="true" multiple>
+            <option disabled value="0"><i>{{ 'SELECT_LANGUAGE' | translate }}</i></option>
+            <option ng-value="language.locale" on-finish-render="ngRepeatFinished" ng-repeat="language in languageList | orderBy : 'locale'">
+                {{ language.name }}
+            </option>
+        </select>
+    </form>
     <span ng-show="!selectorLoaded" class="loading-icon">
         <span class="glyphicon glyphicon-hourglass"></span>
     </span>

@@ -21,7 +21,8 @@ TallySheets.controller("datasetFormCtrl", [
 
     $scope.$watch(
       function () {
-        return $scope.dataset.selectedIds;
+        console.log($scope.dataset.selected);
+        return $scope.dataset.selected;
       },
       function (newVal, oldVal, scope) {
         $scope.progressbarDisplayed = true;
