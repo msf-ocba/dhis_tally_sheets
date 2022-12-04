@@ -9,6 +9,26 @@ var ApiUrl = dhisUrl + "api";
 TallySheets.controller("TallySheetsController", [
 	"$scope",
 	function ($scope) {
+		const getSelectedDataSets = function () {
+			//Temporal workaround, expected to be deleted on future
+			//Split array in pairs of 2 because dataset and language <select/> elements have same id
+			const selects = _.chunk(
+				[...document.querySelectorAll("select[id^=dsSelector]")],
+				2
+			).map(([datasets, locales]) => ({
+				ids: [...datasets.selectedOptions].map(
+					(option) => option.value
+				),
+				locale: [...locales.selectedOptions].map(
+					(option) => option.value
+				),
+			}));
+
+			const ids = _.uniq(selects.flatMap((select) => select.ids));
+
+			return ids;
+		};
+
 		var dsSelectorLastId = -1;
 		$scope.dsSelectorList = [];
 
@@ -25,6 +45,8 @@ TallySheets.controller("TallySheetsController", [
 		};
 
 		$scope.exportToTable = function (tableId) {
+			const ids = getSelectedDataSets();
+
 			var uri = "data:application/vnd.ms-excel;base64,",
 				template =
 					'<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
@@ -64,11 +86,16 @@ TallySheets.controller("TallySheetsController", [
 				table: table.html(),
 			};
 
-			var zip = new JSZip();
-			zip.file(name, format(template, ctx));
-			zip.generateAsync({ type: "base64" }).then(function (base64) {
-				location.href = "data:application/zip;base64," + base64;
-			});
+			XlsxRepository.test()
+				.then((blob) => {
+					var zip = new JSZip();
+					zip.file(name, format(template, ctx));
+					zip.file("test.xlsx", blob);
+					zip.generateAsync({ type: "base64" }).then((base64) => {
+						location.href = "data:application/zip;base64," + base64;
+					});
+				})
+				.catch((err) => console.error(err));
 
 			//Create a fake link to download the file
 			// var link = angular.element('<a class="hidden" id="idlink"></a>');
