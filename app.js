@@ -92,7 +92,8 @@ TallySheets.controller("TallySheetsController", [
 					zip.file(name, format(template, ctx));
 					zip.file("test.xlsx", blob);
 					zip.generateAsync({ type: "base64" }).then((base64) => {
-						location.href = "data:application/zip;base64," + base64;
+						// location.href = "data:application/zip;base64," + base64;
+						saveAs(base64, "MSF-OCBA HMIS.zip");
 					});
 				})
 				.catch((err) => console.error(err));

@@ -1,3 +1,5 @@
 export class DHISRepository {
-	get() {}
+	get() {
+		console.log("what");
+	}
 }
