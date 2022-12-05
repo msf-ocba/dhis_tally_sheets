@@ -1,22 +1,19 @@
 {
-	"version":"1.7",
-	"name":"HMIS Tally sheets",
-	"description":"HMIS Tally sheets",
-	"launch_path":"index.html",
-	"icons":{"16":null,
-	"48":"img/Logo_48.png",
-	"128":null
+	"version": "1.7",
+	"name": "HMIS Tally sheets",
+	"description": "HMIS Tally sheets",
+	"launch_path": "index.html",
+	"icons": { "16": null, "48": "assets/img/Logo_48.png", "128": null },
+	"developer": {
+		"url": "",
+		"name": "Victor Garcia - MSFOCBA",
+		"email": "victor.garcia@barcelona.msf.org"
 	},
-	"developer":{
-	"url":"",
-	"name":"Victor Garcia - MSFOCBA",
-	"email":"victor.garcia@barcelona.msf.org"
-	},
-	"installs_allowed_from":null,
-	"default_locale":"en",
+	"installs_allowed_from": null,
+	"default_locale": "en",
 	"activities": {
 		"dhis": {
-	  		"href": "*"
+			"href": "*"
 		}
 	}
 }
