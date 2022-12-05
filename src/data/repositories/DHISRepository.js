@@ -9,7 +9,7 @@ export class DHISRepository {
 				get: {
 					method: "GET",
 					params: {
-						fields: "id,displayName,formType,displayFormName,sections[:all]",
+						fields: "id,name,displayName,formType,displayFormName,sections[:all],dataSetElements[dataElement[:all]]",
 						filter: `id:in:[${dataSetsIds}]`,
 						paging: false,
 					},

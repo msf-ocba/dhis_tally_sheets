@@ -4,8 +4,7 @@ export class GetSelectedDataSetsUseCase {
 	}
 
 	execute($resource, dataSetsIds) {
-		console.log(this.dhisRepository.get($resource, dataSetsIds));
-		const x = this.dhisRepository
+		return this.dhisRepository
 			.get($resource, dataSetsIds)
 			.$promise.then(({ dataSets }) => {
 				const customDataSets = dataSets.filter(
@@ -19,15 +18,20 @@ export class GetSelectedDataSetsUseCase {
 				);
 
 				const defaultSections = defaultDataSets.map((dataSet) => ({
+					id: dataSet.id,
 					title: dataSet.name,
 					description: dataSet.displayFormName,
+					dataElements: dataSet.dataSetElements.map(
+						({ id, displayFormName }) => ({
+							id,
+							displayFormName,
+						})
+					),
 				}));
 
-				console.log("custom: ", customDataSets);
-				console.log("sectioned: ", sectionedDataSets);
-				console.log("default: ", defaultDataSets);
-				console.log(defaultSections);
+				return {
+					defaultSections,
+				};
 			});
-		return x;
 	}
 }

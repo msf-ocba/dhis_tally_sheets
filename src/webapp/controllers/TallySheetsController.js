@@ -7,26 +7,6 @@ export const TallySheetsController = TallySheets.controller(
 		"$scope",
 		"$resource",
 		function ($scope, $resource) {
-			const getSelectedDataSets = function () {
-				//Temporal workaround, expected to be deleted on future
-				//Split array in pairs of 2 because dataset and language <select/> elements have same id
-				const selects = _.chunk(
-					[...document.querySelectorAll("select[id^=dsSelector]")],
-					2
-				).map(([datasets, locales]) => ({
-					ids: [...datasets.selectedOptions].map(
-						(option) => option.value
-					),
-					locale: [...locales.selectedOptions].map(
-						(option) => option.value
-					),
-				}));
-
-				const ids = _.uniq(selects.flatMap((select) => select.ids));
-
-				return ids;
-			};
-
 			var dsSelectorLastId = -1;
 			$scope.dsSelectorList = [];
 
@@ -124,3 +104,41 @@ export const TallySheetsController = TallySheets.controller(
 		},
 	]
 );
+
+function getSelectedDataSets() {
+	//Temporal workaround, expected to be deleted on future
+	//Split array in pairs of 2 because dataset and language <select/> elements have same id
+	const selects = _.chunk(
+		[...document.querySelectorAll("select[id^=dsSelector]")],
+		2
+	).map(([datasets, locales]) => ({
+		ids: [...datasets.selectedOptions].map((option) => option.value),
+		locale: [...locales.selectedOptions].map((option) => option.value),
+	}));
+
+	const ids = _.uniq(selects.flatMap((select) => select.ids));
+
+	return ids;
+}
+
+function getHeaders() {
+	const dataSetForms = [...document.querySelectorAll(".dataset-form")];
+	const headers = dataSetForms.flatMap((form) => {
+		const n = _.toNumber(form.id.replace("datasetForm", ""));
+		if (_.isNumber(n)) {
+			const [healthFacility, reportingPeriod, dataSetName] = [
+				...form.querySelectorAll(".dsTitle"),
+			].map((input) => input.value);
+			return [
+				{
+					index: n - 1,
+					healthFacility,
+					reportingPeriod,
+					dataSetName,
+				},
+			];
+		} else return [];
+	});
+
+	return headers;
+}
