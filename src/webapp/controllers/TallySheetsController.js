@@ -1,5 +1,5 @@
 import { TallySheets } from "../TallySheets.js";
-import { dhisUrl, apiUrl } from "../app.js";
+import { dhisUrl, apiUrl, compositionRoot } from "../app.js";
 
 export const TallySheetsController = TallySheets.controller(
 	"TallySheetsController",
@@ -7,23 +7,6 @@ export const TallySheetsController = TallySheets.controller(
 		"$scope",
 		"$resource",
 		function ($scope, $resource) {
-			const getDataSets = (ids) => {
-				return $resource(
-					apiUrl + "/dataSets.json",
-					{},
-					{
-						get: {
-							method: "GET",
-							params: {
-								fields: "id,displayName,formType,displayFormName,sections[:all]",
-								filter: `id:in:[${ids}]`,
-								paging: false,
-							},
-						},
-					}
-				);
-			};
-
 			const getSelectedDataSets = function () {
 				//Temporal workaround, expected to be deleted on future
 				//Split array in pairs of 2 because dataset and language <select/> elements have same id
@@ -104,31 +87,10 @@ export const TallySheetsController = TallySheets.controller(
 					table: table.html(),
 				};
 
-				getDataSets(ids.join(","))
-					.get()
-					.$promise.then(({ dataSets }) => {
-						const customDataSets = dataSets.filter(
-							(dataset) => dataset.formType === "CUSTOM"
-						);
-						const sectionedDataSets = dataSets.filter(
-							(dataset) => dataset.formType === "SECTION"
-						);
-						const defaultDataSets = dataSets.filter(
-							(dataset) => dataset.formType === "DEFAULT"
-						);
-
-						const defaultSections = defaultDataSets.map(
-							(dataSet) => ({
-								title: dataSet.name,
-								description: dataSet.displayFormName,
-							})
-						);
-
-						console.log("custom: ", customDataSets);
-						console.log("sectioned: ", sectionedDataSets);
-						console.log("default: ", defaultDataSets);
-						console.log(defaultSections);
-					});
+				const dataSets = compositionRoot.dataSets.getSelected.execute(
+					$resource,
+					ids.join(",")
+				);
 
 				// XlsxRepository.test()
 				// 	.then((blob) => {

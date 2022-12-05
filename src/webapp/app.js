@@ -9,6 +9,11 @@ import { datasetFormDirective } from "./directives/datasetFormDirective.js";
 import { datasetSelectorController } from "./controllers/datasetSelectorController.js";
 import { datasetFormController } from "./controllers/datasetFormController.js";
 import { TallySheetsController } from "./controllers/TallySheetsController.js";
+import { getCompositionRoot } from "../compositionRoot.js";
+
+export const dhisUrl = window.location.href.split("api/apps/")[0];
+export const apiUrl = dhisUrl + "api";
+export const compositionRoot = getCompositionRoot();
 
 const config = {
 	factories: [DataSetsUIDFactory, LocalesFactory, DataSetEntryFormFactory],
@@ -24,9 +29,6 @@ const config = {
 		TallySheetsController,
 	],
 };
-
-export const dhisUrl = window.location.href.split("api/apps/")[0];
-export const apiUrl = dhisUrl + "api";
 
 TallySheets.config(function ($translateProvider) {
 	$translateProvider.useStaticFilesLoader({

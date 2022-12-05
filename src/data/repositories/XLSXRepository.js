@@ -1,4 +1,4 @@
-class XlsxRepository {
+class XLSXRepository {
 	static test() {
 		// Load a new blank workbook
 		return XlsxPopulate.fromBlankAsync().then((workbook) => {
