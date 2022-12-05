@@ -23,9 +23,9 @@ export class GetSelectedDataSetsUseCase {
 					description: dataSet.displayFormName,
 					formType: dataSet.formType,
 					dataElements: dataSet.dataSetElements.map(
-						({ id, displayFormName }) => ({
-							id,
-							displayFormName,
+						({ dataElement: de }) => ({
+							id: de.id,
+							displayFormName: de.displayFormName,
 						})
 					),
 				}));

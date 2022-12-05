@@ -68,7 +68,7 @@ export const TallySheetsController = TallySheets.controller(
 				};
 
 				const headers = getHeaders();
-				console.log(headers);
+
 				compositionRoot.dataSets.getSelected
 					.execute($resource, ids.join(","))
 					.then((dataSets) => {
