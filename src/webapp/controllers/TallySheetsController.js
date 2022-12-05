@@ -72,14 +72,12 @@ export const TallySheetsController = TallySheets.controller(
 				compositionRoot.dataSets.getSelected
 					.execute($resource, ids.join(","))
 					.then((dataSets) => {
-						const dataSetsWithHeaders = dataSets.map(
-							(dataSet, idx) => ({
-								...dataSet,
-								headers: headers.find(
-									({ index }) => index === idx
-								),
-							})
-						);
+						const dataSetsWithHeaders = dataSets.map((dataSet) => ({
+							...dataSet,
+							headers: headers.find(
+								({ id }) => id === dataSet.id
+							),
+						}));
 						compositionRoot.export.createFiles
 							.execute(dataSetsWithHeaders)
 							.then((blobFiles) => {
@@ -137,20 +135,15 @@ function getSelectedDataSets() {
 function getHeaders() {
 	const dataSetForms = [...document.querySelectorAll(".dataset-form")];
 	const headers = dataSetForms.flatMap((form) => {
-		const n = _.toNumber(form.id.replace("datasetForm", ""));
-		if (_.isNumber(n)) {
-			const [healthFacility, reportingPeriod, dataSetName] = [
-				...form.querySelectorAll(".dsTitle"),
-			].map((input) => input.value);
-			return [
-				{
-					index: n - 1,
-					healthFacility,
-					reportingPeriod,
-					dataSetName,
-				},
-			];
-		} else return [];
+		const [healthFacility, reportingPeriod, dataSetName] = [
+			...form.querySelectorAll(".dsTitle"),
+		].map((input) => input.value);
+		return {
+			id: form.dataset.id,
+			healthFacility,
+			reportingPeriod,
+			dataSetName,
+		};
 	});
 
 	return _.orderBy(headers, ({ index }) => index);

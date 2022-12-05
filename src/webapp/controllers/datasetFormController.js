@@ -29,7 +29,9 @@ export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 					);
 
 					$("#datasetForms").prepend(
-						"<span class='dataset-form' id=datasetForm" +
+						"<span class='dataset-form' data-id='" +
+							scope.dataset.id +
+							"' id=datasetForm" +
 							$scope.selectorId +
 							">" +
 							header +
