@@ -6,9 +6,13 @@ export class CreateXlsxFilesUseCase {
 			switch (dataSet.formType) {
 				case "DEFAULT":
 					return [
-						XlsxPopulate.fromBlankAsync().then(
-							exportDefaultDataSet
-						),
+						{
+							name: `${dataSet.title}.xlsx`,
+							blob: XlsxPopulate.fromBlankAsync().then(
+								(workbook) =>
+									exportDefaultDataSet(workbook, dataSet)
+							),
+						},
 					];
 				default:
 					return [];
@@ -18,13 +22,20 @@ export class CreateXlsxFilesUseCase {
 	}
 }
 
-function exportDefaultDataSet(workbook) {
+function exportDefaultDataSet(workbook, dataSet) {
 	const sheet = workbook.sheet(0);
 	sheet.name("MSF-OCBA HMIS");
+	if (dataSet.headers) populateHeaders(sheet, dataSet.headers);
 
 	return workbook.outputAsync().then((buffer) => {
 		return new Blob([buffer], {
 			type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 		});
 	});
+}
+
+function populateHeaders(sheet, header) {
+	sheet.cell("A1").value(header.healthFacility);
+	sheet.cell("A2").value(header.reportingPeriod);
+	sheet.cell("A3").value(header.dataSetName);
 }

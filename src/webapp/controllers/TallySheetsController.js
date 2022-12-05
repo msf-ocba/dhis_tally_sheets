@@ -68,14 +68,16 @@ export const TallySheetsController = TallySheets.controller(
 				};
 
 				const headers = getHeaders();
-
+				console.log(headers);
 				compositionRoot.dataSets.getSelected
 					.execute($resource, ids.join(","))
 					.then((dataSets) => {
 						const dataSetsWithHeaders = dataSets.map(
 							(dataSet, idx) => ({
 								...dataSet,
-								headers: headers.at(idx),
+								headers: headers.find(
+									({ index }) => index === idx
+								),
 							})
 						);
 						compositionRoot.export.createFiles
@@ -83,17 +85,16 @@ export const TallySheetsController = TallySheets.controller(
 							.then((blobFiles) => {
 								var zip = new JSZip();
 								zip.file(name, format(template, ctx));
-								// zip.file("test.xlsx", blob);
+								blobFiles.forEach((file) =>
+									zip.file(file.name, file.blob)
+								);
 								zip.generateAsync({ type: "blob" }).then(
 									(blob) => {
 										saveAs(blob, "MSF-OCBA HMIS.zip");
 									}
 								);
 							});
-					})
-					.catch(() => {
-						console.error("");
-					}); //todo
+					});
 
 				//Create a fake link to download the file
 				// var link = angular.element('<a class="hidden" id="idlink"></a>');
