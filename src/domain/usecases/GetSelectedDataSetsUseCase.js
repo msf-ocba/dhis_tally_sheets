@@ -3,8 +3,8 @@ export class GetSelectedDataSetsUseCase {
 		this.dhisRepository = dhisRepository;
 	}
 
-	execute($resource, dataSetsIds) {
-		return this.dhisRepository
+	async execute($resource, dataSetsIds) {
+		return await this.dhisRepository
 			.get($resource, dataSetsIds)
 			.$promise.then(({ dataSets }) => {
 				const customDataSets = dataSets.filter(
@@ -21,6 +21,7 @@ export class GetSelectedDataSetsUseCase {
 					id: dataSet.id,
 					title: dataSet.name,
 					description: dataSet.displayFormName,
+					formType: dataSet.formType,
 					dataElements: dataSet.dataSetElements.map(
 						({ id, displayFormName }) => ({
 							id,
@@ -29,9 +30,7 @@ export class GetSelectedDataSetsUseCase {
 					),
 				}));
 
-				return {
-					defaultSections,
-				};
+				return [...defaultSections];
 			});
 	}
 }

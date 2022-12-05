@@ -67,21 +67,33 @@ export const TallySheetsController = TallySheets.controller(
 					table: table.html(),
 				};
 
-				const dataSets = compositionRoot.dataSets.getSelected.execute(
-					$resource,
-					ids.join(",")
-				);
+				const headers = getHeaders();
 
-				// XlsxRepository.test()
-				// 	.then((blob) => {
-				// 		var zip = new JSZip();
-				// 		zip.file(name, format(template, ctx));
-				// 		zip.file("test.xlsx", blob);
-				// 		zip.generateAsync({ type: "blob" }).then((blob) => {
-				// 			saveAs(blob, "MSF-OCBA HMIS.zip");
-				// 		});
-				// 	})
-				// 	.catch((err) => console.error(err));
+				compositionRoot.dataSets.getSelected
+					.execute($resource, ids.join(","))
+					.then((dataSets) => {
+						const dataSetsWithHeaders = dataSets.map(
+							(dataSet, idx) => ({
+								...dataSet,
+								headers: headers.at(idx),
+							})
+						);
+						compositionRoot.export.createFiles
+							.execute(dataSetsWithHeaders)
+							.then((blobFiles) => {
+								var zip = new JSZip();
+								zip.file(name, format(template, ctx));
+								// zip.file("test.xlsx", blob);
+								zip.generateAsync({ type: "blob" }).then(
+									(blob) => {
+										saveAs(blob, "MSF-OCBA HMIS.zip");
+									}
+								);
+							});
+					})
+					.catch(() => {
+						console.error("");
+					}); //todo
 
 				//Create a fake link to download the file
 				// var link = angular.element('<a class="hidden" id="idlink"></a>');
@@ -140,5 +152,5 @@ function getHeaders() {
 		} else return [];
 	});
 
-	return headers;
+	return _.orderBy(headers, ({ index }) => index);
 }
