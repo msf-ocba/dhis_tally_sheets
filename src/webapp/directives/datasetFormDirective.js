@@ -5,7 +5,7 @@ export const datasetFormDirective = TallySheets.directive(
 	function () {
 		return {
 			restrict: "E",
-			templateUrl: "assets/views/datasetFormView.html",
+			templateUrl: "src/views/datasetFormView.html",
 			scope: {
 				dataset: "=",
 				selectorId: "@",

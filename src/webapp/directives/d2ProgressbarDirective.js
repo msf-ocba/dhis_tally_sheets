@@ -5,7 +5,7 @@ export const d2ProgressbarDirective = TallySheets.directive(
 	function () {
 		return {
 			restrict: "E",
-			templateUrl: "assets/views/progressBarView.html",
+			templateUrl: "src/views/progressBarView.html",
 		};
 	}
 );

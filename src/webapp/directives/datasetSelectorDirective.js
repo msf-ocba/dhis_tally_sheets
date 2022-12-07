@@ -5,7 +5,7 @@ export const datasetSelectorDirective = TallySheets.directive(
 	function () {
 		return {
 			restrict: "E",
-			templateUrl: "assets/views/datasetSelectorView.html",
+			templateUrl: "src/views/datasetSelectorView.html",
 			scope: {
 				selectorId: "=",
 				bindToDataset: "=",
