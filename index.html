@@ -47,13 +47,10 @@
 				<span class="row flex">
 					<span class="row flex" ng-repeat="(index,selector) in dsSelectorList">
 						<dataset-selector selector-id="selector.id" bind-to-dataset="selector.dataset"></dataset-selector>
-						<button ng-click="deleteDatesetSelector(index)" class="btn btn-default hidden-print">
+						<button ng-click="clearForm()" class="btn btn-default hidden-print">
 							<span class="glyphicon glyphicon-remove"></span>
 						</button>
 					</span>
-					<button ng-click="addDatasetSelector()" class="btn btn-primary btn-xs hidden-print">
-						{{ 'ADD_FORM' | translate }}
-					</button>
 				</span>
 			</div>
 		</div>

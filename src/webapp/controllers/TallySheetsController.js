@@ -21,9 +21,9 @@ export const TallySheetsController = TallySheets.controller(
 				});
 			};
 
-			$scope.deleteDatesetSelector = function (selectPosition) {
-				$scope.dsSelectorList.splice(selectPosition, 1);
-			};
+			$scope.clearForm = function () {
+				$('#datasetForms').children().remove();;
+			  };
 
 			$scope.exportToTable = function (tableId) {
 				const ids = getSelectedDataSets();

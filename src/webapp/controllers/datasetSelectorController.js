@@ -40,11 +40,12 @@ export const datasetSelectorController = TallySheets.controller(
 				$scope.selectorLoaded = true;
 			});
 
-			var form = document.querySelector("#datasetSelector");
-			$scope.selectedIds = [];
+			$scope.selected = [];
 
-			$(form).on("change", "#" + $scope.id, function () {
-				var formData = new FormData(form);
+			var datasetForm = document.querySelector("#datasetSelector");
+			$scope.selectedIds = [];
+			$(datasetForm).on("change", "#" + $scope.id, function () {
+				var formData = new FormData(datasetForm);
 				var selectedValues = formData.getAll("dataset");
 
 				var dsId = selectedValues.find(
@@ -52,11 +53,11 @@ export const datasetSelectorController = TallySheets.controller(
 				);
 				var dsName = $scope.dataSetList.find(
 					(dataSet) => dataSet.id === dsId
-				).displayName;
+				)?.displayName;
 
 				var languageList = $scope.dataSetList
 					.find((dataSet) => dataSet.id === dsId)
-					.translations.filter(
+					.translations?.filter(
 						(translation) => translation.property === "NAME"
 					);
 
@@ -67,13 +68,37 @@ export const datasetSelectorController = TallySheets.controller(
 					)
 				);
 
+				$scope.selected = selectedValues;
+
 				$scope.bindToDataset.id = dsId;
 				$scope.bindToDataset.name = dsName;
 				$scope.bindToDataset.selectedIds = selectedValues;
-				$scope.bindToDataset.dataSets = $scope.dataSetList;
+				$scope.bindToDataset.selected = $scope.selected.filter(Boolean);
 
 				$scope.selectedIds = selectedValues;
 
+				$rootScope.$apply();
+			});
+
+			$scope.selectedLangs = [];
+			var languageForm = document.querySelector("#languageSelector");
+			$(languageForm).on("change", "#" + $scope.id, function () {
+				var formData = new FormData(languageForm);
+				var selectedValues = formData.getAll("language");
+
+				var selectedLanguage = selectedValues.find(
+					(selected) =>
+						!$scope.selectedLangs.includes(selected) &&
+						selected !== "en"
+				);
+
+				if (selectedLanguage !== undefined) {
+					$scope.selected.push(selectedLanguage);
+					$scope.bindToDataset.selected =
+						$scope.selected.filter(Boolean);
+				}
+
+				$scope.selectedLangs = selectedValues;
 				$rootScope.$apply();
 			});
 		},

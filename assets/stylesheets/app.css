@@ -118,3 +118,7 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
 		border: 0px;
 	}
 }
+
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+	width: 350px;
+  }
