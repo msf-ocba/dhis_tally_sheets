@@ -22,8 +22,8 @@ export const TallySheetsController = TallySheets.controller(
 			};
 
 			$scope.clearForm = function () {
-				$('#datasetForms').children().remove();;
-			  };
+				$("#datasetForms").children().remove();
+			};
 
 			$scope.exportToTable = function (tableId) {
 				const ids = getSelectedDataSets();
@@ -69,30 +69,33 @@ export const TallySheetsController = TallySheets.controller(
 
 				const headers = getHeaders();
 
-				compositionRoot.dataSets.getSelected
-					.execute($resource, ids.join(","))
-					.then((dataSets) => {
-						const dataSetsWithHeaders = dataSets.map((dataSet) => ({
-							...dataSet,
-							headers: headers.find(
-								({ id }) => id === dataSet.id
-							),
-						}));
-						compositionRoot.export.createFiles
-							.execute(dataSetsWithHeaders)
-							.then((blobFiles) => {
-								var zip = new JSZip();
-								zip.file(name, format(template, ctx));
-								blobFiles.forEach((file) =>
-									zip.file(file.name, file.blob)
-								);
-								zip.generateAsync({ type: "blob" }).then(
-									(blob) => {
-										saveAs(blob, "MSF-OCBA HMIS.zip");
-									}
-								);
-							});
-					});
+				if (!_.isEmpty(ids))
+					compositionRoot.dataSets.getSelected
+						.execute($resource, ids.join(","))
+						.then((dataSets) => {
+							const dataSetsWithHeaders = dataSets.map(
+								(dataSet) => ({
+									...dataSet,
+									headers: headers.find(
+										({ id }) => id === dataSet.id
+									),
+								})
+							);
+							compositionRoot.export.createFiles
+								.execute(dataSetsWithHeaders)
+								.then((blobFiles) => {
+									var zip = new JSZip();
+									zip.file(name, format(template, ctx));
+									blobFiles.forEach((file) =>
+										zip.file(file.name, file.blob)
+									);
+									zip.generateAsync({ type: "blob" }).then(
+										(blob) => {
+											saveAs(blob, "MSF-OCBA HMIS.zip");
+										}
+									);
+								});
+						});
 
 				//Create a fake link to download the file
 				// var link = angular.element('<a class="hidden" id="idlink"></a>');

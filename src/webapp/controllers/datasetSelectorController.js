@@ -57,7 +57,7 @@ export const datasetSelectorController = TallySheets.controller(
 
 				var languageList = $scope.dataSetList
 					.find((dataSet) => dataSet.id === dsId)
-					.translations?.filter(
+					?.translations?.filter(
 						(translation) => translation.property === "NAME"
 					);
 
@@ -76,6 +76,12 @@ export const datasetSelectorController = TallySheets.controller(
 				$scope.bindToDataset.selected = $scope.selected.filter(Boolean);
 
 				$scope.selectedIds = selectedValues;
+
+				const exportButton = document.getElementById("export-button");
+				if (exportButton) {
+					if (_.isEmpty(selectedValues)) exportButton.disabled = true;
+					else exportButton.disabled = false;
+				}
 
 				$rootScope.$apply();
 			});
