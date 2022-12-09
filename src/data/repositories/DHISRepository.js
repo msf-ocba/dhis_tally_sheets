@@ -9,7 +9,7 @@ export class DHISRepository {
 				get: {
 					method: "GET",
 					params: {
-						fields: "id,name,displayName,formType,displayFormName,sections[:all],dataSetElements[dataElement[:all]]",
+						fields: fields,
 						filter: `id:in:[${dataSetsIds}]`,
 						paging: false,
 					},
@@ -18,3 +18,9 @@ export class DHISRepository {
 		).get();
 	}
 }
+
+const idDisplayFormName = `id,displayFormName`;
+const categoryCombos = `categories[categoryOptions[displayFormName]],categoryOptionCombos[${idDisplayFormName}]`;
+const section = `displayName,description,categoryCombos[id,${categoryCombos}],dataElements[${idDisplayFormName},categoryCombo],greyedFields[:all]`;
+
+const fields = `id,name,displayName,formType,displayFormName,sections[${section}],dataSetElements[dataElement[${idDisplayFormName}]]`;
