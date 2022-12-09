@@ -44,6 +44,8 @@ function mapSection(section) {
 		};
 	});
 
+	//Order category combos by the ones that comes first on the dataset dataElements
+	//Needed when multiple dataElements differ on categoryCombo
 	const orderedCategoryCombos = _.orderBy(
 		mappedCategoryCombos,
 		(categoryCombo) =>
@@ -55,26 +57,22 @@ function mapSection(section) {
 	const categoryCombos = orderedCategoryCombos.map((categoryCombo) => {
 		return {
 			...categoryCombo,
-			categoryOptionCombos: categoryCombo.categoryOptionCombos.sort(
-				(a, b) => {
-					const aPrio = a.categories.map((category) =>
-						getPrio(categoryCombo, category)
-					);
-					const bPrio = b.categories.map((category) =>
-						getPrio(categoryCombo, category)
+			categoryOptionCombos: _.orderBy(
+				categoryCombo.categoryOptionCombos,
+				(categoryOptionCombo) => {
+					//Assign to each word of the displayFormName the index where it appears on categoryCombo.categories[]
+					//Output: [1, 2, 0]
+					const prio = categoryOptionCombo.categories.map(
+						(category) => getPrio(categoryCombo, category)
 					);
 
-					let index = 0;
-					let order = 0;
-					while (
-						order == 0 &&
-						index < categoryCombo.categories.length
-					) {
-						if (aPrio[index] < bPrio[index]) return -1;
-						else if (aPrio[index] > bPrio[index]) return 1;
-						else index++;
-					}
-					return 0;
+					//Gives lower priority as [N] increases and does a sum of all values
+					//[1, 2, 0] -> [100, 20, 0] -> 120
+					return prio
+						.map(
+							(v, idx) => v * Math.pow(10, prio.length - 1 - idx)
+						)
+						.reduce((a, b) => a + b, 0);
 				}
 			),
 		};
