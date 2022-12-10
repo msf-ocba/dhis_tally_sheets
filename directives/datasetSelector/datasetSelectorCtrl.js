@@ -54,16 +54,19 @@ TallySheets.controller("datasetSelectorCtrl", [
       var formData = new FormData(datasetForm);
       var selectedValues = formData.getAll("dataset");
 
-      var dsId = selectedValues.find(
-        (selected) => !$scope.selectedIds.includes(selected)
-      );
+      var dsId =
+        selectedValues.find(
+          (selected) => !$scope.selectedIds.includes(selected)
+        ) ?? null;
       var dsName = $scope.dataSetList.find(
         (dataSet) => dataSet.id === dsId
       )?.displayName;
 
       var languageList = $scope.dataSetList
         .find((dataSet) => dataSet.id === dsId)
-        .translations?.filter((translation) => translation.property === "NAME");
+        ?.translations?.filter(
+          (translation) => translation.property === "NAME"
+        );
 
       $scope.languageList = $scope.languages.filter((lang) =>
         languageList?.some(
@@ -76,7 +79,7 @@ TallySheets.controller("datasetSelectorCtrl", [
       $scope.bindToDataset.id = dsId;
       $scope.bindToDataset.name = dsName;
       $scope.bindToDataset.selectedIds = selectedValues;
-      $scope.bindToDataset.selected = $scope.selected.filter(Boolean);
+      $scope.bindToDataset.selected = $scope.selected;
 
       $scope.selectedIds = selectedValues;
 
@@ -96,7 +99,7 @@ TallySheets.controller("datasetSelectorCtrl", [
 
       if (selectedLanguage !== undefined) {
         $scope.selected.push(selectedLanguage);
-        $scope.bindToDataset.selected = $scope.selected.filter(Boolean);
+        $scope.bindToDataset.selected = $scope.selected;
       }
 
       $scope.selectedLangs = selectedValues;
