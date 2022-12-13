@@ -86,8 +86,8 @@ export const TallySheetsController = TallySheets.controller(
 								.then((blobFiles) => {
 									var zip = new JSZip();
 									zip.file(name, format(template, ctx));
-									blobFiles.forEach((file) =>
-										zip.file(file.name, file.blob)
+									blobFiles.forEach(
+										(file) => zip.file(file.name, file.blob) //TODO: REGEX NAME
 									);
 									zip.generateAsync({ type: "blob" }).then(
 										(blob) => {

@@ -25,6 +25,7 @@ export class CreateXlsxFilesUseCase {
 
 function exportDataSet(workbook, dataSet) {
 	const sheet = workbook.sheet(0);
+	sheet.column("A").width(40);
 	sheet.name("MSF-OCBA HMIS");
 	console.log(dataSet);
 	if (dataSet.formType === "DEFAULT") populateDefault(sheet, dataSet);
@@ -78,10 +79,16 @@ function addSection(sheet, section, row) {
 			loops = loops * categoryGroup.length;
 			categoryCombo.categoryOptionCombos.forEach(
 				(categoryOptionCombo, cocIdx) => {
-					// const column = _.range(0, Math.max(1, cocIdx) / 24)
-					// 	.map(() => String.fromCharCode((cocIdx % 25) + 66))
-					// 	.join(""); //B is 66
-					const column = String.fromCharCode(cocIdx + 66);
+					const range = _.range(0, Math.max(1, cocIdx) / 24);
+					const column = range
+						.map((idx) =>
+							idx === range.length - 1
+								? range.length === 1
+									? String.fromCharCode((cocIdx % 25) + 66)
+									: String.fromCharCode((cocIdx % 25) + 65)
+								: String.fromCharCode(idx + 65)
+						)
+						.join(""); //B is 66
 					console.log(column);
 					console.log(`idx: ${cocIdx}, column: ${column}`);
 					sheet
