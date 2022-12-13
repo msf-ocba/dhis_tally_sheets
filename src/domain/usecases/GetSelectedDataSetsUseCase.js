@@ -11,6 +11,9 @@ export class GetSelectedDataSetsUseCase {
 					if (dataSet.formType === "CUSTOM") return [];
 					const mappedDataSets = {
 						...dataSet,
+						dataSetElements: dataSet.dataSetElements.map(
+							({ dataElement }) => dataElement
+						),
 						sections: dataSet.sections.map(mapSection),
 					};
 					return [mappedDataSets];
@@ -21,12 +24,16 @@ export class GetSelectedDataSetsUseCase {
 
 function mapSection(section) {
 	const mappedCategoryCombos = section.categoryCombos.map((categoryCombo) => {
-		const categoryOptionCombos = categoryCombo.categoryOptionCombos.map(
-			(categoryOptionCombo) => ({
+		const categoryOptionCombos = categoryCombo.categoryOptionCombos
+			.map((categoryOptionCombo) => ({
 				...categoryOptionCombo,
 				categories: categoryOptionCombo.displayFormName.split(", "),
-			})
-		);
+			}))
+			.filter(
+				(categoryOptionCombo) =>
+					categoryOptionCombo.categoryOptions.length ===
+					categoryCombo.categories.length
+			);
 
 		const categories = categoryCombo.categories.map(({ categoryOptions }) =>
 			categoryOptions.map(({ displayFormName }) => displayFormName)
@@ -60,7 +67,7 @@ function mapSection(section) {
 			categoryOptionCombos: _.orderBy(
 				categoryCombo.categoryOptionCombos,
 				(categoryOptionCombo) => {
-					//Assign to each word of the displayFormName the index where it appears on categoryCombo.categories[]
+					//Assign to each word of the (displayFormName) the index where it appears on categoryCombo.categories[]
 					//Output: [1, 2, 0]
 					const prio = categoryOptionCombo.categories.map(
 						(category) => getPrio(categoryCombo, category)
@@ -86,5 +93,6 @@ function mapSection(section) {
 
 function getPrio(categoryCombo, category) {
 	const categories = categoryCombo.categories.flat();
+	console.log(categories);
 	return categories.indexOf(category);
 }

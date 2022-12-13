@@ -1,6 +1,8 @@
 export class CreateXlsxFilesUseCase {
 	constructor() {}
 
+	//TODO WHEN IS SECTION BUT IS DEFAULT IN REALITY
+
 	execute(dataSets) {
 		const files$ = dataSets.flatMap((dataSet) => {
 			if (
@@ -46,7 +48,7 @@ function populateDefault(sheet, dataSet) {
 	sheet.cell("A4").value(dataSet.displayFormName);
 	sheet.cell("B6").value("Value");
 	_.orderBy(
-		dataSet.dataElements,
+		dataSet.dataSetElements,
 		({ displayFormName }) => displayFormName
 	).forEach((de, idx) => sheet.cell(`A${7 + idx}`).value(de.displayFormName));
 }
@@ -65,19 +67,50 @@ function addSection(sheet, section, row) {
 	if (section.description) sheet.cell(`A${++row}`).value(section.description);
 	++row;
 	section.categoryCombos.forEach((categoryCombo) => {
-		categoryCombo.categories.forEach((category) => {
+		let combinations = categoryCombo.categories
+			.map((cg) => cg.length)
+			.reduce((a, b) => a * b);
+		let categoryWidth = combinations;
+		let loops = 1;
+		categoryCombo.categories.forEach((categoryGroup, cgIdx) => {
 			++row;
-			categoryCombo.categoryOptionCombo.forEach(
-				(categoryOptionCombo, idx) => {
-					const column = String.fromCharCode(idx + 66);
-					// sheet.cell(`${column}${row}`).value(categoryOptionCombo.categories??"");
+			categoryWidth = categoryWidth / categoryGroup.length;
+			loops = loops * categoryGroup.length;
+			categoryCombo.categoryOptionCombos.forEach(
+				(categoryOptionCombo, cocIdx) => {
+					// const column = _.range(0, Math.max(1, cocIdx) / 24)
+					// 	.map(() => String.fromCharCode((cocIdx % 25) + 66))
+					// 	.join(""); //B is 66
+					const column = String.fromCharCode(cocIdx + 66);
+					console.log(column);
+					console.log(`idx: ${cocIdx}, column: ${column}`);
+					sheet
+						.cell(`${column}${row}`)
+						.value(
+							_.first(
+								_.at(categoryOptionCombo.categories, cgIdx)
+							) ?? ""
+						);
 				}
 			);
+			if (categoryWidth > 1) {
+				_.range(0, loops).map((i) => {
+					const start = i * categoryWidth + 66; //B is 66
+					const end = start + categoryWidth - 1; //B is 66
+					const range = sheet.range(
+						`${String.fromCharCode(
+							start
+						)}${row}:${String.fromCharCode(end)}${row}`
+					);
+					range.merged(true);
+				});
+			}
 		});
+		_.orderBy(
+			categoryCombo.dataElements,
+			({ displayFormName }) => displayFormName
+		).forEach((de) => sheet.cell(`A${++row}`).value(de.displayFormName));
+		++row;
 	});
-	// _.orderBy(
-	// 	dataSet.dataElements,
-	// 	({ displayFormName }) => displayFormName
-	// ).forEach((de, idx) => sheet.cell(`A${7 + idx}`).value(de.displayFormName));
 	return row;
 }
