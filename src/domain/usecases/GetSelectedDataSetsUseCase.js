@@ -35,7 +35,6 @@ function mapSection(section) {
 			}))
 			.filter((categoryOptionCombo) => {
 				const flatCategories = categories.flat();
-				console.log(flatCategories);
 				const includesInCategories =
 					categoryOptionCombo.categories.every((category) =>
 						flatCategories.includes(category)
@@ -43,6 +42,7 @@ function mapSection(section) {
 				const sameCategoriesLength =
 					categoryOptionCombo.categoryOptions.length ===
 					categoryCombo.categories.length;
+
 				return includesInCategories && sameCategoriesLength;
 			});
 
