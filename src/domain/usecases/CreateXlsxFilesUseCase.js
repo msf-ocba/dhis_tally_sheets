@@ -50,33 +50,44 @@ function exportDataSet(workbook, dataSet) {
 	});
 }
 
-const titleStyle = {
-	bold: true,
-	fontSize: 13.5,
-};
+const borderStyle = { style: "thin", color: "000000" };
 
-const categoryHeaderStyle = {
-	bold: true,
-	fontSize: 10,
-	horizontalAlignment: "center",
-	verticalAlignment: "center",
+const styles = {
+	dataElementStyle: { fontSize: 10, wrapText: true },
+	titleStyle: {
+		bold: true,
+		fontSize: 13.5,
+	},
+	categoryHeaderStyle: {
+		bold: true,
+		fontSize: 10,
+		horizontalAlignment: "center",
+		verticalAlignment: "center",
+	},
+	borders: {
+		border: {
+			left: borderStyle,
+			right: borderStyle,
+			top: borderStyle,
+			bottom: borderStyle,
+		},
+	},
 };
-const dataElementStyle = { fontSize: 10, wrapText: true };
 
 function populateHeaders(sheet, header) {
-	sheet.cell("A1").value(header.healthFacility).style(titleStyle);
+	sheet.cell("A1").value(header.healthFacility).style(styles.titleStyle);
 	sheet
 		.cell("A2")
 		.value(header.reportingPeriod)
 		.style({ bold: true, fontSize: 18 });
-	sheet.cell("A3").value(header.dataSetName).style(titleStyle);
+	sheet.cell("A3").value(header.dataSetName).style(styles.titleStyle);
 }
 
 function populateDefault(sheet, dataSet) {
 	if (dataSet.headers) populateHeaders(sheet, dataSet.headers);
-	sheet.cell("A4").value(dataSet.displayFormName).style(titleStyle);
+	sheet.cell("A4").value(dataSet.displayFormName).style(styles.titleStyle);
 	sheet.cell("B6").value("Value");
-	sheet.row(6).style(categoryHeaderStyle);
+	sheet.row(6).style(styles.categoryHeaderStyle);
 	_.orderBy(
 		dataSet.dataSetElements,
 		({ displayFormName }) => displayFormName
@@ -85,8 +96,11 @@ function populateDefault(sheet, dataSet) {
 			.row(7 + idx) //(6 + 1 cause idx starts on 0)
 			.cell(1)
 			.value(de.displayFormName)
-			.style(dataElementStyle)
+			.style(styles.dataElementStyle)
 	);
+
+	const lastCell = sheet.row(dataSet.dataSetElements.length + 6).cell(2); //B = 2
+	sheet.row(6).cell(1).rangeTo(lastCell).style(styles.borders);
 
 	return dataSet.dataSetElements.length + 6;
 }
@@ -103,16 +117,22 @@ function populateSections(sheet, dataSet) {
 }
 
 function addSection(sheet, section, row) {
-	sheet.row(++row).cell(1).value(section.displayName);
+	sheet
+		.row(++row)
+		.cell(1)
+		.value(section.displayName)
+		.style(styles.titleStyle);
 	if (section.description)
 		sheet.row(++row).cell(1).value(section.description);
 	++row;
+
 	section.categoryCombos.forEach((categoryCombo) => {
-		let combinations = categoryCombo.categories
+		const combinations = categoryCombo.categories
 			.map((cg) => cg.length)
 			.reduce((a, b) => a * b);
 		let categoryWidth = combinations;
 		let loops = 1;
+		const firstRow = row;
 		categoryCombo.categories.forEach((categoryGroup, cgIdx) => {
 			++row;
 			categoryWidth = categoryWidth / categoryGroup.length;
@@ -138,6 +158,7 @@ function addSection(sheet, section, row) {
 					range.merged(true);
 				});
 			}
+			sheet.row(row).style(styles.categoryHeaderStyle);
 		});
 		_.orderBy(
 			categoryCombo.dataElements,
@@ -147,8 +168,16 @@ function addSection(sheet, section, row) {
 				.row(++row)
 				.cell(1)
 				.value(de.displayFormName)
-				.style(dataElementStyle)
+				.style(styles.dataElementStyle)
 		);
+
+		const lastCell = sheet.row(row).cell(combinations + 1);
+		sheet
+			.row(firstRow + 1)
+			.cell(1)
+			.rangeTo(lastCell)
+			.style(styles.borders);
+
 		++row;
 	});
 
