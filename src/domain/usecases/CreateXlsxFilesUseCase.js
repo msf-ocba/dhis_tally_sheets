@@ -25,7 +25,7 @@ export class CreateXlsxFilesUseCase {
 
 function exportDataSet(workbook, dataSet) {
 	const sheet = workbook.sheet(0);
-	sheet.column("A").width(40);
+	sheet.column("A").width(57);
 	sheet.name("MSF-OCBA HMIS");
 	console.log(dataSet);
 	if (dataSet.formType === "DEFAULT") populateDefault(sheet, dataSet);
@@ -39,9 +39,13 @@ function exportDataSet(workbook, dataSet) {
 }
 
 function populateHeaders(sheet, header) {
-	sheet.cell("A1").value(header.healthFacility);
-	sheet.cell("A2").value(header.reportingPeriod);
-	sheet.cell("A3").value(header.dataSetName);
+	sheet
+		.cell("A1")
+		.value([
+			[header.healthFacility],
+			[header.reportingPeriod],
+			[header.dataSetName],
+		]);
 }
 
 function populateDefault(sheet, dataSet) {
@@ -51,7 +55,12 @@ function populateDefault(sheet, dataSet) {
 	_.orderBy(
 		dataSet.dataSetElements,
 		({ displayFormName }) => displayFormName
-	).forEach((de, idx) => sheet.cell(`A${7 + idx}`).value(de.displayFormName));
+	).forEach((de, idx) =>
+		sheet
+			.row(7 + idx)
+			.cell(1)
+			.value(de.displayFormName)
+	);
 }
 
 function populateSections(sheet, dataSet) {
@@ -64,8 +73,10 @@ function populateSections(sheet, dataSet) {
 }
 
 function addSection(sheet, section, row) {
-	sheet.cell(`A${++row}`).value(section.displayName);
-	if (section.description) sheet.cell(`A${++row}`).value(section.description);
+	if (section.displayName)
+		sheet.row(++row).cell(1).value(section.displayName);
+	if (section.description)
+		sheet.row(++row).cell(1).value(section.description);
 	++row;
 	section.categoryCombos.forEach((categoryCombo) => {
 		let combinations = categoryCombo.categories
@@ -78,37 +89,23 @@ function addSection(sheet, section, row) {
 			categoryWidth = categoryWidth / categoryGroup.length;
 			loops = loops * categoryGroup.length;
 			categoryCombo.categoryOptionCombos.forEach(
-				(categoryOptionCombo, cocIdx) => {
-					const range = _.range(0, Math.max(1, cocIdx) / 24);
-					const column = range
-						.map((idx) =>
-							idx === range.length - 1
-								? range.length === 1
-									? String.fromCharCode((cocIdx % 25) + 66)
-									: String.fromCharCode((cocIdx % 25) + 65)
-								: String.fromCharCode(idx + 65)
-						)
-						.join(""); //B is 66
-					console.log(column);
-					console.log(`idx: ${cocIdx}, column: ${column}`);
+				(categoryOptionCombo, column) => {
+					const value =
+						_.first(_.at(categoryOptionCombo.categories, cgIdx)) ??
+						"";
 					sheet
-						.cell(`${column}${row}`)
-						.value(
-							_.first(
-								_.at(categoryOptionCombo.categories, cgIdx)
-							) ?? ""
-						);
+						.row(row)
+						.cell(column + 2) //(1 + 1) starts at B and starts from 1 not 0
+						.value(value === "default" ? "Value" : value);
 				}
 			);
 			if (categoryWidth > 1) {
 				_.range(0, loops).map((i) => {
-					const start = i * categoryWidth + 66; //B is 66
-					const end = start + categoryWidth - 1; //B is 66
-					const range = sheet.range(
-						`${String.fromCharCode(
-							start
-						)}${row}:${String.fromCharCode(end)}${row}`
-					);
+					const start = i * categoryWidth + 2; //(1 + 1) starts at B and starts from 1 not 0
+					const end = start + categoryWidth - 1;
+					const startCell = sheet.row(row).cell(start);
+					const endCell = sheet.row(row).cell(end);
+					const range = startCell.rangeTo(endCell);
 					range.merged(true);
 				});
 			}
@@ -116,7 +113,7 @@ function addSection(sheet, section, row) {
 		_.orderBy(
 			categoryCombo.dataElements,
 			({ displayFormName }) => displayFormName
-		).forEach((de) => sheet.cell(`A${++row}`).value(de.displayFormName));
+		).forEach((de) => sheet.row(++row).cell(1).value(de.displayFormName));
 		++row;
 	});
 	return row;
