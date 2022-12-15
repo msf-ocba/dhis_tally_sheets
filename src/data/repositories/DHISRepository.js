@@ -20,7 +20,7 @@ export class DHISRepository {
 }
 
 const idDisplayFormName = `id,displayFormName`;
-const categoryCombos = `categories[categoryOptions[displayFormName]],categoryOptionCombos[${idDisplayFormName},categoryOptions[id,displayFormName]]`;
-const section = `displayName,description,categoryCombos[id,${categoryCombos}],dataElements[${idDisplayFormName},categoryCombo],greyedFields[dataElement,categoryOptionCombo]`;
+const categoryCombos = `categories[categoryOptions[displayFormName]],categoryOptionCombos[${idDisplayFormName},categoryOptions[id,displayFormName,translations]]`;
+const section = `translations,displayName,description,categoryCombos[id,${categoryCombos}],dataElements[${idDisplayFormName},translations,categoryCombo],greyedFields[dataElement,categoryOptionCombo]`;
 
-const fields = `id,name,displayName,formType,displayFormName,sections[${section}],dataSetElements[dataElement[${idDisplayFormName}]]`;
+const fields = `id,name,displayName,formType,displayFormName,sections[${section}],dataSetElements[dataElement[translations,${idDisplayFormName}]],translations`;
