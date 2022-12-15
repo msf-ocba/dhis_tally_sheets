@@ -19,17 +19,29 @@ export class CreateXlsxFilesUseCase {
 				];
 			} else return [];
 		});
+
 		return Promise.all(files$);
 	}
 }
 
 function exportDataSet(workbook, dataSet) {
 	const sheet = workbook.sheet(0);
-	sheet.column("A").width(57);
 	sheet.name("MSF-OCBA HMIS");
-	console.log(dataSet);
-	if (dataSet.formType === "DEFAULT") populateDefault(sheet, dataSet);
-	else if (dataSet.formType === "SECTION") populateSections(sheet, dataSet);
+
+	const { formType } = dataSet;
+
+	const finalRow =
+		formType === "DEFAULT"
+			? populateDefault(sheet, dataSet)
+			: formType === "SECTION"
+			? populateSections(sheet, dataSet)
+			: 1;
+	const values = sheet.range(`A1:A${finalRow}`).value();
+	const length = Math.min(
+		60,
+		Math.max(..._.compact(values.flat()).map((s) => s.length))
+	);
+	sheet.column("A").width(length);
 
 	return workbook.outputAsync().then((buffer) => {
 		return new Blob([buffer], {
@@ -38,29 +50,45 @@ function exportDataSet(workbook, dataSet) {
 	});
 }
 
+const titleStyle = {
+	bold: true,
+	fontSize: 13.5,
+};
+
+const categoryHeaderStyle = {
+	bold: true,
+	fontSize: 10,
+	horizontalAlignment: "center",
+	verticalAlignment: "center",
+};
+const dataElementStyle = { fontSize: 10, wrapText: true };
+
 function populateHeaders(sheet, header) {
+	sheet.cell("A1").value(header.healthFacility).style(titleStyle);
 	sheet
-		.cell("A1")
-		.value([
-			[header.healthFacility],
-			[header.reportingPeriod],
-			[header.dataSetName],
-		]);
+		.cell("A2")
+		.value(header.reportingPeriod)
+		.style({ bold: true, fontSize: 18 });
+	sheet.cell("A3").value(header.dataSetName).style(titleStyle);
 }
 
 function populateDefault(sheet, dataSet) {
 	if (dataSet.headers) populateHeaders(sheet, dataSet.headers);
-	sheet.cell("A4").value(dataSet.displayFormName);
+	sheet.cell("A4").value(dataSet.displayFormName).style(titleStyle);
 	sheet.cell("B6").value("Value");
+	sheet.row(6).style(categoryHeaderStyle);
 	_.orderBy(
 		dataSet.dataSetElements,
 		({ displayFormName }) => displayFormName
 	).forEach((de, idx) =>
 		sheet
-			.row(7 + idx)
+			.row(7 + idx) //(6 + 1 cause idx starts on 0)
 			.cell(1)
 			.value(de.displayFormName)
+			.style(dataElementStyle)
 	);
+
+	return dataSet.dataSetElements.length + 6;
 }
 
 function populateSections(sheet, dataSet) {
@@ -70,11 +98,12 @@ function populateSections(sheet, dataSet) {
 		const section = dataSet.sections[i];
 		row = addSection(sheet, section, row);
 	});
+
+	return row - 1;
 }
 
 function addSection(sheet, section, row) {
-	if (section.displayName)
-		sheet.row(++row).cell(1).value(section.displayName);
+	sheet.row(++row).cell(1).value(section.displayName);
 	if (section.description)
 		sheet.row(++row).cell(1).value(section.description);
 	++row;
@@ -113,8 +142,15 @@ function addSection(sheet, section, row) {
 		_.orderBy(
 			categoryCombo.dataElements,
 			({ displayFormName }) => displayFormName
-		).forEach((de) => sheet.row(++row).cell(1).value(de.displayFormName));
+		).forEach((de) =>
+			sheet
+				.row(++row)
+				.cell(1)
+				.value(de.displayFormName)
+				.style(dataElementStyle)
+		);
 		++row;
 	});
+
 	return row;
 }
