@@ -24,20 +24,27 @@ export class GetSelectedDataSetsUseCase {
 
 function mapSection(section) {
 	const mappedCategoryCombos = section.categoryCombos.map((categoryCombo) => {
+		const categories = categoryCombo.categories.map(({ categoryOptions }) =>
+			categoryOptions.map(({ displayFormName }) => displayFormName)
+		);
+
 		const categoryOptionCombos = categoryCombo.categoryOptionCombos
 			.map((categoryOptionCombo) => ({
 				...categoryOptionCombo,
 				categories: categoryOptionCombo.displayFormName.split(", "),
 			}))
-			.filter(
-				(categoryOptionCombo) =>
+			.filter((categoryOptionCombo) => {
+				const flatCategories = categories.flat();
+				console.log(flatCategories);
+				const includesInCategories =
+					categoryOptionCombo.categories.every((category) =>
+						flatCategories.includes(category)
+					);
+				const sameCategoriesLength =
 					categoryOptionCombo.categoryOptions.length ===
-					categoryCombo.categories.length
-			);
-
-		const categories = categoryCombo.categories.map(({ categoryOptions }) =>
-			categoryOptions.map(({ displayFormName }) => displayFormName)
-		);
+					categoryCombo.categories.length;
+				return includesInCategories && sameCategoriesLength;
+			});
 
 		const dataElements = section.dataElements.filter(
 			(de) => de.categoryCombo.id === categoryCombo.id
@@ -93,6 +100,5 @@ function mapSection(section) {
 
 function getPrio(categoryCombo, category) {
 	const categories = categoryCombo.categories.flat();
-	console.log(categories);
 	return categories.indexOf(category);
 }
