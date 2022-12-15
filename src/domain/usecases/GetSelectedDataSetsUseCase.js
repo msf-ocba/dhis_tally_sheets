@@ -50,11 +50,21 @@ function mapSection(section) {
 			(de) => de.categoryCombo.id === categoryCombo.id
 		);
 
+		const deIds = dataElements.map(({ id }) => id);
+		const cocIds = categoryOptionCombos.map(({ id }) => id);
+
+		const greyedFields = section.greyedFields.filter(
+			(gf) =>
+				deIds.includes(gf.dataElement.id) &&
+				cocIds.includes(gf.categoryOptionCombo.id)
+		);
+
 		return {
 			...categoryCombo,
 			categoryOptionCombos,
 			categories,
 			dataElements,
+			greyedFields,
 		};
 	});
 

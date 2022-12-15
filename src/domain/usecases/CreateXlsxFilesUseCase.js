@@ -138,13 +138,13 @@ function addSection(sheet, section, row) {
 			categoryWidth = categoryWidth / categoryGroup.length;
 			loops = loops * categoryGroup.length;
 			categoryCombo.categoryOptionCombos.forEach(
-				(categoryOptionCombo, column) => {
+				(categoryOptionCombo, idx) => {
 					const value =
 						_.first(_.at(categoryOptionCombo.categories, cgIdx)) ??
 						"";
 					sheet
 						.row(row)
-						.cell(column + 2) //(1 + 1) starts at B and starts from 1 not 0
+						.cell(idx + 2) //(1 + 1) starts at B and starts from 1 not 0
 						.value(value === "default" ? "Value" : value);
 				}
 			);
@@ -160,16 +160,33 @@ function addSection(sheet, section, row) {
 			}
 			sheet.row(row).style(styles.categoryHeaderStyle);
 		});
+
+		const cocIds = categoryCombo.categoryOptionCombos.map(({ id }) => id);
+
 		_.orderBy(
 			categoryCombo.dataElements,
 			({ displayFormName }) => displayFormName
-		).forEach((de) =>
+		).forEach((de) => {
 			sheet
 				.row(++row)
 				.cell(1)
 				.value(de.displayFormName)
-				.style(styles.dataElementStyle)
-		);
+				.style(styles.dataElementStyle);
+
+			if (!_.isEmpty(categoryCombo.greyedFields)) {
+				const applicableGF = section.greyedFields.filter(
+					(gf) => gf.dataElement.id === de.id
+				);
+				applicableGF.forEach((gf) => {
+					const idx = cocIds.indexOf(gf.categoryOptionCombo.id);
+					if (idx || idx === 0)
+						sheet
+							.row(row)
+							.cell(idx + 2) //(1 + 1)
+							.value("X");
+				});
+			}
+		});
 
 		const lastCell = sheet.row(row).cell(combinations + 1);
 		sheet
