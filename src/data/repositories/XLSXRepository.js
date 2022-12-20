@@ -1,9 +1,5 @@
-export class CreateXlsxFilesUseCase {
-	constructor() {}
-
-	//TODO WHEN IS SECTION BUT IS DEFAULT IN REALITY
-
-	execute(dataSets) {
+export class XLSXRepository {
+	createFiles(dataSets) {
 		const files$ = dataSets.flatMap((dataSet) => {
 			if (
 				dataSet.formType === "SECTION" ||

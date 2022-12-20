@@ -80,43 +80,11 @@ export const TallySheetsController = TallySheets.controller(
 				// });
 
 				if (!_.isEmpty(ids))
-					compositionRoot.dataSets.getSelected
-						.execute($resource, ids.join(","))
-						.then((dataSets) => {
-							const dataSetsWithHeaders = dataSets.map(
-								(dataSet) => ({
-									...dataSet,
-									headers: headers.find(
-										({ id }) => id === dataSet.id
-									),
-								})
-							);
-							compositionRoot.export.createFiles
-								.execute(dataSetsWithHeaders)
-								.then((blobFiles) => {
-									var zip = new JSZip();
-									zip.file(name, format(template, ctx));
-									blobFiles.forEach(
-										(file) => zip.file(file.name, file.blob) //TODO: REGEX NAME
-									);
-									zip.generateAsync({ type: "blob" }).then(
-										(blob) => {
-											saveAs(blob, "MSF-OCBA HMIS.zip");
-										}
-									);
-								});
-						});
-
-				//Create a fake link to download the file
-				// var link = angular.element('<a class="hidden" id="idlink"></a>');
-				// link.attr({
-				//   href: uri + base64(format(template, ctx)),
-				//   target: "_blank",
-				//   download: name,
-				// });
-				// $("body").prepend(link[0].outerHTML);
-				// $("#idlink")[0].click();
-				// $("#idlink")[0].remove();
+					compositionRoot.exportToXlsx.execute(
+						$resource,
+						ids.join(","),
+						headers
+					);
 			};
 
 			$scope.goHome = function () {
