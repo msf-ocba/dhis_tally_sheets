@@ -3,9 +3,7 @@
         <select id="{{id}}" name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
             <option disabled value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
             <option ng-repeat="dataSet in dataSetList | orderBy : 'displayName'" ng-value="dataSet.id"
-                on-finish-render="ngRepeatFinished">
-                {{ dataSet.displayName }}
-            </option>
+                on-finish-render="ngRepeatFinished">{{ dataSet.displayName }}</option>
         </select>
     </form>
     <span ng-show="!selectorLoaded" class="loading-icon">
@@ -15,9 +13,7 @@
         <select id="{{id}}" name="language" class="selectpicker hidden-print" data-live-search="true" multiple>
             <option disabled value="0"><i>{{ 'SELECT_LANGUAGE' | translate }}</i></option>
             <option ng-value="language.locale" on-finish-render="ngRepeatFinished"
-                ng-repeat="language in languageList | orderBy : 'locale'">
-                {{ language.name }}
-            </option>
+                ng-repeat="language in languageList | orderBy : 'locale'">{{ language.name }}</option>
         </select>
     </form>
     <span ng-show="!selectorLoaded" class="loading-icon">
