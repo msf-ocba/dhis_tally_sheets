@@ -1,34 +1,19 @@
 import { TallySheets } from "./TallySheets.js";
-import { DataSetsUIDFactory } from "./factories/DataSetsUIDFactory.js";
-import { DataSetEntryFormFactory } from "./factories/DataSetEntryForm.js";
-import { LocalesFactory } from "./factories/LocalesFactory.js";
-import { onFinishRenderDirective } from "./directives/onFinishRenderDirective.js";
-import { d2ProgressbarDirective } from "./directives/d2ProgressbarDirective.js";
-import { datasetSelectorDirective } from "./directives/datasetSelectorDirective.js";
-import { datasetFormDirective } from "./directives/datasetFormDirective.js";
-import { datasetSelectorController } from "./controllers/datasetSelectorController.js";
-import { datasetFormController } from "./controllers/datasetFormController.js";
-import { TallySheetsController } from "./controllers/TallySheetsController.js";
+import { DataSetsUIDFactory as _DataSetsUIDFactory } from "./factories/DataSetsUIDFactory.js";
+import { DataSetEntryFormFactory as _DataSetEntryFormFactory } from "./factories/DataSetEntryForm.js";
+import { LocalesFactory as _LocalesFactory } from "./factories/LocalesFactory.js";
+import { onFinishRenderDirective as _onFinishRenderDirective } from "./directives/onFinishRenderDirective.js";
+import { d2ProgressbarDirective as _d2ProgressbarDirective } from "./directives/d2ProgressbarDirective.js";
+import { datasetSelectorDirective as _datasetSelectorDirective } from "./directives/datasetSelectorDirective.js";
+import { datasetFormDirective as _datasetFormDirective } from "./directives/datasetFormDirective.js";
+import { datasetSelectorController as _datasetSelectorController } from "./controllers/datasetSelectorController.js";
+import { datasetFormController as _datasetFormController } from "./controllers/datasetFormController.js";
+import { TallySheetsController as _TallySheetsController } from "./controllers/TallySheetsController.js";
 import { getCompositionRoot } from "../compositionRoot.js";
 
 export const dhisUrl = window.location.href.split("api/apps/")[0];
 export const apiUrl = dhisUrl + "api";
 export const compositionRoot = getCompositionRoot();
-
-const config = {
-	factories: [DataSetsUIDFactory, LocalesFactory, DataSetEntryFormFactory],
-	directives: [
-		onFinishRenderDirective,
-		d2ProgressbarDirective,
-		datasetSelectorDirective,
-		datasetFormDirective,
-	],
-	controllers: [
-		datasetSelectorController,
-		datasetFormController,
-		TallySheetsController,
-	],
-};
 
 TallySheets.config(function ($translateProvider) {
 	$translateProvider.useStaticFilesLoader({
