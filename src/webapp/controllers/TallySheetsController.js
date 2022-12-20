@@ -69,6 +69,16 @@ export const TallySheetsController = TallySheets.controller(
 
 				const headers = getHeaders();
 
+				// GET LANGS
+				// $scope.selectedLangs = [];
+				// var languageForm = document.querySelector("#languageSelector");
+				// $(languageForm).on("change", "#" + $scope.id, function () {
+				// 	var formData = new FormData(languageForm);
+				// 	$scope.selectedLangs = formData.getAll("language");
+				// 	console.log($scope.selectedLangs);
+				// 	$rootScope.$apply();
+				// });
+
 				if (!_.isEmpty(ids))
 					compositionRoot.dataSets.getSelected
 						.execute($resource, ids.join(","))

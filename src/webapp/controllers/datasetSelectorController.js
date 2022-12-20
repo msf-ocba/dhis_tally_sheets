@@ -38,21 +38,22 @@ function controller($scope, $rootScope, DataSetsUID, Locales) {
 	});
 
 	$scope.selected = [];
-
-	var datasetForm = document.querySelector("#datasetSelector");
 	$scope.selectedIds = [];
-	$(datasetForm).on("change", "#" + $scope.id, function () {
-		var formData = new FormData(datasetForm);
-		var selectedValues = formData.getAll("dataset");
 
-		var dsId = selectedValues.find(
+	const datasetForm = document.querySelector("#datasetSelector");
+	$(datasetForm).on("change", "#" + $scope.id, () => {
+		// FORM
+		const formData = new FormData(datasetForm);
+		const selectedValues = formData.getAll("dataset");
+
+		const dsId = selectedValues.find(
 			(selected) => !$scope.selectedIds.includes(selected)
 		);
-		var dsName = $scope.dataSetList.find(
+		const dsName = $scope.dataSetList.find(
 			(dataSet) => dataSet.id === dsId
 		)?.displayName;
 
-		var languageList = $scope.dataSetList
+		const languageList = $scope.dataSetList
 			.find((dataSet) => dataSet.id === dsId)
 			?.translations?.filter(
 				(translation) => translation.property === "NAME"
@@ -73,32 +74,13 @@ function controller($scope, $rootScope, DataSetsUID, Locales) {
 
 		$scope.selectedIds = selectedValues;
 
+		$rootScope.$apply();
+
+		// EXPORT BUTTON
 		const exportButton = document.getElementById("export-button");
 		if (exportButton) {
 			if (_.isEmpty(selectedValues)) exportButton.disabled = true;
 			else exportButton.disabled = false;
 		}
-
-		$rootScope.$apply();
-	});
-
-	$scope.selectedLangs = [];
-	var languageForm = document.querySelector("#languageSelector");
-	$(languageForm).on("change", "#" + $scope.id, function () {
-		var formData = new FormData(languageForm);
-		var selectedValues = formData.getAll("language");
-
-		var selectedLanguage = selectedValues.find(
-			(selected) =>
-				!$scope.selectedLangs.includes(selected) && selected !== "en"
-		);
-
-		if (selectedLanguage !== undefined) {
-			$scope.selected.push(selectedLanguage);
-			$scope.bindToDataset.selected = $scope.selected.filter(Boolean);
-		}
-
-		$scope.selectedLangs = selectedValues;
-		$rootScope.$apply();
 	});
 }
