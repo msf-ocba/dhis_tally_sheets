@@ -12,7 +12,6 @@ export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 
 		$scope.$watch(
 			function () {
-				console.log($scope.dataset.selected);
 				return $scope.dataset.selected;
 			},
 			function (newVal, oldVal, scope) {

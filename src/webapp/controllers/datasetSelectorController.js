@@ -46,9 +46,11 @@ function controller($scope, $rootScope, DataSetsUID, Locales) {
 		const formData = new FormData(datasetForm);
 		const selectedValues = formData.getAll("dataset");
 
-		const dsId = selectedValues.find(
-			(selected) => !$scope.selectedIds.includes(selected)
-		);
+		var dsId =
+			selectedValues.find(
+				(selected) => !$scope.selectedIds.includes(selected)
+			) ?? null;
+
 		const dsName = $scope.dataSetList.find(
 			(dataSet) => dataSet.id === dsId
 		)?.displayName;
@@ -70,7 +72,7 @@ function controller($scope, $rootScope, DataSetsUID, Locales) {
 		$scope.bindToDataset.id = dsId;
 		$scope.bindToDataset.name = dsName;
 		$scope.bindToDataset.selectedIds = selectedValues;
-		$scope.bindToDataset.selected = $scope.selected.filter(Boolean);
+		$scope.bindToDataset.selected = $scope.selected;
 
 		$scope.selectedIds = selectedValues;
 
