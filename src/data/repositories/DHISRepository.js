@@ -19,7 +19,7 @@ export class DHISRepository {
 	}
 
 	getDataSets(dataSets) {
-		return dataSets.flatMap((dataSet) => {
+		const mappedDatasets = dataSets.flatMap((dataSet) => {
 			if (dataSet.formType === "CUSTOM") return [];
 			const mappedDataSets = {
 				...dataSet,
@@ -28,13 +28,16 @@ export class DHISRepository {
 				),
 				sections: dataSet.sections.map(mapSection),
 			};
+
 			return [mappedDataSets];
 		});
+
+		return mappedDatasets;
 	}
 }
 
 const idDisplayFormName = `id,displayFormName`;
-const categoryCombos = `categories[categoryOptions[displayFormName]],categoryOptionCombos[${idDisplayFormName},categoryOptions[id,displayFormName,translations]]`;
+const categoryCombos = `categories[categoryOptions[id,displayFormName,translations]],categoryOptionCombos[${idDisplayFormName},categoryOptions[id,displayFormName,translations]]`;
 const section = `translations,displayName,description,categoryCombos[id,${categoryCombos}],dataElements[${idDisplayFormName},translations,categoryCombo],greyedFields[dataElement,categoryOptionCombo]`;
 
 const fields = `id,name,displayName,formType,displayFormName,sections[${section}],dataSetElements[dataElement[translations,${idDisplayFormName}]],translations`;

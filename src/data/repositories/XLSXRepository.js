@@ -7,7 +7,9 @@ export class XLSXRepository {
 			) {
 				return [
 					{
-						name: `${dataSet.name}.xlsx`,
+						name: dataSet.pickedTranslations
+							? `${dataSet.name}_${dataSet.pickedTranslations}.xlsx`
+							: `${dataSet.name}.xlsx`,
 						blob: XlsxPopulate.fromBlankAsync().then((workbook) =>
 							exportDataSet(workbook, dataSet)
 						),

@@ -70,20 +70,18 @@ export const TallySheetsController = TallySheets.controller(
 				const headers = getHeaders();
 
 				// GET LANGS
-				// $scope.selectedLangs = [];
-				// var languageForm = document.querySelector("#languageSelector");
-				// $(languageForm).on("change", "#" + $scope.id, function () {
-				// 	var formData = new FormData(languageForm);
-				// 	$scope.selectedLangs = formData.getAll("language");
-				// 	console.log($scope.selectedLangs);
-				// 	$rootScope.$apply();
-				// });
+				$scope.selectedLangs = [];
+				const languageForm =
+					document.querySelector("#languageSelector");
+				const formData = new FormData(languageForm);
+				$scope.selectedLangs = formData.getAll("language");
 
 				if (!_.isEmpty(ids))
 					compositionRoot.exportToXlsx.execute(
 						$resource,
 						ids.join(","),
-						headers
+						headers,
+						$scope.selectedLangs
 					);
 			};
 
