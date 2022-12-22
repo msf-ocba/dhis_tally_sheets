@@ -182,7 +182,6 @@ function addSection(sheet, section, row) {
 							.row(row)
 							.cell(idx + 2) //(1 + 1)
 							.value("X");
-					else console.log("nope");
 				});
 			}
 		});
