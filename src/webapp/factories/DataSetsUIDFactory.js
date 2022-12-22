@@ -11,7 +11,8 @@ export const DataSetsUIDFactory = TallySheets.factory("DataSetsUID", [
 				get: {
 					method: "GET",
 					params: {
-						fields: "id,displayName,translations,attributeValues[value,attribute]",
+						fields: "id,formType,displayName,translations,attributeValues[value,attribute[id,name]]",
+						filter: "formType:!eq:CUSTOM",
 						translate: "true",
 						paging: false,
 					},

@@ -21,7 +21,7 @@ function controller($scope, $rootScope, DataSetsUID, Locales) {
 			for (att in ds.attributeValues) {
 				if (
 					ds.attributeValues[att].value == "true" &&
-					ds.attributeValues[att].attribute.id == "Re2UlY7OGO4"
+					ds.attributeValues[att].attribute.name == "hideInTallySheet"
 				) {
 					visible = false;
 				}

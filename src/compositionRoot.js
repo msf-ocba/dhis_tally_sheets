@@ -1,12 +1,16 @@
 import { ExportDatasetsUseCase } from "./domain/usecases/ExportDatasetsUseCase.js";
-import { DHISRepository } from "./data/repositories/DHISRepository.js";
-import { XLSXRepository } from "./data/repositories/XLSXRepository.js";
+import { DataSetsDhis2Repository } from "./data/repositories/DataSetsDhis2Repository.js";
+import { DataSetsExportSpreadsheetRepository } from "./data/repositories/DataSetsExportSpreadsheetRepository.js";
 
 export function getCompositionRoot() {
-	const dhisRepository = new DHISRepository();
-	const xlsxRepository = new XLSXRepository();
+	const dataSetsDhis2Repository = new DataSetsDhis2Repository();
+	const dataSetsExportSpreadsheetRepository =
+		new DataSetsExportSpreadsheetRepository();
 
 	return {
-		exportToXlsx: new ExportDatasetsUseCase(dhisRepository, xlsxRepository),
+		exportToXlsx: new ExportDatasetsUseCase(
+			dataSetsDhis2Repository,
+			dataSetsExportSpreadsheetRepository
+		),
 	};
 }

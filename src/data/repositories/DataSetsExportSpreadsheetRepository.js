@@ -1,4 +1,4 @@
-export class XLSXRepository {
+export class DataSetsExportSpreadsheetRepository {
 	createFiles(dataSets) {
 		const files$ = dataSets.flatMap((dataSet) => {
 			if (
@@ -86,7 +86,7 @@ function populateDefault(sheet, dataSet) {
 	sheet.cell("A4").value(dataSet.displayFormName).style(styles.titleStyle);
 	sheet.cell("B6").value("Value");
 	sheet.row(6).style(styles.categoryHeaderStyle);
-	_.orderBy(
+	_.sortBy(
 		dataSet.dataSetElements,
 		({ displayFormName }) => displayFormName
 	).forEach((de, idx) =>
@@ -106,7 +106,7 @@ function populateDefault(sheet, dataSet) {
 function populateSections(sheet, dataSet) {
 	if (dataSet.headers) populateHeaders(sheet, dataSet.headers);
 	let row = 3;
-	_.range(0, dataSet.sections.length).map((i) => {
+	_.range(0, dataSet.sections.length).forEach((i) => {
 		const section = dataSet.sections[i];
 		row = addSection(sheet, section, row);
 	});
@@ -161,7 +161,7 @@ function addSection(sheet, section, row) {
 
 		const cocIds = categoryCombo.categoryOptionCombos.map(({ id }) => id);
 
-		_.orderBy(
+		_.sortBy(
 			categoryCombo.dataElements,
 			({ displayFormName }) => displayFormName
 		).forEach((de) => {
@@ -177,11 +177,12 @@ function addSection(sheet, section, row) {
 				);
 				applicableGF.forEach((gf) => {
 					const idx = cocIds.indexOf(gf.categoryOptionCombo.id);
-					if (idx || idx === 0)
+					if (idx >= 0)
 						sheet
 							.row(row)
 							.cell(idx + 2) //(1 + 1)
 							.value("X");
+					else console.log("nope");
 				});
 			}
 		});

@@ -236,10 +236,10 @@ export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 		var onSampleResized = function (e) {
 			var columns = $(e.currentTarget).find("td");
 			var rows = $(e.currentTarget).find("tr");
-			var Cloumnsize;
+			var columnSize;
 			var rowsize;
 			columns.each(function () {
-				Cloumnsize +=
+				columnSize +=
 					$(this).attr("id") +
 					"" +
 					$(this).width() +
@@ -256,7 +256,7 @@ export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 					$(this).height() +
 					";";
 			});
-			document.getElementById("hf_columndata").value = Cloumnsize;
+			document.getElementById("hf_columndata").value = columnSize;
 			document.getElementById("hf_rowdata").value = rowsize;
 		};
 	},
