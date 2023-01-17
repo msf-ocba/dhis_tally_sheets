@@ -18,7 +18,7 @@ function controller($scope, $rootScope, DataSetsUID, Locales) {
 		$scope.dataSetList = result.dataSets.filter((ds) => {
 			var visible = true;
 
-			for (att in ds.attributeValues) {
+			for (const att in ds.attributeValues) {
 				if (
 					ds.attributeValues[att].value == "true" &&
 					ds.attributeValues[att].attribute.name == "hideInTallySheet"

@@ -10,7 +10,7 @@ export class DataSetsDhis2Repository {
 					method: "GET",
 					params: {
 						fields: fields,
-						filter: `id:in:[${dataSetsIds}]`,
+						filter: `id:in:[${dataSetsIds.join(",")}]`,
 						paging: false,
 					},
 				},
