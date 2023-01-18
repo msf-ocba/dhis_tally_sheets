@@ -5,6 +5,7 @@ export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 	"DataSetEntryForm",
 	function ($scope, DataSetEntryForm) {
 		$scope.headers = true;
+		$scope.selectorId = 0;
 
 		var header = $scope.headers
 			? "<span><h3><input type='text' class='dsTitle' value='Health Facility:'></h3><h3><input type= 'text' class='dsTitle' value='Reporting Period:'></h3></span>"
@@ -233,31 +234,31 @@ export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 			});
 		};
 
-		var onSampleResized = function (e) {
-			var columns = $(e.currentTarget).find("td");
-			var rows = $(e.currentTarget).find("tr");
-			var columnSize;
-			var rowsize;
-			columns.each(function () {
-				columnSize +=
-					$(this).attr("id") +
-					"" +
-					$(this).width() +
-					"" +
-					$(this).height() +
-					";";
-			});
-			rows.each(function () {
-				rowsize +=
-					$(this).attr("id") +
-					"" +
-					$(this).width() +
-					"" +
-					$(this).height() +
-					";";
-			});
-			document.getElementById("hf_columndata").value = columnSize;
-			document.getElementById("hf_rowdata").value = rowsize;
-		};
+		// var onSampleResized = function (e) {
+		// 	var columns = $(e.currentTarget).find("td");
+		// 	var rows = $(e.currentTarget).find("tr");
+		// 	var columnSize;
+		// 	var rowsize;
+		// 	columns.each(function () {
+		// 		columnSize +=
+		// 			$(this).attr("id") +
+		// 			"" +
+		// 			$(this).width() +
+		// 			"" +
+		// 			$(this).height() +
+		// 			";";
+		// 	});
+		// 	rows.each(function () {
+		// 		rowsize +=
+		// 			$(this).attr("id") +
+		// 			"" +
+		// 			$(this).width() +
+		// 			"" +
+		// 			$(this).height() +
+		// 			";";
+		// 	});
+		// 	document.getElementById("hf_columndata").value = columnSize;
+		// 	document.getElementById("hf_rowdata").value = rowsize;
+		// };
 	},
 ]);

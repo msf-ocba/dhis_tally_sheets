@@ -1,16 +1,9 @@
 import { TallySheets } from "./TallySheets.js";
 import { getCompositionRoot } from "../compositionRoot.js";
 
-import "./factories/DataSetsUIDFactory.js";
-import "./factories/DataSetEntryForm.js";
-import "./factories/LocalesFactory.js";
-import "./directives/onFinishRenderDirective.js";
-import "./controllers/datasetSelectorController.js";
-import "./controllers/datasetFormController.js";
-import "./controllers/TallySheetsController.js";
-import "./directives/d2ProgressbarDirective.js";
-import "./directives/datasetSelectorDirective.js";
-import "./directives/datasetFormDirective.js";
+import "./factories/index.js";
+import "./controllers/index.js";
+import "./directives/index.js";
 
 export const dhisUrl = window.location.href.split("api/apps/")[0];
 export const apiUrl = dhisUrl + "api";
