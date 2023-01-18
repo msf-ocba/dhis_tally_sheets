@@ -50,40 +50,40 @@ export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 			}
 		);
 
-		var updateForm = function (datasetId, datasetName) {
-			// Delete previous dataset, if any
-			$("#" + $scope.formId)
-				.children()
-				.remove();
+		// var updateForm = function (datasetId, datasetName) {
+		// 	// Delete previous dataset, if any
+		// 	$("#" + $scope.formId)
+		// 		.children()
+		// 		.remove();
 
-			// Assign a new id (for new dataset)
-			$scope.formId = "datasetForm" + $scope.selectorId;
+		// 	// Assign a new id (for new dataset)
+		// 	$scope.formId = "datasetForm" + $scope.selectorId;
 
-			if (datasetId != "0") {
-				$scope.progressbarDisplayed = true;
-				DataSetEntryForm.get({ dataSetId: datasetId }).$promise.then(
-					function (dataSetHtml) {
-						var codeHtml = dataSetHtml.codeHtml;
+		// 	if (datasetId != "0") {
+		// 		$scope.progressbarDisplayed = true;
+		// 		DataSetEntryForm.get({ dataSetId: datasetId }).$promise.then(
+		// 			function (dataSetHtml) {
+		// 				var codeHtml = dataSetHtml.codeHtml;
 
-						// Replace unique id='tabs'
-						codeHtml = codeHtml.replace(
-							/id="tabs"/g,
-							'id="tabs-' + datasetId + '"'
-						);
+		// 				// Replace unique id='tabs'
+		// 				codeHtml = codeHtml.replace(
+		// 					/id="tabs"/g,
+		// 					'id="tabs-' + datasetId + '"'
+		// 				);
 
-						$("#" + $scope.formId).append(
-							"<h2><input class='dsTitle' value='" +
-								datasetName +
-								"'></h2>"
-						);
-						$("#" + $scope.formId).append(codeHtml);
+		// 				$("#" + $scope.formId).append(
+		// 					"<h2><input class='dsTitle' value='" +
+		// 						datasetName +
+		// 						"'></h2>"
+		// 				);
+		// 				$("#" + $scope.formId).append(codeHtml);
 
-						formatDataset();
-						$scope.progressbarDisplayed = false;
-					}
-				);
-			}
-		};
+		// 				formatDataset();
+		// 				$scope.progressbarDisplayed = false;
+		// 			}
+		// 		);
+		// 	}
+		// };
 
 		var formatDataset = function () {
 			var datasetForm = $("#datasetForm" + $scope.selectorId);
