@@ -6,9 +6,60 @@ export const TallySheetsController = TallySheets.controller(
 	[
 		"$scope",
 		"$resource",
-		function ($scope, $resource) {
+		"DataSetsUID",
+		"Locales",
+		function ($scope, $resource, DataSetsUID, Locales) {
 			$scope.id = 0;
 			$scope.dataset = {};
+
+			$scope.datasets = [];
+			$scope.selectedDatasets = [];
+			$scope.selectedLocales = [];
+			$scope.progressbarDisplayed = false;
+
+			Locales.get().$promise.then(function (result) {
+				$scope.languages = result;
+			});
+
+			DataSetsUID.get().$promise.then(function (result) {
+				$scope.datasets = result.dataSets.filter(
+					(dataset) =>
+						!dataset.attributeValues.some(
+							(att) =>
+								att.attribute.name === "hideInTallySheet" &&
+								att.value === "true"
+						)
+				);
+			});
+
+			const datasetSelectorForm = document.getElementById(
+				"datasetSelectorForm"
+			);
+
+			$(datasetSelectorForm).on("change", () => {
+				// FORM
+				const formData = new FormData(datasetSelectorForm);
+				const selectedIds = formData.getAll("dataset");
+				const selectedDatasets = $scope.datasets.filter((dataset) =>
+					selectedIds.includes(dataset.id)
+				);
+				const selectedLocales = _.uniq(
+					selectedDatasets
+						.map((dataset) =>
+							dataset.translations?.flatMap((translation) =>
+								translation.property === "NAME"
+									? [translation.locale.split("_")[0]]
+									: []
+							)
+						)
+						.flat()
+				);
+
+				$scope.$apply(() => {
+					$scope.selectedDatasets = selectedDatasets;
+					$scope.selectedLocales = selectedLocales;
+				});
+			});
 
 			// $scope.clearForm = () => {
 			// 	$("#datasetForms").children().remove();
