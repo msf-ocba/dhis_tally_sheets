@@ -7,25 +7,16 @@ export const TallySheetsController = TallySheets.controller(
 		"$scope",
 		"$resource",
 		function ($scope, $resource) {
-			var dsSelectorLastId = -1;
-			$scope.dsSelectorList = [];
+			$scope.id = 0;
+			$scope.dataset = {};
 
-			// Set "headers" to true by default
-			$scope.headers = true;
+			// $scope.clearForm = () => {
+			// 	$("#datasetForms").children().remove();
+			// };
 
-			dsSelectorLastId++;
-			$scope.dsSelectorList.push({
-				id: dsSelectorLastId,
-				dataset: {},
-			});
-
-			$scope.clearForm = function () {
-				$("#datasetForms").children().remove();
-			};
-
-			$scope.goHome = function () {
-				window.location.replace(dhisUrl);
-			};
+			// $scope.goHome = () => {
+			// 	window.location.replace(dhisUrl);
+			// };
 
 			// $scope.exportToTable = function (tableId) {
 			// 	const ids = getSelectedDataSets();

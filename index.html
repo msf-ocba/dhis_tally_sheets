@@ -48,22 +48,18 @@
 
 			<!-- SELECTORS -->
 			<div class="row flex">
-				<div class="row flex" ng-repeat="(index,selector) in dsSelectorList">
-					<dataset-selector selector-id="selector.id" bind-to-dataset="selector.dataset"></dataset-selector>
-					<button ng-click="clearForm()" class="btn btn-default hidden-print">
-						<span class="glyphicon glyphicon-remove"></span>
-					</button>
-				</div>
+				<dataset-selector selector-id="id" bind-to-dataset="dataset"></dataset-selector>
+				<button ng-click="clearForm()" class="btn btn-default hidden-print">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
 			</div>
 		</div>
 	</div>
 
 	<!-- DATASETS VIEW -->
 	<div id="tallysheetForm">
-		<div ng-repeat="(index,selector) in dsSelectorList">
-			<dataset-form ng-if="!!selector.dataset.id" dataset="selector.dataset" selector-id="0">
-			</dataset-form>
-		</div>
+		<dataset-form selector-id="0" ng-if="!!dataset.id" dataset="dataset">
+		</dataset-form>
 	</div>
 </body>
 
