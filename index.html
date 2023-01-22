@@ -1,4 +1,4 @@
-<html ng-app="TallySheets">
+<html ng-app="TallySheets" update-language>
 
 <head>
 	<script src="assets/includes/lodash-4.17.15/lodash.min.js" type="text/javascript"></script>
@@ -7,6 +7,7 @@
 	<script src="assets/includes/angular-1.4.0/angular.min.js" type="text/javascript"></script>
 	<script src="assets/includes/angular-1.4.0/angular-route.min.js" type="text/javascript"></script>
 	<script src="assets/includes/angular-1.4.0/angular-resource.min.js" type="text/javascript"></script>
+	<script src="assets/includes/angular-1.4.0/angular-sanitize.min.js" type="text/javascript"></script>
 	<script src="assets/includes/angular-1.4.0/angular-translate.min.js" type="text/javascript"></script>
 	<script src="assets/includes/angular-1.4.0/angular-translate-loader-static-files.min.js"
 		type="text/javascript"></script>
@@ -75,12 +76,16 @@
 
 	<!-- DATASETS VIEW -->
 	<div id="tallysheetForm1">
-		<div>
-			<div class="progress hidden-print" ng-show="progressbarDisplayed" style="width:40%;">
-				<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="100"
-					aria-valuemin="0" aria-valuemax="100" style="width:100%;text-align:center;">
-					{{ 'IN_PROGRESS' | translate }}
-				</div>
+		<div class="progress hidden-print" ng-show="progressbarDisplayed" style="width:40%;">
+			<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="100"
+				aria-valuemin="0" aria-valuemax="100" style="width:100%;text-align:center;">
+				{{ 'IN_PROGRESS' | translate }}
+			</div>
+		</div>
+
+		<div id="datasetsForms1">
+			<div ng-repeat="(index,datasetWrapper) in forms">
+				<form-dataset dataset="datasetWrapper.dataset" output-html="datasetWrapper.output"></form-dataset>
 			</div>
 		</div>
 	</div>
@@ -91,16 +96,5 @@
 		</dataset-form>
 	</div>
 </body>
-
-<style>
-	.include-headers {
-		display: inline-block;
-		margin: 1em 0;
-	}
-
-	#tallysheetForm {
-		margin-top: 3em;
-	}
-</style>
 
 </html>

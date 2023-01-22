@@ -3,51 +3,51 @@ import { TallySheets } from "../TallySheets.js";
 export const datasetFormController = TallySheets.controller("datasetFormCtrl", [
 	"$scope",
 	"DataSetEntryForm",
-	function ($scope, DataSetEntryForm) {
-		$scope.headers = true;
+	($scope, DataSetEntryForm) => {
 		$scope.selectorId = 0;
-
-		var header = $scope.headers
-			? "<span><h3><input type='text' class='dsTitle' value='Health Facility:'></h3><h3><input type= 'text' class='dsTitle' value='Reporting Period:'></h3></span>"
-			: "";
+		console.log("selected");
 
 		$scope.$watch(
-			function () {
-				return $scope.dataset.selected;
-			},
-			function (newVal, oldVal, scope) {
+			() => $scope.dataset.selected,
+			(newVal, oldVal, scope) => {
+				const header = $scope.includeHeaders
+					? "<span><h3><input type='text' class='dsTitle' value='Health Facility:'></h3><h3><input type= 'text' class='dsTitle' value='Reporting Period:'></h3></span>"
+					: "";
+
 				$scope.progressbarDisplayed = true;
 
-				DataSetEntryForm.get({
-					dataSetId: scope.dataset.id,
-				}).$promise.then(function (dataSetHtml) {
-					var codeHtml = dataSetHtml.codeHtml;
+				const forms$ = Promise.all(
+					newVal.map((id) =>
+						DataSetEntryForm.get({
+							dataSetId: id,
+						}).$promise.then((dataset) => ({ id, dataset }))
+					)
+				);
 
-					// Replace unique id='tabs'
-					codeHtml = codeHtml.replace(
-						/id="tabs"/g,
-						'id="tabs-' + scope.dataset.id + '"'
-					);
+				forms$.then((datasets) => {
+					$("#datasetForms").children().remove();
+					datasets.forEach(({ dataset, id }, idx) => {
+						// Replace unique id='tabs'
+						const codeHtml = dataset.codeHtml.replace(
+							/id="tabs"/g,
+							`id="tabs-${id}"`
+						);
 
-					$("#datasetForms").prepend(
-						"<span class='dataset-form' data-id='" +
-							scope.dataset.id +
-							"' id=datasetForm" +
-							$scope.selectorId +
-							">" +
-							header +
-							"<h2><input id='title' class='dsTitle' value=''></h2>" +
-							codeHtml +
-							"</span>"
-					);
+						$("#datasetForms").prepend(
+							`<div class='dataset-form' data-id='${scope.dataset.id}' id=datasetForm${idx}>
+								${header}
+								<h2><input id='title' class='dsTitle' value=''></h2>
+								${codeHtml}
+								</div>`
+						);
 
-					document.getElementById("title").defaultValue =
-						scope.dataset.name;
+						document.getElementById("title").defaultValue =
+							scope.dataset.name;
 
-					$scope.progressbarDisplayed = false;
-					formatDataset();
+						$scope.progressbarDisplayed = false;
+						formatDataset();
+					});
 				});
-				$scope.selectorId++;
 			}
 		);
 

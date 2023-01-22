@@ -8,7 +8,8 @@ export const TallySheetsController = TallySheets.controller(
 		"$resource",
 		"DataSetsUID",
 		"Locales",
-		function ($scope, $resource, DataSetsUID, Locales) {
+		"DataSetEntryForm",
+		function ($scope, $resource, DataSetsUID, Locales, DataSetEntryForm) {
 			$scope.id = 0;
 			$scope.dataset = {};
 
@@ -17,11 +18,11 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.selectedLocales = [];
 			$scope.progressbarDisplayed = false;
 
-			Locales.get().$promise.then(function (result) {
+			Locales.get().$promise.then((result) => {
 				$scope.languages = result;
 			});
 
-			DataSetsUID.get().$promise.then(function (result) {
+			DataSetsUID.get().$promise.then((result) => {
 				$scope.datasets = result.dataSets.filter(
 					(dataset) =>
 						!dataset.attributeValues.some(
@@ -59,11 +60,34 @@ export const TallySheetsController = TallySheets.controller(
 					$scope.selectedDatasets = selectedDatasets;
 					$scope.selectedLocales = selectedLocales;
 				});
+
+				Promise.all(
+					selectedDatasets.map((dataset) =>
+						DataSetEntryForm.get({
+							dataSetId: dataset.id,
+						}).$promise.then((result) => {
+							const codeHtml = result.codeHtml.replace(
+								/id="tabs"/g,
+								`id="tabs-${dataset.id}"`
+							);
+
+							return {
+								dataset,
+								output: codeHtml,
+							};
+						})
+					)
+				).then((datasets) => {
+					$scope.$apply(() => {
+						$scope.forms = datasets;
+						$scope.clearForm();
+					});
+				});
 			});
 
-			// $scope.clearForm = () => {
-			// 	$("#datasetForms").children().remove();
-			// };
+			$scope.clearForm = () => {
+				$("#datasetsForms1").children().remove();
+			};
 
 			// $scope.goHome = () => {
 			// 	window.location.replace(dhisUrl);

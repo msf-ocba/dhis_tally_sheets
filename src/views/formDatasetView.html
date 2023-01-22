@@ -1,0 +1,12 @@
+<div ng-controller="formDatasetCtrl">
+    <div class="dataset-form">
+        <div>
+            <h3><input type="text" class="dsTitle" value="Health Facility:"></h3>
+            <h3><input type="text" class="dsTitle" value="Reporting Period:"></h3>
+        </div>
+        <h2><input id="title" class="dsTitle" value="{{dataset.displayName}}"></h2>
+        <ng-bind-html ng-bind-html="deliberatelyTrustDangerousSnippet()">
+        </ng-bind-html>
+    </div>
+
+</div>
