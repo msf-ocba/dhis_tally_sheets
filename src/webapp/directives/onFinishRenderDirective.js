@@ -5,9 +5,13 @@ export const onFinishRenderDirective = TallySheets.directive(
 	function ($timeout) {
 		return {
 			restrict: "A",
-			link: function (scope, element, attr) {
+			link: (scope, element, attr) => {
+				if (scope.formatForm)
+					$timeout(() => {
+						scope.formatForm(element);
+					});
 				if (scope.$last === true) {
-					$timeout(function () {
+					$timeout(() => {
 						scope.$emit("ngRepeatFinished");
 					});
 				}
