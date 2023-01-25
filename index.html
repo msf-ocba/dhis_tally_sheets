@@ -50,8 +50,6 @@
 			<!-- SELECTORS -->
 			<div class="row flex">
 
-
-
 				<div>
 					<form id="datasetSelectorForm" class="inline">
 						<select name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
@@ -85,7 +83,8 @@
 
 		<div id="datasetsForms1">
 			<div ng-repeat="(index,datasetWrapper) in forms">
-				<form-dataset dataset="datasetWrapper.dataset" output-html="datasetWrapper.output"></form-dataset>
+				<form-dataset dataset="datasetWrapper.dataset" output-html="datasetWrapper.output"
+					include-headers="includeHeaders"></form-dataset>
 			</div>
 		</div>
 	</div>

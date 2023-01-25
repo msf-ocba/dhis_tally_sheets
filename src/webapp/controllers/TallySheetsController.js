@@ -13,6 +13,7 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.id = 0;
 			$scope.dataset = {};
 
+			$scope.includeHeaders = true;
 			$scope.datasets = [];
 			$scope.selectedDatasets = [];
 			$scope.selectedLocales = [];
@@ -38,6 +39,8 @@ export const TallySheetsController = TallySheets.controller(
 			);
 
 			$(datasetSelectorForm).on("change", () => {
+				$scope.progressbarDisplayed = true;
+
 				// FORM
 				const formData = new FormData(datasetSelectorForm);
 				const selectedIds = formData.getAll("dataset");
@@ -81,6 +84,7 @@ export const TallySheetsController = TallySheets.controller(
 					$scope.$apply(() => {
 						$scope.forms = datasets;
 						$scope.clearForm();
+						$scope.progressbarDisplayed = false;
 					});
 				});
 			});
@@ -89,9 +93,9 @@ export const TallySheetsController = TallySheets.controller(
 				$("#datasetsForms1").children().remove();
 			};
 
-			// $scope.goHome = () => {
-			// 	window.location.replace(dhisUrl);
-			// };
+			$scope.goHome = () => {
+				window.location.replace(dhisUrl);
+			};
 
 			// $scope.exportToTable = function (tableId) {
 			// 	const ids = getSelectedDataSets();
