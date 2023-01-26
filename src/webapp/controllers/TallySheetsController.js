@@ -46,16 +46,19 @@ export const TallySheetsController = TallySheets.controller(
 				// Refresh bootstrap-select
 				$(".selectpicker").selectpicker("refresh");
 				$(".selectpicker").selectpicker("render");
-				$scope.selectorLoaded = true;
+				$scope.selectorsLoaded = true;
 			});
 
 			const datasetSelectorForm = document.getElementById(
 				"datasetSelectorForm"
 			);
+			const languageSelectorForm = document.getElementById(
+				"languageSelectorForm"
+			);
 
 			$(datasetSelectorForm).on("change", () => {
 				$scope.progressbarDisplayed = true;
-				$scope.selectorLoaded = false;
+				$scope.selectorsLoaded = false;
 
 				// FORM
 				const formData = new FormData(datasetSelectorForm);
@@ -103,21 +106,56 @@ export const TallySheetsController = TallySheets.controller(
 							};
 						})
 					)
-				).then((datasets) => {
-					$scope.$apply(() => {
-						$scope.forms = datasets;
-						$scope.clearForm();
-						$scope.progressbarDisplayed = false;
-						$timeout(() => {
-							$(".selectpicker").selectpicker("refresh");
-							$(".selectpicker").selectpicker("render");
+				)
+					.then((datasets) => {
+						$scope.$apply(() => {
+							$("#datasetsForms").children().remove();
+							$scope.forms = datasets;
+							$scope.progressbarDisplayed = false;
+
+							$timeout(() => {
+								$(".selectpicker").selectpicker("refresh");
+								$(".selectpicker").selectpicker("render");
+							});
+
+							$timeout(() => {
+								//just for visuals
+								$scope.selectorsLoaded = true;
+							}, 200);
 						});
+					})
+					.catch((err) => {
+						console.error(err);
+						$scope.selectorsLoaded = true;
 					});
-				});
 			});
 
 			$scope.clearForm = () => {
-				$("#datasetsForms").children().remove();
+				// $("#datasetsForms").children().remove();
+				$scope.availableLanguages = [];
+				$scope.forms = [];
+				$scope.selectedDatasets = [];
+				$scope.progressbarDisplayed = false;
+				$scope.selectorsLoaded = false;
+
+				_.first(
+					datasetSelectorForm.getElementsByTagName("select")
+				).value = "";
+				_.first(
+					languageSelectorForm.getElementsByTagName("select")
+				).value = "";
+
+				$timeout(() => {
+					$(".selectpicker").selectpicker("refresh");
+					$(".selectpicker").selectpicker("render");
+				});
+
+				$timeout(() => {
+					//just for visuals
+					$(".selectpicker").selectpicker("refresh");
+					$(".selectpicker").selectpicker("render");
+					$scope.selectorsLoaded = true;
+				}, 200);
 			};
 
 			$scope.goHome = () => {

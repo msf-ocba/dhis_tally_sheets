@@ -51,31 +51,32 @@
 			<div class="row flex">
 				<div>
 					<form id="datasetSelectorForm" class="inline">
-						<select name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
+						<select title="Nothing selected" name="dataset" class="selectpicker hidden-print"
+							data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_DATASET' | translate }}</option>
 							<option ng-repeat="dataset in datasets | orderBy : 'displayName'" ng-value="dataset.id"
 								on-finish-render="ngRepeatFinished">
 								{{dataset.displayName}}</option>
 						</select>
 					</form>
-					<span ng-show="!selectorsLoaded" class="loading-icon">
-						<span class="glyphicon glyphicon-hourglass"></span>
-					</span>
 					<form id="languageSelectorForm" class="inline">
-						<select name="language" class="selectpicker hidden-print" data-live-search="true" multiple>
+						<select title="Nothing selected" name="language" class="selectpicker hidden-print"
+							data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_LANGUAGE' | translate }}</option>
 							<option ng-repeat="language in availableLanguages | orderBy : 'locale'"
 								ng-value="language.locale" on-finish-render="ngRepeatFinished">
 								{{ language.name }}</option>
 						</select>
 					</form>
-					<span ng-show="!selectorsLoaded" class="loading-icon">
-						<span class="glyphicon glyphicon-hourglass"></span>
-					</span>
 				</div>
 				<button ng-click="clearForm()" class="btn btn-default hidden-print">
 					<span class="glyphicon glyphicon-remove"></span>
 				</button>
+				<div>
+					<span ng-show="!selectorsLoaded" class="loading-icon">
+						<span class="glyphicon glyphicon-hourglass"></span>
+					</span>
+				</div>
 			</div>
 
 		</div>
