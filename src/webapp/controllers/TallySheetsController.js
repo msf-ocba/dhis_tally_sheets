@@ -6,18 +6,27 @@ export const TallySheetsController = TallySheets.controller(
 	[
 		"$scope",
 		"$resource",
+		"$timeout",
 		"DataSetsUID",
 		"Locales",
 		"DataSetEntryForm",
-		function ($scope, $resource, DataSetsUID, Locales, DataSetEntryForm) {
+		function (
+			$scope,
+			$resource,
+			$timeout,
+			DataSetsUID,
+			Locales,
+			DataSetEntryForm
+		) {
 			$scope.id = 0;
 			$scope.dataset = {};
 
 			$scope.includeHeaders = true;
 			$scope.datasets = [];
 			$scope.selectedDatasets = [];
-			$scope.selectedLocales = [];
+			$scope.availableLanguages = [];
 			$scope.progressbarDisplayed = false;
+			$scope.selectorsLoaded = false;
 
 			Locales.get().$promise.then((result) => {
 				$scope.languages = result;
@@ -32,6 +41,8 @@ export const TallySheetsController = TallySheets.controller(
 								att.value === "true"
 						)
 				);
+
+				$scope.selectorsLoaded = true;
 			});
 
 			const datasetSelectorForm = document.getElementById(
@@ -40,6 +51,7 @@ export const TallySheetsController = TallySheets.controller(
 
 			$(datasetSelectorForm).on("change", () => {
 				$scope.progressbarDisplayed = true;
+				$scope.selectorLoaded = false;
 
 				// FORM
 				const formData = new FormData(datasetSelectorForm);
@@ -47,7 +59,8 @@ export const TallySheetsController = TallySheets.controller(
 				const selectedDatasets = $scope.datasets.filter((dataset) =>
 					selectedIds.includes(dataset.id)
 				);
-				const selectedLocales = _.uniq(
+
+				const availableLocales = _.uniq(
 					selectedDatasets
 						.map((dataset) =>
 							dataset.translations?.flatMap((translation) =>
@@ -59,9 +72,15 @@ export const TallySheetsController = TallySheets.controller(
 						.flat()
 				);
 
+				const availableLanguages = $scope.languages.filter((lang) =>
+					availableLocales?.some(
+						(language) => language === lang.locale
+					)
+				);
+
 				$scope.$apply(() => {
 					$scope.selectedDatasets = selectedDatasets;
-					$scope.selectedLocales = selectedLocales;
+					$scope.availableLanguages = availableLanguages;
 				});
 
 				Promise.all(
@@ -85,6 +104,10 @@ export const TallySheetsController = TallySheets.controller(
 						$scope.forms = datasets;
 						$scope.clearForm();
 						$scope.progressbarDisplayed = false;
+						$timeout(() => {
+							$(".selectpicker").selectpicker("refresh");
+							$(".selectpicker").selectpicker("render");
+						});
 					});
 				});
 			});
