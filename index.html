@@ -73,15 +73,15 @@
 						<span class="glyphicon glyphicon-hourglass"></span>
 					</span>
 				</div>
+				<button ng-click="clearForm()" class="btn btn-default hidden-print">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
 
 			</div>
 
 			<!-- SELECTORS -->
 			<div class="row flex">
 				<dataset-selector selector-id="id" bind-to-dataset="dataset"></dataset-selector>
-				<button ng-click="clearForm()" class="btn btn-default hidden-print">
-					<span class="glyphicon glyphicon-remove"></span>
-				</button>
 			</div>
 		</div>
 	</div>
