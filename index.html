@@ -32,8 +32,8 @@
 			<!-- PRINT AND EXPORT -->
 			<div class="row">
 				<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
-				<button id="export-button" ng-click="exportToTable('tallysheetForm')"
-					class="btn btn-success hidden-print" disabled>
+				<button type="button" id="export-button" ng-click="exportToTable('tallysheetForm')"
+					class="btn btn-success hidden-print" export-button="{{selectedDatasets}}">
 					{{ 'EXPORT_EXCEL' | translate}}</button>
 				<button id="homeBtn" ng-click="goHome()" class="btn btn-danger hidden-print">
 					<span class="glyphicon glyphicon-home"></span>
@@ -94,7 +94,7 @@
 		<div id="datasetsForms">
 			<div ng-repeat="(index,datasetWrapper) in forms">
 				<form-dataset dataset="datasetWrapper.dataset" output-html="datasetWrapper.output"
-					include-headers="includeHeaders"></form-dataset>
+					headers="datasetWrapper.headers" include-headers="includeHeaders"></form-dataset>
 			</div>
 		</div>
 	</div>

@@ -22,6 +22,7 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.datasets = [];
 			$scope.selectedDatasets = [];
 			$scope.availableLanguages = [];
+			$scope.selectedLanguages = [];
 			$scope.progressbarDisplayed = false;
 			$scope.selectorsLoaded = false;
 
@@ -80,9 +81,7 @@ export const TallySheetsController = TallySheets.controller(
 				);
 
 				const availableLanguages = $scope.languages.filter((lang) =>
-					availableLocales?.some(
-						(language) => language === lang.locale
-					)
+					availableLocales?.includes(lang.locale)
 				);
 
 				$scope.$apply(() => {
@@ -102,6 +101,11 @@ export const TallySheetsController = TallySheets.controller(
 
 							return {
 								dataset,
+								headers: {
+									healthFacility: "Health Facility: ",
+									reportingPeriod: "Reporting Period: ",
+									displayName: dataset.displayName,
+								},
 								output: codeHtml,
 							};
 						})
@@ -130,8 +134,21 @@ export const TallySheetsController = TallySheets.controller(
 					});
 			});
 
+			$(languageSelectorForm).on("change", () => {
+				// FORM
+				const formData = new FormData(languageSelectorForm);
+				const selectedLocales = formData.getAll("language");
+				const selectedLanguages = $scope.languages.filter((lang) =>
+					selectedLocales?.includes(lang.locale)
+				);
+
+				$scope.$apply(() => {
+					$scope.selectedLanguages = selectedLanguages;
+				});
+			});
+
 			$scope.clearForm = () => {
-				// $("#datasetsForms").children().remove();
+				// $("#datasetsForms").children().remove(); //Commented because not need to remove children. $scope vars will update UI
 				$scope.availableLanguages = [];
 				$scope.forms = [];
 				$scope.selectedDatasets = [];
