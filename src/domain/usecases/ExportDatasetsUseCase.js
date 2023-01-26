@@ -23,13 +23,16 @@ export class ExportDatasetsUseCase {
 							)
 					),
 				}));
+
 				const translatedDatasets = pickedTranslations.flatMap(
 					mapDataSetTranslations
 				);
+
 				const mappedDatasets = getDataSets([
 					...translatedDatasets,
 					...dataSets,
 				]);
+
 				const dataSetsWithHeaders = mappedDatasets.map((dataSet) => ({
 					...dataSet,
 					headers: headers.find(({ id }) => id === dataSet.id),

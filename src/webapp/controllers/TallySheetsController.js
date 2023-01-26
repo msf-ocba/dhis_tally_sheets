@@ -102,9 +102,10 @@ export const TallySheetsController = TallySheets.controller(
 							return {
 								dataset,
 								headers: {
+									id: dataset.id,
 									healthFacility: "Health Facility: ",
 									reportingPeriod: "Reporting Period: ",
-									displayName: dataset.displayName,
+									dataSetName: dataset.displayName,
 								},
 								output: codeHtml,
 							};
@@ -150,6 +151,7 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.clearForm = () => {
 				// $("#datasetsForms").children().remove(); //Commented because not need to remove children. $scope vars will update UI
 				$scope.availableLanguages = [];
+				$scope.selectedLanguages = [];
 				$scope.forms = [];
 				$scope.selectedDatasets = [];
 				$scope.progressbarDisplayed = false;
@@ -179,74 +181,18 @@ export const TallySheetsController = TallySheets.controller(
 				window.location.replace(dhisUrl);
 			};
 
-			// $scope.exportToTable = function (tableId) {
-			// 	const ids = getSelectedDataSets();
+			$scope.exportToTable = () => {
+				const ids = $scope.selectedDatasets.map(({ id }) => id);
+				const headers = $scope.forms.map(({ headers }) => headers);
 
-			// 	var table = $("#" + tableId).clone();
-
-			// 	// Remove non-printable section from the table
-			// 	table.find(".hidden-print").remove();
-			// 	table.find(".ng-hide").remove();
-
-			// 	// Replace input fields with their values (for correct excel formatting)
-			// 	table.find("input").each(function () {
-			// 		var value = $(this).val();
-			// 		$(this).replaceWith(value);
-			// 	});
-
-			// 	// Add border to section table (for printing in MS Excel)
-			// 	table.find(".sectionTable").prop("border", "1");
-
-			// 	const headers = getHeaders();
-
-			// 	// GET LANGS
-			// 	$scope.selectedLangs = [];
-			// 	const languageForm =
-			// 		document.querySelector("#languageSelector");
-			// 	const formData = new FormData(languageForm);
-			// 	$scope.selectedLangs = formData.getAll("language");
-
-			// 	if (!_.isEmpty(ids))
-			// 		compositionRoot.exportToXlsx.execute(
-			// 			$resource,
-			// 			ids.join(","),
-			// 			headers,
-			// 			$scope.selectedLangs
-			// 		);
-			// };
+				if (!_.isEmpty(ids))
+					compositionRoot.exportToXlsx.execute(
+						$resource,
+						ids,
+						headers,
+						$scope.selectedLanguages.map(({ locale }) => locale)
+					);
+			};
 		},
 	]
 );
-
-// function getSelectedDataSets() {
-// 	//Temporal workaround, expected to be deleted on future
-// 	//Split array in pairs of 2 because dataset and language <select/> elements have same id
-// 	const selects = _.chunk(
-// 		[...document.querySelectorAll("select[id^=dsSelector]")],
-// 		2
-// 	).map(([datasets, locales]) => ({
-// 		ids: [...datasets.selectedOptions].map((option) => option.value),
-// 		locale: [...locales.selectedOptions].map((option) => option.value),
-// 	}));
-
-// 	const ids = _.uniq(selects.flatMap((select) => select.ids));
-
-// 	return ids;
-// }
-
-// function getHeaders() {
-// 	const dataSetForms = [...document.querySelectorAll(".dataset-form")];
-// 	const headers = dataSetForms.flatMap((form) => {
-// 		const [healthFacility, reportingPeriod, dataSetName] = [
-// 			...form.querySelectorAll(".dsTitle"),
-// 		].map((input) => input.value);
-// 		return {
-// 			id: form.dataset.id,
-// 			healthFacility,
-// 			reportingPeriod,
-// 			dataSetName,
-// 		};
-// 	});
-
-// 	return _.sortBy(headers, ({ index }) => index);
-// }
