@@ -18,9 +18,6 @@ export const TallySheetsController = TallySheets.controller(
 			Locales,
 			DataSetEntryForm
 		) {
-			$scope.id = 0;
-			$scope.dataset = {};
-
 			$scope.includeHeaders = true;
 			$scope.datasets = [];
 			$scope.selectedDatasets = [];
@@ -43,6 +40,13 @@ export const TallySheetsController = TallySheets.controller(
 				);
 
 				$scope.selectorsLoaded = true;
+			});
+
+			$scope.$on("ngRepeatFinished", function (ngRepeatFinishedEvent) {
+				// Refresh bootstrap-select
+				$(".selectpicker").selectpicker("refresh");
+				$(".selectpicker").selectpicker("render");
+				$scope.selectorLoaded = true;
 			});
 
 			const datasetSelectorForm = document.getElementById(
@@ -113,7 +117,7 @@ export const TallySheetsController = TallySheets.controller(
 			});
 
 			$scope.clearForm = () => {
-				$("#datasetsForms1").children().remove();
+				$("#datasetsForms").children().remove();
 			};
 
 			$scope.goHome = () => {

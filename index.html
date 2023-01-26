@@ -49,12 +49,12 @@
 
 			<!-- SELECTORS -->
 			<div class="row flex">
-
 				<div>
 					<form id="datasetSelectorForm" class="inline">
 						<select name="dataset" class="selectpicker hidden-print" data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_DATASET' | translate }}</option>
-							<option ng-repeat="dataset in datasets | orderBy : 'displayName'" ng-value="dataset.id">
+							<option ng-repeat="dataset in datasets | orderBy : 'displayName'" ng-value="dataset.id"
+								on-finish-render="ngRepeatFinished">
 								{{dataset.displayName}}</option>
 						</select>
 					</form>
@@ -65,7 +65,7 @@
 						<select name="language" class="selectpicker hidden-print" data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_LANGUAGE' | translate }}</option>
 							<option ng-repeat="language in availableLanguages | orderBy : 'locale'"
-								ng-value="language.locale">
+								ng-value="language.locale" on-finish-render="ngRepeatFinished">
 								{{ language.name }}</option>
 						</select>
 					</form>
@@ -76,18 +76,13 @@
 				<button ng-click="clearForm()" class="btn btn-default hidden-print">
 					<span class="glyphicon glyphicon-remove"></span>
 				</button>
-
 			</div>
 
-			<!-- SELECTORS -->
-			<div class="row flex">
-				<dataset-selector selector-id="id" bind-to-dataset="dataset"></dataset-selector>
-			</div>
 		</div>
 	</div>
 
 	<!-- DATASETS VIEW -->
-	<div id="tallysheetForm1">
+	<div>
 		<div class="progress hidden-print" ng-show="progressbarDisplayed" style="width:40%;">
 			<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="100"
 				aria-valuemin="0" aria-valuemax="100" style="width:100%;text-align:center;">
@@ -95,7 +90,7 @@
 			</div>
 		</div>
 
-		<div id="datasetsForms1">
+		<div id="datasetsForms">
 			<div ng-repeat="(index,datasetWrapper) in forms">
 				<form-dataset dataset="datasetWrapper.dataset" output-html="datasetWrapper.output"
 					include-headers="includeHeaders"></form-dataset>
@@ -103,11 +98,6 @@
 		</div>
 	</div>
 
-	<!-- DATASETS VIEW -->
-	<div id="tallysheetForm">
-		<dataset-form selector-id="0" ng-if="!!dataset.id" dataset="dataset">
-		</dataset-form>
-	</div>
 </body>
 
 </html>
