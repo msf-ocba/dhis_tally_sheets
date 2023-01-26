@@ -107,6 +107,7 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
 	table.sectionTable > tbody > tr > th:not(.no-border) {
 		background-color: #c8dceb;
 		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
 		background-image: url("../img/header.png") !important;
 		background-repeat: repeat;
 		line-height: 1.5em;
@@ -124,8 +125,11 @@ table.sectionTable > tbody > tr > th:not(.no-border) {
 }
 
 .include-headers {
-	display: inline-block;
-	margin: 1em 0;
+	margin: 1em 0 0;
+}
+
+.select-all {
+	margin: 0 0 1em;
 }
 
 #tallysheetForm {

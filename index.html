@@ -47,6 +47,13 @@
 				<input type="checkbox" ng-model="includeHeaders" aria-labelledby="includeHeaders">
 			</div>
 
+			<!-- INCLUDE HEADERS -->
+			<div class="row select-all">
+				<label id="selectAllLangs">{{ 'SELECT_ALL_LANGUAGES' | translate }}</label>
+				<input type="checkbox" ng-click="updateLangs()" ng-model="selectAllLangs"
+					aria-labelledby="selectAllLangs">
+			</div>
+
 			<!-- SELECTORS -->
 			<div class="row flex">
 				<div>
@@ -55,17 +62,15 @@
 							data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_DATASET' | translate }}</option>
 							<option ng-repeat="dataset in datasets | orderBy : 'displayName'" ng-value="dataset.id"
-								on-finish-render="ngRepeatFinished">
-								{{dataset.displayName}}</option>
+								on-finish-render="ngRepeatFinished">{{dataset.displayName}}</option>
 						</select>
 					</form>
-					<form id="languageSelectorForm" class="inline">
+					<form id="languageSelectorForm" class="inline" ng-show="!selectAllLangs">
 						<select title="Nothing selected" name="language" class="selectpicker hidden-print"
 							data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_LANGUAGE' | translate }}</option>
 							<option ng-repeat="language in availableLanguages | orderBy : 'locale'"
-								ng-value="language.locale" on-finish-render="ngRepeatFinished">
-								{{ language.name }}</option>
+								ng-value="language.locale" on-finish-render="ngRepeatFinished">{{ language.name }}</option>
 						</select>
 					</form>
 				</div>
