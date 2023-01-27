@@ -182,12 +182,18 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.exportToTable = () => {
 				const ids = $scope.selectedDatasets.map(({ id }) => id);
 				const headers = $scope.forms.map(({ headers }) => headers);
+				const realHeaders = $scope.includeHeaders
+					? headers
+					: headers.map((header) => ({
+							id: headers.id,
+							dataSetName: header.displayName,
+					  }));
 
 				if (!_.isEmpty(ids))
 					compositionRoot.exportToXlsx.execute(
 						$resource,
 						ids,
-						headers,
+						realHeaders,
 						$scope.selectedLocales
 					);
 			};
