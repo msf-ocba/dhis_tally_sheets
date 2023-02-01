@@ -220,6 +220,7 @@ export const TallySheetsController = TallySheets.controller(
 
 				if ($scope.selectAllLangs)
 					$scope.selectedLocales = availableLocales;
+				else $scope.selectedLocales = [];
 			};
 		},
 	]
