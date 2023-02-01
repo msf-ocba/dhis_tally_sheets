@@ -19,23 +19,55 @@ export class ExportDatasetsUseCase {
 					),
 				}));
 
-				const pickedTranslations = dataSetsWithoutComments.map(
-					(dataSet) => ({
-						...dataSet,
-						pickedTranslations: _.intersection(
-							locales,
-							dataSet.translations
-								.filter(
-									(translation) =>
-										translation.property === "NAME"
-								)
-								.map(
-									(translation) =>
-										translation.locale.split("_")[0]
-								)
-						),
-					})
+				const overridedDataSets = dataSetsWithoutComments.map(
+					(dataSet) => {
+						const overrides = dataSet.dataSetElements.map(
+							(dse) => ({
+								categoryComboId: dse.categoryCombo.id,
+								dataElementId: dse.dataElement.id,
+							})
+						);
+						const overridedSections = dataSet.sections.map(
+							(section) => ({
+								...section,
+								dataElements: section.dataElements.map(
+									(de) => ({
+										...de,
+										categoryCombo: {
+											id:
+												overrides.find(
+													(o) =>
+														o.dataElementId ===
+														de.id
+												)?.categoryComboId ??
+												de.categoryCombo.id,
+										},
+									})
+								),
+							})
+						);
+
+						return {
+							...dataSet,
+							sections: overridedSections,
+						};
+					}
 				);
+
+				const pickedTranslations = overridedDataSets.map((dataSet) => ({
+					...dataSet,
+					pickedTranslations: _.intersection(
+						locales,
+						dataSet.translations
+							.filter(
+								(translation) => translation.property === "NAME"
+							)
+							.map(
+								(translation) =>
+									translation.locale.split("_")[0]
+							)
+					),
+				}));
 
 				const translatedDatasets = pickedTranslations.flatMap(
 					mapDataSetTranslations
@@ -43,7 +75,7 @@ export class ExportDatasetsUseCase {
 
 				const mappedDatasets = getDataSets([
 					...translatedDatasets,
-					...dataSetsWithoutComments,
+					...overridedDataSets,
 				]);
 
 				const dataSetsWithHeaders = mappedDatasets.map((dataSet) => ({

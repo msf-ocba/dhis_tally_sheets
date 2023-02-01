@@ -43,6 +43,6 @@ const fields = `
 		dataElements[${common},categoryCombo],
 		greyedFields[dataElement,categoryOptionCombo]
 	],
-	dataSetElements[dataElement[${common}]],
+	dataSetElements[categoryCombo[id,displayName,categories[*],categoryOptionCombos[*]],dataElement[${common}]],
 	translations
 `.replaceAll(/\s/g, "");
