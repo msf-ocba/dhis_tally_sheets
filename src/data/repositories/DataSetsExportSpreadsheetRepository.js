@@ -8,8 +8,10 @@ export class DataSetsExportSpreadsheetRepository {
 				return [
 					{
 						name: dataSet.pickedTranslations
-							? `${dataSet.name}_${dataSet.pickedTranslations}.xlsx`
-							: `${dataSet.name}.xlsx`,
+							? `${dataSet.name.trim()}_${
+									dataSet.pickedTranslations
+							  }.xlsx`
+							: `${dataSet.name.trim()}.xlsx`,
 						blob: XlsxPopulate.fromBlankAsync().then((workbook) =>
 							exportDataSet(workbook, dataSet)
 						),
