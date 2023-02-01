@@ -26,6 +26,7 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.progressbarDisplayed = false;
 			$scope.selectorsLoaded = false;
 			$scope.selectAllLangs = false;
+			$scope.removedSections = [];
 
 			Locales.get().$promise.then((result) => {
 				$scope.languages = result;
@@ -118,6 +119,7 @@ export const TallySheetsController = TallySheets.controller(
 					.then((datasets) => {
 						$scope.$apply(() => {
 							$("#datasetsForms").children().remove();
+							$scope.removedSections = [];
 							$scope.forms = datasets;
 							$scope.progressbarDisplayed = false;
 
@@ -154,6 +156,7 @@ export const TallySheetsController = TallySheets.controller(
 				$scope.selectedDatasets = [];
 				$scope.progressbarDisplayed = false;
 				$scope.selectorsLoaded = false;
+				$scope.removedSections = [];
 
 				_.first(
 					datasetSelectorForm.getElementsByTagName("select")
@@ -194,7 +197,8 @@ export const TallySheetsController = TallySheets.controller(
 						$resource,
 						ids,
 						realHeaders,
-						$scope.selectedLocales
+						$scope.selectedLocales,
+						$scope.removedSections
 					);
 			};
 

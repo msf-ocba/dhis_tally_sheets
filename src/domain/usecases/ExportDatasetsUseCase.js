@@ -5,22 +5,27 @@ export class ExportDatasetsUseCase {
 			dataSetsExportSpreadsheetRepository;
 	}
 
-	execute($resource, dataSetsIds, headers, locales) {
+	execute($resource, dataSetsIds, headers, locales, removedSections) {
 		return this.dataSetsDhis2Repository
 			.get($resource, dataSetsIds)
 			.$promise.then(({ dataSets }) => {
-				const dataSetsWithoutComments = dataSets.map((dataSet) => ({
-					...dataSet,
-					sections: dataSet.sections.filter(
-						(section) =>
-							!section.displayName
-								.toLowerCase()
-								.includes("comments")
-					),
-				}));
+				const dataSetsWithoutCommentsAndRemovedSections = dataSets.map(
+					(dataSet) => ({
+						...dataSet,
+						sections: dataSet.sections.filter(
+							(section) =>
+								!(
+									section.displayName
+										.toLowerCase()
+										.includes("comments") ||
+									removedSections.includes(section.id)
+								)
+						),
+					})
+				);
 
-				const overridedDataSets = dataSetsWithoutComments.map(
-					(dataSet) => {
+				const overridedDataSets =
+					dataSetsWithoutCommentsAndRemovedSections.map((dataSet) => {
 						const overrides = dataSet.dataSetElements.map(
 							(dse) => ({
 								categoryComboId: dse.categoryCombo?.id,
@@ -51,8 +56,7 @@ export class ExportDatasetsUseCase {
 							...dataSet,
 							sections: overridedSections,
 						};
-					}
-				);
+					});
 
 				const pickedTranslations = overridedDataSets.map((dataSet) => ({
 					...dataSet,

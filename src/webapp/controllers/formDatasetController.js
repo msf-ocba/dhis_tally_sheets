@@ -110,6 +110,11 @@ export const formDatasetController = TallySheets.controller("formDatasetCtrl", [
 				const sectionId = $(this).attr("sectionId");
 				j.find("#" + sectionId).hide(400, function () {
 					j.find("#" + sectionId).remove();
+					$scope.$apply(() => {
+						$scope.removedSections.push(
+							sectionId.replace("tab-", "")
+						);
+					});
 				});
 			});
 		};

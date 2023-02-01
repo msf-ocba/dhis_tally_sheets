@@ -70,7 +70,8 @@
 							data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_LANGUAGE' | translate }}</option>
 							<option ng-repeat="language in availableLanguages | orderBy : 'locale'"
-								ng-value="language.locale" on-finish-render="ngRepeatFinished">{{ language.name }}</option>
+								ng-value="language.locale" on-finish-render="ngRepeatFinished">{{ language.name }}
+							</option>
 						</select>
 					</form>
 				</div>
@@ -99,7 +100,8 @@
 		<div id="datasetsForms">
 			<div ng-repeat="(index,datasetWrapper) in forms">
 				<form-dataset dataset="datasetWrapper.dataset" output-html="datasetWrapper.output"
-					headers="datasetWrapper.headers" include-headers="includeHeaders"></form-dataset>
+					headers="datasetWrapper.headers" include-headers="includeHeaders"
+					removed-sections="removedSections"></form-dataset>
 			</div>
 		</div>
 	</div>

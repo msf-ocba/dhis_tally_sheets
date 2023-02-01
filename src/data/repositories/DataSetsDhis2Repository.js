@@ -28,6 +28,7 @@ const fields = `
 	formType,
 	displayFormName,
 	sections[
+		id,
 		translations,
 		displayName,
 		description,

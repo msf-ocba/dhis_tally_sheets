@@ -9,6 +9,7 @@ export const formDirective = TallySheets.directive("formDataset", function () {
 			outputHtml: "=",
 			includeHeaders: "=",
 			headers: "=",
+			removedSections: "=",
 		},
 	};
 });
