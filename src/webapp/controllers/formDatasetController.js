@@ -84,9 +84,9 @@ export const formDatasetController = TallySheets.controller("formDatasetCtrl", [
 				.remove();
 
 			// Make rows resizable
-			j.find(".sectionTable tr").each(function () {
-				$(this).find("td").last().resizable();
-			});
+			// j.find(".sectionTable tr").each(function () {
+			// 	$(this).find("td").last().resizable();
+			// });
 
 			// Add class "greyfield" to cells (td object)
 			j.find(".sectionTable input:disabled")
