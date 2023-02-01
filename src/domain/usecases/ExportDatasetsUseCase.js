@@ -9,20 +9,33 @@ export class ExportDatasetsUseCase {
 		return this.dataSetsDhis2Repository
 			.get($resource, dataSetsIds)
 			.$promise.then(({ dataSets }) => {
-				const pickedTranslations = dataSets.map((dataSet) => ({
+				const dataSetsWithoutComments = dataSets.map((dataSet) => ({
 					...dataSet,
-					pickedTranslations: _.intersection(
-						locales,
-						dataSet.translations
-							.filter(
-								(translation) => translation.property === "NAME"
-							)
-							.map(
-								(translation) =>
-									translation.locale.split("_")[0]
-							)
+					sections: dataSet.sections.filter(
+						(section) =>
+							!section.displayName
+								.toLowerCase()
+								.includes("comments")
 					),
 				}));
+
+				const pickedTranslations = dataSetsWithoutComments.map(
+					(dataSet) => ({
+						...dataSet,
+						pickedTranslations: _.intersection(
+							locales,
+							dataSet.translations
+								.filter(
+									(translation) =>
+										translation.property === "NAME"
+								)
+								.map(
+									(translation) =>
+										translation.locale.split("_")[0]
+								)
+						),
+					})
+				);
 
 				const translatedDatasets = pickedTranslations.flatMap(
 					mapDataSetTranslations
@@ -30,7 +43,7 @@ export class ExportDatasetsUseCase {
 
 				const mappedDatasets = getDataSets([
 					...translatedDatasets,
-					...dataSets,
+					...dataSetsWithoutComments,
 				]);
 
 				const dataSetsWithHeaders = mappedDatasets.map((dataSet) => ({
@@ -66,6 +79,7 @@ export class ExportDatasetsUseCase {
 function getDataSets(dataSets) {
 	const mappedDatasets = dataSets.flatMap((dataSet) => {
 		if (dataSet.formType === "CUSTOM") return [];
+		console.log(dataSet.sections);
 		const mappedDataSets = {
 			...dataSet,
 			dataSetElements: dataSet.dataSetElements.map(
