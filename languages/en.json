@@ -1,10 +1,12 @@
 {
 	"IN_PROGRESS": "IN PROGRESS",
 	"PRINT": "Print",
-  	"EXPORT_EXCEL": "Export to MS Excel",
+	"EXPORT_EXCEL": "Export to MS Excel",
 	"HOME": "Home",
 	"SELECT_DATASET": "Select a dataset",
-  	"ADD_FORM": "Add form",
+	"SELECT_LANGUAGE": "Select a language",
+	"SELECT_ALL_LANGUAGES": "Select all languages",
+	"ADD_FORM": "Add form",
 	"HEADERS": "Include headers",
 	"FACILITY": "Health facility",
 	"PERIOD": "Reporting period"

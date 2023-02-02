@@ -1,0 +1,137 @@
+body {
+	margin: 3%;
+	height: 70%;
+}
+
+.greyfield,
+.sectionTable th {
+	text-align: center;
+	width: 100%;
+}
+
+input.dsTitle {
+	width: 100%;
+}
+
+table.formSection,
+table.sectionTable {
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: separate;
+	border-spacing: 0px 1px;
+}
+
+.sectionTable th,
+.sectionTable td {
+	font-size: 14;
+	padding: 0.3em !important;
+	vertical-align: middle !important;
+	border: 1px solid #000;
+}
+
+.no-border {
+	border: 0px solid #000 !important;
+}
+
+span {
+	vertical-align: middle;
+	line-height: 100%;
+}
+
+.row {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+.hidden {
+	display: none;
+}
+
+.flex {
+	display: flex;
+	gap: 4px;
+}
+
+.inline {
+	display: inline;
+}
+
+table.sectionTable > tbody > tr > th:not(.no-border) {
+	background-color: #c8dceb;
+	-webkit-print-color-adjust: exact;
+	background-image: url("../img/header.png") !important;
+	background-repeat: repeat;
+	line-height: 1.5em;
+}
+
+#homeBtn {
+	float: right;
+}
+
+#mainMenu {
+	background-color: #fff0f0;
+}
+
+.loading-icon {
+	animation: spin infinite linear 2s;
+	-webkit-animation: spin infinite linear 2s;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes spin {
+	0% {
+		transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@media print {
+	body {
+		margin: 0%;
+	}
+
+	table.sectionTable > tbody > tr > th:not(.no-border) {
+		background-color: #c8dceb;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		background-image: url("../img/header.png") !important;
+		background-repeat: repeat;
+		line-height: 1.5em;
+	}
+
+	input.dsTitle {
+		border: 0px;
+	}
+}
+
+.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(
+		.input-group-btn
+	) {
+	width: 350px;
+}
+
+.include-headers {
+	margin: 1em 0 0;
+}
+
+.select-all {
+	margin: 0 0 1em;
+}
+
+#tallysheetForm {
+	margin-top: 3em;
+}
