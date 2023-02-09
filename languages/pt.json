@@ -1,12 +1,12 @@
 {
-  "IN_PROGRESS": "EM PROCESSO",
-  "PRINT": "Imprimir",
-  "EXPORT_EXCEL": "Exportar para Excel",
-  "HOME": "Principal",
-  "SELECT_DATASET": "Selecione um conjunto de dados",
-  "SELECT_LANGUAGE": "Selecione um idioma",
-  "ADD_FORM": "Adicionar forma",
-  "HEADERS": "Adicionar cabeçalho",
-  "FACILITY": "Centro sanitário",
-  "PERIOD": "Período"
+	"IN_PROGRESS": "EM PROCESSO",
+	"PRINT": "Imprimir",
+	"EXPORT_EXCEL": "Exportar para Excel",
+	"HOME": "Principal",
+	"SELECT_DATASET": "Selecione um conjunto de dados",
+	"SELECT_LANGUAGE": "Selecione um idioma",
+	"ADD_FORM": "Adicionar forma",
+	"HEADERS": "Adicionar cabeçalho",
+	"FACILITY": "Centro sanitário",
+	"PERIOD": "Período"
 }

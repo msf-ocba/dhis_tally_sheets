@@ -1,70 +1,70 @@
 {
-  "version": "2.0.0",
-  "name": "hmis-tally-sheets",
-  "description": "HMIS Tally sheets",
-  "author": "MSF OCBA, EyeSeeTea team",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EyeSeeTea/dhis_tally_sheets.git"
-  },
-  "homepage": ".",
-  "dependencies": {
-    "angular": "angular/bower-angular#1.4.0",
-    "angular-resource": "angular/bower-angular-resource#1.3.15",
-    "angular-route": "angular/bower-angular-route#1.4.0",
-    "angular-sanitize": "angular/bower-angular-sanitize#1.4.0",
-    "angular-translate": "PascalPrecht/bower-angular-translate#2.5.2",
-    "angular-translate-loader-static-files": "PascalPrecht/bower-angular-translate-loader-static-files#2.5.2",
-    "bootstrap": "twbs/bootstrap#3.3.4",
-    "bootstrap-select": "snapappointments/bootstrap-select#1.7.2",
-    "filesaver": "eligrey/FileSaver.js#2.0.4",
-    "jquery": "jquery/jquery-dist#2.1.4",
-    "jquery-ui": "components/jqueryui#1.11.4",
-    "jszip": "Stuk/jszip#3.10.1",
-    "lodash": "lodash/lodash#4.17.15",
-    "xlsx-populate": "dtjohnson/xlsx-populate#1.21.0",
-    "d2-manifest": "^1.0.0"
-  },
-  "devDependencies": {
-    "bower": "^1.8.14",
-    "http-server": "^14.1.1",
-    "prettier": "^2.8.4"
-  },
-  "scripts": {
-    "postinstall": "sh build-deps.sh",
-    "build-folder": "rm -rf build/ && d2-manifest package.json manifest.webapp && mkdir build && yarn run manifest && cp -r src assets languages assets/img/Logo_48.png index.html build",
-    "build": "yarn build-folder && rm -f $npm_package_name.zip && cd build && zip --quiet -r ../$npm_package_name.zip *",
-    "start": ". ./.env.local && http-server . -a $HOST -p $PORT -c-1 -P $REACT_APP_DHIS2_BASE_URL --proxy-options.auth $REACT_APP_DHIS2_AUTH",
-    "manifest": "d2-manifest package.json build/manifest.webapp",
-    "prettify": "prettier \"./**/*.{js,jsx,json,css,ts,tsx}\" --write"
-  },
-  "manifest.webapp": {
-    "name": "HMIS Tally sheets",
+    "version": "2.0.0",
+    "name": "hmis-tally-sheets",
     "description": "HMIS Tally sheets",
-    "launch_path": "index.html",
-    "icons": {
-      "16": null,
-      "48": "assets/img/Logo_48.png",
-      "128": null
+    "author": "MSF OCBA, EyeSeeTea team",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/EyeSeeTea/dhis_tally_sheets.git"
     },
-    "developer1": {
-      "url": "",
-      "name": "Victor Garcia - MSFOCBA",
-      "email": "victor.garcia@barcelona.msf.org"
+    "homepage": ".",
+    "dependencies": {
+        "angular": "angular/bower-angular#1.4.0",
+        "angular-resource": "angular/bower-angular-resource#1.3.15",
+        "angular-route": "angular/bower-angular-route#1.4.0",
+        "angular-sanitize": "angular/bower-angular-sanitize#1.4.0",
+        "angular-translate": "PascalPrecht/bower-angular-translate#2.5.2",
+        "angular-translate-loader-static-files": "PascalPrecht/bower-angular-translate-loader-static-files#2.5.2",
+        "bootstrap": "twbs/bootstrap#3.3.4",
+        "bootstrap-select": "snapappointments/bootstrap-select#1.7.2",
+        "filesaver": "eligrey/FileSaver.js#2.0.4",
+        "jquery": "jquery/jquery-dist#2.1.4",
+        "jquery-ui": "components/jqueryui#1.11.4",
+        "jszip": "Stuk/jszip#3.10.1",
+        "lodash": "lodash/lodash#4.17.15",
+        "xlsx-populate": "dtjohnson/xlsx-populate#1.21.0",
+        "d2-manifest": "^1.0.0"
     },
-    "developer2": {
-      "url": "https://www.eyeseetea.com/",
-      "name": "EyeSeeTea team"
+    "devDependencies": {
+        "bower": "^1.8.14",
+        "http-server": "^14.1.1",
+        "prettier": "^2.8.4"
     },
-    "installs_allowed_from": null,
-    "default_locale": "en",
-    "activities": {
-      "dhis": {
-        "href": "*"
-      }
+    "scripts": {
+        "postinstall": "sh build-deps.sh",
+        "build-folder": "rm -rf build/ && d2-manifest package.json manifest.webapp && mkdir build && yarn run manifest && cp -r src assets languages assets/img/Logo_48.png index.html build",
+        "build": "yarn build-folder && rm -f $npm_package_name.zip && cd build && zip --quiet -r ../$npm_package_name.zip *",
+        "start": ". ./.env.local && http-server . -a $HOST -p $PORT -c-1 -P $REACT_APP_DHIS2_BASE_URL --proxy-options.auth $REACT_APP_DHIS2_AUTH",
+        "manifest": "d2-manifest package.json build/manifest.webapp",
+        "prettify": "prettier \"./**/*.{js,jsx,json,css,ts,tsx}\" --write"
+    },
+    "manifest.webapp": {
+        "name": "HMIS Tally sheets",
+        "description": "HMIS Tally sheets",
+        "launch_path": "index.html",
+        "icons": {
+            "16": null,
+            "48": "assets/img/Logo_48.png",
+            "128": null
+        },
+        "developer1": {
+            "url": "",
+            "name": "Victor Garcia - MSFOCBA",
+            "email": "victor.garcia@barcelona.msf.org"
+        },
+        "developer2": {
+            "url": "https://www.eyeseetea.com/",
+            "name": "EyeSeeTea team"
+        },
+        "installs_allowed_from": null,
+        "default_locale": "en",
+        "activities": {
+            "dhis": {
+                "href": "*"
+            }
+        }
+    },
+    "engines": {
+        "yarn": ">= 1.0.0"
     }
-  },
-  "engines": {
-    "yarn": ">= 1.0.0"
-  }
 }
