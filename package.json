@@ -36,7 +36,8 @@
         "build": "yarn build-folder && rm -f $npm_package_name.zip && cd build && zip --quiet -r ../$npm_package_name.zip *",
         "start": ". ./.env.local && http-server . -a $HOST -p $PORT -c-1 -P $REACT_APP_DHIS2_BASE_URL --proxy-options.auth $REACT_APP_DHIS2_AUTH",
         "manifest": "d2-manifest package.json build/manifest.webapp",
-        "prettify": "prettier \"./**/*.{js,jsx,json,css,ts,tsx}\" --write"
+        "prettify": "prettier \"./**/*.{js,jsx,json,css,ts,tsx}\" --write",
+        "prettify-html": "prettier \"./**/*.html\" --write --parser=angular"
     },
     "manifest.webapp": {
         "name": "HMIS Tally sheets",

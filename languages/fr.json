@@ -1,12 +1,12 @@
 {
-	"IN_PROGRESS": "EN COURS",
-	"PRINT": "Imprimer",
-	"EXPORT_EXCEL": "Exporter à MS Excel",
-	"HOME": "Accueil",
-	"SELECT_DATASET": "Sélectionnez un ensemble de données",
-	"SELECT_LANGUAGE": "Sélectionnez une langue",
-	"ADD_FORM": "Ajouter formulaire",
-	"HEADERS": "Ajouter en-tête",
-	"FACILITY": "Structure de santé",
-	"PERIOD": "Periode rapportée"
+    "IN_PROGRESS": "EN COURS",
+    "PRINT": "Imprimer",
+    "EXPORT_EXCEL": "Exporter à MS Excel",
+    "HOME": "Accueil",
+    "SELECT_DATASET": "Sélectionnez un ensemble de données",
+    "SELECT_LANGUAGE": "Sélectionnez une langue",
+    "ADD_FORM": "Ajouter formulaire",
+    "HEADERS": "Ajouter en-tête",
+    "FACILITY": "Structure de santé",
+    "PERIOD": "Periode rapportée"
 }

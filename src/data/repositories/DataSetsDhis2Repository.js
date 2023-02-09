@@ -1,22 +1,22 @@
 import { apiUrl } from "../../webapp/app.js";
 
 export class DataSetsDhis2Repository {
-	get($resource, dataSetsIds) {
-		return $resource(
-			apiUrl + "/dataSets.json",
-			{},
-			{
-				get: {
-					method: "GET",
-					params: {
-						fields: fields,
-						filter: `id:in:[${dataSetsIds.join(",")}]`,
-						paging: false,
-					},
-				},
-			}
-		).get();
-	}
+    get($resource, dataSetsIds) {
+        return $resource(
+            apiUrl + "/dataSets.json",
+            {},
+            {
+                get: {
+                    method: "GET",
+                    params: {
+                        fields: fields,
+                        filter: `id:in:[${dataSetsIds.join(",")}]`,
+                        paging: false,
+                    },
+                },
+            }
+        ).get();
+    }
 }
 
 const common = "id,displayFormName,translations";
