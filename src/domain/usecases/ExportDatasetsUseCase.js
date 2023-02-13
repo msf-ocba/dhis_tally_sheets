@@ -136,12 +136,17 @@ function mapSection(section) {
 			categoryOptions.map(({ displayFormName }) => displayFormName)
 		);
 
+		const categoriesOrder = categoryCombo.categories.map(
+			({ categoryOptions }) => categoryOptions.map(({ id }) => id)
+		);
+
 		const categoryOptionCombos = categoryCombo.categoryOptionCombos
 			.map((categoryOptionCombo) => ({
 				...categoryOptionCombo,
-				categories: categoryOptionCombo.categoryOptions.flatMap(
-					({ displayFormName }) => displayFormName
-				),
+				categories: _.sortBy(
+					categoryOptionCombo.categoryOptions,
+					({ id }) => categoriesOrder.findIndex((c) => c.includes(id))
+				).map(({ displayFormName }) => displayFormName),
 			}))
 			.filter((categoryOptionCombo) => {
 				const flatCategories = categories.flat();
