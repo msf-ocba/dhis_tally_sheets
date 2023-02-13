@@ -47,17 +47,24 @@
 				<input type="checkbox" ng-model="includeHeaders" aria-labelledby="includeHeaders">
 			</div>
 
-			<!-- INCLUDE HEADERS -->
+			<!-- SELECT ALL -->
 			<div class="row select-all">
-				<label id="selectAllLangs">{{ 'SELECT_ALL_LANGUAGES' | translate }}</label>
-				<input type="checkbox" ng-click="updateLangs()" ng-model="selectAllLangs"
-					aria-labelledby="selectAllLangs">
+				<div>
+					<label id="selectAllLangs">{{ 'SELECT_ALL_LANGUAGES' | translate }}</label>
+					<input type="checkbox" ng-click="updateLangs()" ng-model="selectAllLangs"
+						aria-labelledby="selectAllLangs">
+				</div>
+				<div>
+					<label id="selectAllDatasets">{{ 'SELECT_ALL_DATASETS' | translate }}</label>
+					<input type="checkbox" ng-click="updateDatasets()" ng-model="selectAllDatasets"
+						aria-labelledby="selectAllDatasets">
+				</div>
 			</div>
 
 			<!-- SELECTORS -->
-			<div class="row flex">
+			<div class="row flex" ng-hide="selectAllDatasets">
 				<div>
-					<form id="datasetSelectorForm" class="inline">
+					<form id="datasetSelectorForm" class="inline" ng-show="!selectAllDatasets">
 						<select title="Nothing selected" name="dataset" class="selectpicker hidden-print"
 							data-live-search="true" multiple>
 							<option disabled value="0">{{ 'SELECT_DATASET' | translate }}</option>

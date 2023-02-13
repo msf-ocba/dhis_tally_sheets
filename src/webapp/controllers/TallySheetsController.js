@@ -26,6 +26,7 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.progressbarDisplayed = false;
 			$scope.selectorsLoaded = false;
 			$scope.selectAllLangs = false;
+			$scope.selectAllDatasets = false;
 			$scope.removedSections = [];
 
 			Locales.get().$promise.then((result) => {
@@ -58,86 +59,17 @@ export const TallySheetsController = TallySheets.controller(
 			const languageSelectorForm = document.getElementById(
 				"languageSelectorForm"
 			);
+			const inputSelectAllDatasets =
+				document.getElementById("selectAllDatasets").nextElementSibling;
 
 			$(datasetSelectorForm).on("change", () => {
-				$scope.progressbarDisplayed = true;
-				$scope.selectorsLoaded = false;
-
-				// FORM
 				const formData = new FormData(datasetSelectorForm);
 				const selectedIds = formData.getAll("dataset");
-				const selectedDatasets = $scope.datasets.filter((dataset) =>
-					selectedIds.includes(dataset.id)
-				);
+				updateSelectedDatasets(selectedIds);
+			});
 
-				const availableLocales = _.uniq(
-					selectedDatasets
-						.map((dataset) =>
-							dataset.translations?.flatMap((translation) =>
-								translation.property === "NAME"
-									? [translation.locale.split("_")[0]]
-									: []
-							)
-						)
-						.flat()
-				);
-
-				const availableLanguages = $scope.languages.filter((lang) =>
-					availableLocales?.includes(lang.locale)
-				);
-
-				$scope.$apply(() => {
-					$scope.selectedDatasets = selectedDatasets;
-					$scope.availableLanguages = availableLanguages;
-					if ($scope.selectAllLangs)
-						$scope.selectedLocales = availableLocales;
-				});
-
-				Promise.all(
-					selectedDatasets.map((dataset) =>
-						DataSetEntryForm.get({
-							dataSetId: dataset.id,
-						}).$promise.then((result) => {
-							const codeHtml = result.codeHtml.replace(
-								/id="tabs"/g,
-								`id="tabs-${dataset.id}"`
-							);
-
-							return {
-								dataset,
-								headers: {
-									id: dataset.id,
-									healthFacility: "Health Facility: ",
-									reportingPeriod: "Reporting Period: ",
-									dataSetName: dataset.displayName,
-								},
-								output: codeHtml,
-							};
-						})
-					)
-				)
-					.then((datasets) => {
-						$scope.$apply(() => {
-							$("#datasetsForms").children().remove();
-							$scope.removedSections = [];
-							$scope.forms = datasets;
-							$scope.progressbarDisplayed = false;
-
-							$timeout(() => {
-								$(".selectpicker").selectpicker("refresh");
-								$(".selectpicker").selectpicker("render");
-							});
-
-							$timeout(() => {
-								//just for visuals
-								$scope.selectorsLoaded = true;
-							}, 200);
-						});
-					})
-					.catch((err) => {
-						console.error(err);
-						$scope.selectorsLoaded = true;
-					});
+			$(inputSelectAllDatasets).on("change", () => {
+				updateSelectedDatasets();
 			});
 
 			$(languageSelectorForm).on("change", () => {
@@ -226,6 +158,86 @@ export const TallySheetsController = TallySheets.controller(
 					$scope.selectedLocales = availableLocales;
 				else $scope.selectedLocales = [];
 			};
+
+			function updateSelectedDatasets(selectedIds) {
+				$scope.progressbarDisplayed = true;
+				$scope.selectorsLoaded = false;
+
+				const selectedDatasets = $scope.selectAllDatasets
+					? $scope.datasets
+					: $scope.datasets.filter((dataset) =>
+							selectedIds.includes(dataset.id)
+					  );
+
+				const availableLocales = _.uniq(
+					selectedDatasets
+						.map((dataset) =>
+							dataset.translations?.flatMap((translation) =>
+								translation.property === "NAME"
+									? [translation.locale.split("_")[0]]
+									: []
+							)
+						)
+						.flat()
+				);
+
+				const availableLanguages = $scope.languages.filter((lang) =>
+					availableLocales?.includes(lang.locale)
+				);
+
+				$scope.$apply(() => {
+					$scope.selectedDatasets = selectedDatasets;
+					$scope.availableLanguages = availableLanguages;
+					if ($scope.selectAllLangs)
+						$scope.selectedLocales = availableLocales;
+				});
+
+				Promise.all(
+					selectedDatasets.map((dataset) =>
+						DataSetEntryForm.get({
+							dataSetId: dataset.id,
+						}).$promise.then((result) => {
+							const codeHtml = result.codeHtml.replace(
+								/id="tabs"/g,
+								`id="tabs-${dataset.id}"`
+							);
+
+							return {
+								dataset,
+								headers: {
+									id: dataset.id,
+									healthFacility: "Health Facility: ",
+									reportingPeriod: "Reporting Period: ",
+									dataSetName: dataset.displayName,
+								},
+								output: codeHtml,
+							};
+						})
+					)
+				)
+					.then((datasets) => {
+						$scope.$apply(() => {
+							$("#datasetsForms").children().remove();
+							$scope.removedSections = [];
+							$scope.forms = datasets;
+							$scope.progressbarDisplayed = false;
+
+							$timeout(() => {
+								$(".selectpicker").selectpicker("refresh");
+								$(".selectpicker").selectpicker("render");
+							});
+
+							$timeout(() => {
+								//just for visuals
+								$scope.selectorsLoaded = true;
+							}, 200);
+						});
+					})
+					.catch((err) => {
+						console.error(err);
+						$scope.selectorsLoaded = true;
+					});
+			}
 		},
 	]
 );
