@@ -1,5 +1,5 @@
 import { TallySheets } from "../TallySheets.js";
-import { dhisUrl, apiUrl, compositionRoot } from "../app.js";
+import { dhisUrl, compositionRoot } from "../app.js";
 
 export const TallySheetsController = TallySheets.controller(
 	"TallySheetsController",
@@ -68,8 +68,10 @@ export const TallySheetsController = TallySheets.controller(
 				updateSelectedDatasets(selectedIds);
 			});
 
+			//can't be on ng-click because updateSelectedDatasets uses $scope.apply
 			$(inputSelectAllDatasets).on("change", () => {
-				updateSelectedDatasets();
+				if ($scope.selectAllDatasets) updateSelectedDatasets();
+				else $scope.clearForm();
 			});
 
 			$(languageSelectorForm).on("change", () => {
@@ -81,7 +83,6 @@ export const TallySheetsController = TallySheets.controller(
 			});
 
 			$scope.clearForm = () => {
-				// $("#datasetsForms").children().remove(); //Commented because not need to remove children. $scope vars will update UI
 				$scope.availableLanguages = [];
 				$scope.selectedLocales = [];
 				$scope.forms = [];
@@ -89,6 +90,7 @@ export const TallySheetsController = TallySheets.controller(
 				$scope.progressbarDisplayed = false;
 				$scope.selectorsLoaded = false;
 				$scope.removedSections = [];
+				$scope.selectAllDatasets = false;
 
 				_.first(
 					datasetSelectorForm.getElementsByTagName("select")
@@ -115,6 +117,7 @@ export const TallySheetsController = TallySheets.controller(
 			};
 
 			$scope.exportToTable = () => {
+				$scope.exporting = true;
 				const ids = $scope.selectedDatasets.map(({ id }) => id);
 				const headers = $scope.forms.map(({ headers }) => headers);
 				const realHeaders = $scope.includeHeaders
@@ -125,22 +128,26 @@ export const TallySheetsController = TallySheets.controller(
 					  }));
 
 				if (!_.isEmpty(ids))
-					compositionRoot.exportToXlsx.execute(
-						$resource,
-						ids,
-						realHeaders,
-						$scope.selectedLocales,
-						$scope.removedSections
-					);
+					compositionRoot.exportToXlsx
+						.execute(
+							$resource,
+							ids,
+							realHeaders,
+							$scope.selectedLocales,
+							$scope.removedSections
+						)
+						.then(() => ($scope.exporting = false));
 			};
 
 			//In case they toggle the selectAllLang switch after selecting the desired datasets
 			$scope.updateLangs = () => {
 				const formData = new FormData(datasetSelectorForm);
 				const selectedIds = formData.getAll("dataset");
-				const selectedDatasets = $scope.datasets.filter((dataset) =>
-					selectedIds.includes(dataset.id)
-				);
+				const selectedDatasets = $scope.selectAllDatasets
+					? $scope.datasets
+					: $scope.datasets.filter((dataset) =>
+							selectedIds.includes(dataset.id)
+					  );
 
 				const availableLocales = _.uniq(
 					selectedDatasets
@@ -156,7 +163,11 @@ export const TallySheetsController = TallySheets.controller(
 
 				if ($scope.selectAllLangs)
 					$scope.selectedLocales = availableLocales;
-				else $scope.selectedLocales = [];
+				else {
+					const formData = new FormData(languageSelectorForm);
+					const selectedLocales = formData.getAll("language");
+					$scope.selectedLocales = selectedLocales;
+				}
 			};
 
 			function updateSelectedDatasets(selectedIds) {

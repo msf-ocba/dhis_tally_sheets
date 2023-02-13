@@ -35,6 +35,9 @@
 				<button type="button" id="export-button" ng-click="exportToTable('tallysheetForm')"
 					class="btn btn-success hidden-print" export-button="{{selectedDatasets}}">
 					{{ 'EXPORT_EXCEL' | translate}}</button>
+				<span ng-show="exporting" class="loading-icon">
+					<span class="glyphicon glyphicon-hourglass"></span>
+				</span>
 				<button id="homeBtn" ng-click="goHome()" class="btn btn-danger hidden-print">
 					<span class="glyphicon glyphicon-home"></span>
 					{{ 'HOME' | translate}}
@@ -56,13 +59,12 @@
 				</div>
 				<div>
 					<label id="selectAllDatasets">{{ 'SELECT_ALL_DATASETS' | translate }}</label>
-					<input type="checkbox" ng-click="updateDatasets()" ng-model="selectAllDatasets"
-						aria-labelledby="selectAllDatasets">
+					<input type="checkbox" ng-model="selectAllDatasets" aria-labelledby="selectAllDatasets">
 				</div>
 			</div>
 
 			<!-- SELECTORS -->
-			<div class="row flex" ng-hide="selectAllDatasets">
+			<div class="row flex" ng-hide="selectAllDatasets && selectAllLangs">
 				<div>
 					<form id="datasetSelectorForm" class="inline" ng-show="!selectAllDatasets">
 						<select title="Nothing selected" name="dataset" class="selectpicker hidden-print"
