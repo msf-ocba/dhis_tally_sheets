@@ -65,57 +65,21 @@
                     />
                 </div>
 
-                <!-- SELECTORS -->
-                <div class="row flex">
-                    <div>
-                        <form id="datasetSelectorForm" class="inline">
-                            <select
-                                title="Nothing selected"
-                                name="dataset"
-                                class="selectpicker hidden-print"
-                                data-live-search="true"
-                                multiple
-                            >
-                                <option disabled value="0">{{ "SELECT_DATASET" | translate }}</option>
-                                <option
-                                    ng-repeat="dataset in datasets | orderBy : 'displayName'"
-                                    ng-value="dataset.id"
-                                    on-finish-render="(ngRepeatFinished)"
-                                >
-                                    {{ dataset.displayName }}
-                                </option>
-                            </select>
-                        </form>
-                        <form id="languageSelectorForm" class="inline" ng-show="!selectAllLangs">
-                            <select
-                                title="Nothing selected"
-                                name="language"
-                                class="selectpicker hidden-print"
-                                data-live-search="true"
-                                multiple
-                            >
-                                <option disabled value="0">{{ "SELECT_LANGUAGE" | translate }}</option>
-                                <option
-                                    ng-repeat="language in availableLanguages | orderBy : 'locale'"
-                                    ng-value="language.locale"
-                                    on-finish-render="(ngRepeatFinished)"
-                                >
-                                    {{ language.name }}
-                                </option>
-                            </select>
-                        </form>
-                    </div>
-                    <button ng-click="clearForm()" class="btn btn-default hidden-print">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
-                    <div>
-                        <span ng-show="!selectorsLoaded" class="loading-icon">
-                            <span class="glyphicon glyphicon-hourglass"></span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+			<!-- PRINT AND EXPORT -->
+			<div class="row">
+				<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
+				<button type="button" id="export-button" ng-click="exportToTable('tallysheetForm')"
+					class="btn btn-success hidden-print" export-button="{{selectedDatasets}}"
+					ng-disabled="progressbarDisplayed">
+					{{ 'EXPORT_EXCEL' | translate}}</button>
+				<span ng-show="exporting" class="loading-icon">
+					<span class="glyphicon glyphicon-hourglass"></span>
+				</span>
+				<button id="homeBtn" ng-click="goHome()" class="btn btn-danger hidden-print">
+					<span class="glyphicon glyphicon-home"></span>
+					{{ 'HOME' | translate}}
+				</button>
+			</div>
 
         <!-- DATASETS VIEW -->
         <div>
@@ -132,17 +96,71 @@
                 </div>
             </div>
 
-            <div id="datasetsForms">
-                <div ng-repeat="(index,datasetWrapper) in forms">
-                    <form-dataset
-                        dataset="datasetWrapper.dataset"
-                        output-html="datasetWrapper.output"
-                        headers="datasetWrapper.headers"
-                        include-headers="includeHeaders"
-                        removed-sections="removedSections"
-                    ></form-dataset>
-                </div>
-            </div>
-        </div>
-    </body>
+			<!-- SELECT ALL -->
+			<div class="row select-all">
+				<div>
+					<label id="selectAllLangs">{{ 'SELECT_ALL_LANGUAGES' | translate }}</label>
+					<input type="checkbox" ng-click="updateLangs()" ng-model="selectAllLangs"
+						aria-labelledby="selectAllLangs">
+				</div>
+				<div>
+					<label id="selectAllDatasets">{{ 'SELECT_ALL_DATASETS' | translate }}</label>
+					<input type="checkbox" ng-model="selectAllDatasets" aria-labelledby="selectAllDatasets">
+				</div>
+			</div>
+
+			<!-- SELECTORS -->
+			<div class="row flex" ng-hide="selectAllDatasets && selectAllLangs">
+				<div>
+					<form id="datasetSelectorForm" class="inline" ng-show="!selectAllDatasets">
+						<select title="Nothing selected" name="dataset" class="selectpicker hidden-print"
+							data-live-search="true" multiple>
+							<option disabled value="0">{{ 'SELECT_DATASET' | translate }}</option>
+							<option ng-repeat="dataset in datasets | orderBy : 'displayName'" ng-value="dataset.id"
+								on-finish-render="ngRepeatFinished">{{dataset.displayName}}</option>
+						</select>
+					</form>
+					<form id="languageSelectorForm" class="inline" ng-show="!selectAllLangs">
+						<select title="Nothing selected" name="language" class="selectpicker hidden-print"
+							data-live-search="true" multiple>
+							<option disabled value="0">{{ 'SELECT_LANGUAGE' | translate }}</option>
+							<option ng-repeat="language in availableLanguages | orderBy : 'locale'"
+								ng-value="language.locale" on-finish-render="ngRepeatFinished">{{ language.name }}
+							</option>
+						</select>
+					</form>
+				</div>
+				<button ng-click="clearForm()" class="btn btn-default hidden-print">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+				<div>
+					<span ng-show="!selectorsLoaded" class="loading-icon">
+						<span class="glyphicon glyphicon-hourglass"></span>
+					</span>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- DATASETS VIEW -->
+	<div>
+		<div class="progress hidden-print" ng-show="progressbarDisplayed" style="width:40%;">
+			<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="100"
+				aria-valuemin="0" aria-valuemax="100" style="width:100%;text-align:center;">
+				{{ 'IN_PROGRESS' | translate }}
+			</div>
+		</div>
+
+		<div id="datasetsForms">
+			<div ng-repeat="(index,datasetWrapper) in forms">
+				<form-dataset dataset="datasetWrapper.dataset" output-html="datasetWrapper.output"
+					headers="datasetWrapper.headers" include-headers="includeHeaders"
+					removed-sections="removedSections"></form-dataset>
+			</div>
+		</div>
+	</div>
+
+</body>
+
 </html>
