@@ -10,37 +10,37 @@ export const apiUrl = dhisUrl + "api";
 export const compositionRoot = getCompositionRoot();
 
 TallySheets.config(function ($translateProvider) {
-	$translateProvider.useStaticFilesLoader({
-		prefix: "languages/",
-		suffix: ".json",
-	});
+    $translateProvider.useStaticFilesLoader({
+        prefix: "languages/",
+        suffix: ".json",
+    });
 
-	$translateProvider.registerAvailableLanguageKeys(["es", "fr", "en", "pt"], {
-		"en*": "en",
-		"es*": "es",
-		"fr*": "fr",
-		"pt*": "pt",
-		"*": "en", // must be last!
-	});
+    $translateProvider.registerAvailableLanguageKeys(["es", "fr", "en", "pt"], {
+        "en*": "en",
+        "es*": "es",
+        "fr*": "fr",
+        "pt*": "pt",
+        "*": "en", // must be last!
+    });
 
-	$translateProvider.fallbackLanguage(["en"]);
+    $translateProvider.fallbackLanguage(["en"]);
 
-	jQuery
-		.ajax({
-			url: apiUrl + "/userSettings/keyUiLocale/",
-			contentType: "text/plain",
-			method: "GET",
-			dataType: "text",
-			async: false,
-		})
-		.success(function (uiLocale) {
-			if (uiLocale == "") {
-				$translateProvider.determinePreferredLanguage();
-			} else {
-				$translateProvider.use(uiLocale);
-			}
-		})
-		.fail(function () {
-			$translateProvider.determinePreferredLanguage();
-		});
+    jQuery
+        .ajax({
+            url: apiUrl + "/userSettings/keyUiLocale/",
+            contentType: "text/plain",
+            method: "GET",
+            dataType: "text",
+            async: false,
+        })
+        .success(function (uiLocale) {
+            if (uiLocale == "") {
+                $translateProvider.determinePreferredLanguage();
+            } else {
+                $translateProvider.use(uiLocale);
+            }
+        })
+        .fail(function () {
+            $translateProvider.determinePreferredLanguage();
+        });
 });

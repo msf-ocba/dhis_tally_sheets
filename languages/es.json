@@ -1,12 +1,12 @@
 {
-  "IN_PROGRESS": "CARGANDO",
-  "PRINT": "Imprimir",
-  "EXPORT_EXCEL": "Exportar a MS Excel",
-  "HOME": "Inicio",
-  "SELECT_DATASET": "Selecciona un set de datos",
-  "SELECT_LANGUAGE": "Selecciona un idioma",
-  "ADD_FORM": "Añadir formulario",
-  "HEADERS": "Incluir cabeceras",
-  "FACILITY": "Centro sanitario",
-  "PERIOD": "Periodo reportado"
+    "IN_PROGRESS": "CARGANDO",
+    "PRINT": "Imprimir",
+    "EXPORT_EXCEL": "Exportar a MS Excel",
+    "HOME": "Inicio",
+    "SELECT_DATASET": "Selecciona un set de datos",
+    "SELECT_LANGUAGE": "Selecciona un idioma",
+    "ADD_FORM": "Añadir formulario",
+    "HEADERS": "Incluir cabeceras",
+    "FACILITY": "Centro sanitario",
+    "PERIOD": "Periodo reportado"
 }
