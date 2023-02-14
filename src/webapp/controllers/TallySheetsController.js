@@ -1,5 +1,5 @@
 import { TallySheets } from "../TallySheets.js";
-import { dhisUrl, apiUrl, compositionRoot } from "../app.js";
+import { dhisUrl, compositionRoot } from "../app.js";
 
 export const TallySheetsController = TallySheets.controller(
 	"TallySheetsController",
@@ -26,6 +26,7 @@ export const TallySheetsController = TallySheets.controller(
 			$scope.progressbarDisplayed = false;
 			$scope.selectorsLoaded = false;
 			$scope.selectAllLangs = false;
+			$scope.selectAllDatasets = false;
 			$scope.removedSections = [];
 
 			Locales.get().$promise.then((result) => {
@@ -58,17 +59,126 @@ export const TallySheetsController = TallySheets.controller(
 			const languageSelectorForm = document.getElementById(
 				"languageSelectorForm"
 			);
+			const inputSelectAllDatasets =
+				document.getElementById("selectAllDatasets").nextElementSibling;
 
 			$(datasetSelectorForm).on("change", () => {
+				const formData = new FormData(datasetSelectorForm);
+				const selectedIds = formData.getAll("dataset");
+				updateSelectedDatasets(selectedIds);
+			});
+
+			//can't be on ng-click because updateSelectedDatasets uses $scope.apply
+			$(inputSelectAllDatasets).on("change", () => {
+				if ($scope.selectAllDatasets) updateSelectedDatasets();
+				else $scope.clearForm();
+			});
+
+			$(languageSelectorForm).on("change", () => {
+				const formData = new FormData(languageSelectorForm);
+				const selectedLocales = formData.getAll("language");
+				$scope.$apply(() => {
+					$scope.selectedLocales = selectedLocales;
+				});
+			});
+
+			$scope.clearForm = () => {
+				$scope.availableLanguages = [];
+				$scope.selectedLocales = [];
+				$scope.forms = [];
+				$scope.selectedDatasets = [];
+				$scope.progressbarDisplayed = false;
+				$scope.selectorsLoaded = false;
+				$scope.removedSections = [];
+				$scope.selectAllDatasets = false;
+
+				_.first(
+					datasetSelectorForm.getElementsByTagName("select")
+				).value = "";
+				_.first(
+					languageSelectorForm.getElementsByTagName("select")
+				).value = "";
+
+				$timeout(() => {
+					$(".selectpicker").selectpicker("refresh");
+					$(".selectpicker").selectpicker("render");
+				});
+
+				$timeout(() => {
+					//just for visuals
+					$(".selectpicker").selectpicker("refresh");
+					$(".selectpicker").selectpicker("render");
+					$scope.selectorsLoaded = true;
+				}, 200);
+			};
+
+			$scope.goHome = () => {
+				window.location.replace(dhisUrl);
+			};
+
+			$scope.exportToTable = () => {
+				$scope.exporting = true;
+				const ids = $scope.selectedDatasets.map(({ id }) => id);
+				const headers = $scope.forms.map(({ headers }) => headers);
+				const realHeaders = $scope.includeHeaders
+					? headers
+					: headers.map((header) => ({
+							id: headers.id,
+							dataSetName: header.displayName,
+					  }));
+
+				if (!_.isEmpty(ids))
+					compositionRoot.exportToXlsx
+						.execute(
+							$resource,
+							ids,
+							realHeaders,
+							$scope.selectedLocales,
+							$scope.removedSections
+						)
+						.then(() => ($scope.exporting = false));
+			};
+
+			//In case they toggle the selectAllLang switch after selecting the desired datasets
+			$scope.updateLangs = () => {
+				const formData = new FormData(datasetSelectorForm);
+				const selectedIds = formData.getAll("dataset");
+				const selectedDatasets = $scope.selectAllDatasets
+					? $scope.datasets
+					: $scope.datasets.filter((dataset) =>
+							selectedIds.includes(dataset.id)
+					  );
+
+				const availableLocales = _.uniq(
+					selectedDatasets
+						.map((dataset) =>
+							dataset.translations?.flatMap((translation) =>
+								translation.property === "NAME"
+									? [translation.locale.split("_")[0]]
+									: []
+							)
+						)
+						.flat()
+				);
+
+				if ($scope.selectAllLangs)
+					$scope.selectedLocales = availableLocales;
+				else {
+					const formData = new FormData(languageSelectorForm);
+					const selectedLocales = formData.getAll("language");
+					$scope.selectedLocales = selectedLocales;
+				}
+			};
+
+			function updateSelectedDatasets(selectedIds) {
 				$scope.progressbarDisplayed = true;
 				$scope.selectorsLoaded = false;
 
-				// FORM
-				const formData = new FormData(datasetSelectorForm);
-				const selectedIds = formData.getAll("dataset");
-				const selectedDatasets = $scope.datasets.filter((dataset) =>
-					selectedIds.includes(dataset.id)
-				);
+				const selectedDatasets = $scope.selectAllDatasets
+					? $scope.datasets
+					: $scope.datasets.filter((dataset) =>
+							selectedIds.includes(dataset.id)
+					  );
 
 				const availableLocales = _.uniq(
 					selectedDatasets
@@ -138,94 +248,7 @@ export const TallySheetsController = TallySheets.controller(
 						console.error(err);
 						$scope.selectorsLoaded = true;
 					});
-			});
-
-			$(languageSelectorForm).on("change", () => {
-				const formData = new FormData(languageSelectorForm);
-				const selectedLocales = formData.getAll("language");
-				$scope.$apply(() => {
-					$scope.selectedLocales = selectedLocales;
-				});
-			});
-
-			$scope.clearForm = () => {
-				// $("#datasetsForms").children().remove(); //Commented because not need to remove children. $scope vars will update UI
-				$scope.availableLanguages = [];
-				$scope.selectedLocales = [];
-				$scope.forms = [];
-				$scope.selectedDatasets = [];
-				$scope.progressbarDisplayed = false;
-				$scope.selectorsLoaded = false;
-				$scope.removedSections = [];
-
-				_.first(
-					datasetSelectorForm.getElementsByTagName("select")
-				).value = "";
-				_.first(
-					languageSelectorForm.getElementsByTagName("select")
-				).value = "";
-
-				$timeout(() => {
-					$(".selectpicker").selectpicker("refresh");
-					$(".selectpicker").selectpicker("render");
-				});
-
-				$timeout(() => {
-					//just for visuals
-					$(".selectpicker").selectpicker("refresh");
-					$(".selectpicker").selectpicker("render");
-					$scope.selectorsLoaded = true;
-				}, 200);
-			};
-
-			$scope.goHome = () => {
-				window.location.replace(dhisUrl);
-			};
-
-			$scope.exportToTable = () => {
-				const ids = $scope.selectedDatasets.map(({ id }) => id);
-				const headers = $scope.forms.map(({ headers }) => headers);
-				const realHeaders = $scope.includeHeaders
-					? headers
-					: headers.map((header) => ({
-							id: headers.id,
-							dataSetName: header.displayName,
-					  }));
-
-				if (!_.isEmpty(ids))
-					compositionRoot.exportToXlsx.execute(
-						$resource,
-						ids,
-						realHeaders,
-						$scope.selectedLocales,
-						$scope.removedSections
-					);
-			};
-
-			//In case they toggle the selectAllLang switch after selecting the desired datasets
-			$scope.updateLangs = () => {
-				const formData = new FormData(datasetSelectorForm);
-				const selectedIds = formData.getAll("dataset");
-				const selectedDatasets = $scope.datasets.filter((dataset) =>
-					selectedIds.includes(dataset.id)
-				);
-
-				const availableLocales = _.uniq(
-					selectedDatasets
-						.map((dataset) =>
-							dataset.translations?.flatMap((translation) =>
-								translation.property === "NAME"
-									? [translation.locale.split("_")[0]]
-									: []
-							)
-						)
-						.flat()
-				);
-
-				if ($scope.selectAllLangs)
-					$scope.selectedLocales = availableLocales;
-				else $scope.selectedLocales = [];
-			};
+			}
 		},
 	]
 );
