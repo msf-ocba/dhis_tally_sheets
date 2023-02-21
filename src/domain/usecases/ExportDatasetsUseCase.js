@@ -14,6 +14,10 @@ export class ExportDatasetsUseCase {
                         section =>
                             !(
                                 section.displayName.toLowerCase().includes("comments") ||
+                                section.displayName.toLowerCase().includes("comentarios") ||
+                                section.displayName.toLowerCase().includes("commentaires") ||
+                                section.displayName.toLowerCase().includes("comentários") ||
+                                section.displayName.toLowerCase().includes("notas") ||
                                 removedSections.includes(section.id)
                             )
                     ),

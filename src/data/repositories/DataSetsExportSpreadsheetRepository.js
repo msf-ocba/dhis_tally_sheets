@@ -4,9 +4,7 @@ export class DataSetsExportSpreadsheetRepository {
             if (dataSet.formType === "SECTION" || dataSet.formType === "DEFAULT") {
                 return [
                     {
-                        name: dataSet.pickedTranslations
-                            ? `${dataSet.name.trim()}_${dataSet.pickedTranslations}.xlsx`
-                            : `${dataSet.name.trim()}.xlsx`,
+                        name: `${dataSet.name.trim()}.xlsx`,
                         blob: XlsxPopulate.fromBlankAsync().then(workbook => exportDataSet(workbook, dataSet)),
                     },
                 ];
@@ -75,7 +73,7 @@ function populateDefault(sheet, dataSet) {
     sheet.cell("A4").value(dataSet.displayFormName).style(styles.titleStyle);
     sheet.cell("B6").value("Value");
     sheet.row(6).style(styles.categoryHeaderStyle);
-    _.sortBy(dataSet.dataSetElements, ({ displayFormName }) => displayFormName).forEach((de, idx) =>
+    dataSet.dataSetElements.forEach((de, idx) =>
         sheet
             .row(7 + idx) //(6 + 1 cause idx starts on 0)
             .cell(1)
@@ -136,7 +134,7 @@ function addSection(sheet, section, row) {
 
         const cocIds = categoryCombo.categoryOptionCombos.map(({ id }) => id);
 
-        _.sortBy(categoryCombo.dataElements, ({ displayFormName }) => displayFormName).forEach(de => {
+        categoryCombo.dataElements.forEach(de => {
             sheet.row(++row).cell(1).value(de.displayFormName).style(styles.dataElementStyle);
 
             if (!_.isEmpty(categoryCombo.greyedFields)) {
