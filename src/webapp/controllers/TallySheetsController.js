@@ -2,13 +2,15 @@ import { TallySheets } from "../TallySheets.js";
 import { dhisUrl, compositionRoot } from "../app.js";
 
 export const TallySheetsController = TallySheets.controller("TallySheetsController", [
+    "$rootScope",
     "$scope",
     "$resource",
     "$timeout",
+    "$translate",
     "DataSetsUID",
     "Locales",
     "DataSetEntryForm",
-    function ($scope, $resource, $timeout, DataSetsUID, Locales, DataSetEntryForm) {
+    function ($rootScope, $scope, $resource, $timeout, $translate, DataSetsUID, Locales, DataSetEntryForm) {
         $scope.includeHeaders = true;
         $scope.datasets = [];
         $scope.selectedDatasets = [];
@@ -33,6 +35,11 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
             );
 
             $scope.selectorsLoaded = true;
+        });
+
+        $rootScope.$on("$translateChangeSuccess", function () {
+            $scope.healthFacility = $translate.instant("FACILITY");
+            $scope.reportingPeriod = $translate.instant("PERIOD");
         });
 
         $scope.$on("ngRepeatFinished", function (ngRepeatFinishedEvent) {
@@ -176,8 +183,8 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
                             dataset,
                             headers: {
                                 id: dataset.id,
-                                healthFacility: "Health Facility: ",
-                                reportingPeriod: "Reporting Period: ",
+                                healthFacility: `${$scope.healthFacility}: `,
+                                reportingPeriod: `${$scope.reportingPeriod}: `,
                                 dataSetName: dataset.displayName,
                             },
                             output: codeHtml,

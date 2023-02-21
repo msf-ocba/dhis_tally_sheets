@@ -62,14 +62,15 @@ const styles = {
     },
 };
 
-function populateHeaders(sheet, header) {
+function populateHeaders(sheet, header, title) {
     sheet.cell("A1").value(header.healthFacility).style(styles.titleStyle);
     sheet.cell("A2").value(header.reportingPeriod).style({ bold: true, fontSize: 18 });
-    sheet.cell("A3").value(header.dataSetName).style(styles.titleStyle);
+    sheet.cell("A3").value(title).style(styles.titleStyle);
 }
 
 function populateDefault(sheet, dataSet) {
-    if (dataSet.headers) populateHeaders(sheet, dataSet.headers);
+    if (dataSet.headers)
+        populateHeaders(sheet, dataSet.headers, dataSet.displayFormName ?? dataSet.headers.dataSetName);
     sheet.cell("A4").value(dataSet.displayFormName).style(styles.titleStyle);
     sheet.cell("B6").value("Value");
     sheet.row(6).style(styles.categoryHeaderStyle);
@@ -88,7 +89,8 @@ function populateDefault(sheet, dataSet) {
 }
 
 function populateSections(sheet, dataSet) {
-    if (dataSet.headers) populateHeaders(sheet, dataSet.headers);
+    if (dataSet.headers)
+        populateHeaders(sheet, dataSet.headers, dataSet.displayFormName ?? dataSet.headers.dataSetName);
     let row = 3;
     _.range(0, dataSet.sections.length).forEach(i => {
         const section = dataSet.sections[i];
