@@ -30,6 +30,7 @@ const fields = `
 	sections[
 		id,
 		translations,
+		name,
 		displayName,
 		description,
 		categoryCombos[

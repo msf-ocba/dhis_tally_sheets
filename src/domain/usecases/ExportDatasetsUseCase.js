@@ -13,6 +13,7 @@ export class ExportDatasetsUseCase {
                     sections: dataSet.sections.filter(
                         section =>
                             !(
+                                section.name.toLowerCase().includes("comments") ||
                                 section.displayName.toLowerCase().includes("comments") ||
                                 section.displayName.toLowerCase().includes("comentarios") ||
                                 section.displayName.toLowerCase().includes("commentaires") ||
