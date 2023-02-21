@@ -4,7 +4,7 @@ export class DataSetsExportSpreadsheetRepository {
             if (dataSet.formType === "SECTION" || dataSet.formType === "DEFAULT") {
                 return [
                     {
-                        name: `${dataSet.name.trim()}.xlsx`,
+                        name: `${dataSet.displayFormName.trim()}.xlsx`,
                         blob: XlsxPopulate.fromBlankAsync().then(workbook => exportDataSet(workbook, dataSet)),
                     },
                 ];
