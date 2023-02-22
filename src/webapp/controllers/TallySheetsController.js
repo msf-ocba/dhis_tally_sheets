@@ -10,7 +10,18 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
     "DataSetsUID",
     "Locales",
     "DataSetEntryForm",
-    function ($rootScope, $scope, $resource, $timeout, $translate, DataSetsUID, Locales, DataSetEntryForm) {
+    "UserSettingsKeyUiLocale",
+    function (
+        $rootScope,
+        $scope,
+        $resource,
+        $timeout,
+        $translate,
+        DataSetsUID,
+        Locales,
+        DataSetEntryForm,
+        UserSettingsKeyUiLocale
+    ) {
         $scope.includeHeaders = true;
         $scope.datasets = [];
         $scope.selectedDatasets = [];
@@ -21,10 +32,18 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
         $scope.selectAllLangs = false;
         $scope.selectAllDatasets = false;
         $scope.removedSections = [];
+        $scope.preferredLanguage = "en";
 
-        Locales.get().$promise.then(result => {
-            $scope.languages = result;
-        });
+        Locales.get()
+            .$promise.then(result => {
+                $scope.languages = result;
+            })
+            .then(() => UserSettingsKeyUiLocale.get().$promise)
+            .then(locale => {
+                $scope.preferredLanguage = $scope.languages.map(({ locale }) => locale).includes(locale.response)
+                    ? locale.response
+                    : "en";
+            });
 
         DataSetsUID.get().$promise.then(result => {
             $scope.datasets = result.dataSets.filter(
@@ -42,7 +61,7 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
             $scope.reportingPeriod = $translate.instant("PERIOD");
         });
 
-        $scope.$on("ngRepeatFinished", function (ngRepeatFinishedEvent) {
+        $scope.$on("ngRepeatFinished", function () {
             // Refresh bootstrap-select
             $(".selectpicker").selectpicker("refresh");
             $(".selectpicker").selectpicker("render");
@@ -164,7 +183,10 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
                     .flat()
             );
 
-            const availableLanguages = $scope.languages.filter(lang => availableLocales?.includes(lang.locale));
+            const availableLanguages = $scope.languages.filter(
+                lang =>
+                    availableLocales?.includes(lang.locale) || (lang.locale === "en" && !_.isEmpty(selectedDatasets))
+            );
 
             $scope.$apply(() => {
                 $scope.selectedDatasets = selectedDatasets;

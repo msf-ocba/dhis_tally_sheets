@@ -79,7 +79,8 @@
                             data-live-search="true" multiple>
                             <option disabled value="0">{{ 'SELECT_LANGUAGE' | translate }}</option>
                             <option ng-repeat="language in availableLanguages | orderBy : 'locale'"
-                                ng-value="language.locale" on-finish-render="ngRepeatFinished">{{ language.name }}
+                                ng-value="language.locale" on-finish-render="ngRepeatFinished"
+                                ng-selected="preferredLanguage==language.locale">{{ language.name }}
                             </option>
                         </select>
                     </form>
