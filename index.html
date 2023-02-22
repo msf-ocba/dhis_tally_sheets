@@ -32,8 +32,8 @@
             <div class="row">
                 <button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
                 <button type="button" id="export-button" ng-click="exportToTable('tallysheetForm')"
-                    class="btn btn-success hidden-print" export-button="{{selectedDatasets}}"
-                    ng-disabled="progressbarDisplayed">
+                    class="btn btn-success hidden-print"
+                    export-button="{{ {selectedDatasets: selectedDatasets, selectedLocales: selectedLocales, progressbarDisplayed: progressbarDisplayed} }}">
                     {{ 'EXPORT_EXCEL' | translate}}</button>
                 <span ng-show="exporting" class="loading-icon">
                     <span class="glyphicon glyphicon-hourglass"></span>
@@ -47,7 +47,8 @@
             <!-- INCLUDE HEADERS -->
             <div class="row include-headers">
                 <label id="includeHeaders">{{ 'HEADERS' | translate }}</label>
-                <input type="checkbox" ng-model="includeHeaders" aria-labelledby="includeHeaders">
+                <input type="checkbox" ng-model="includeHeaders" aria-labelledby="includeHeaders"
+                    ng-disabled="exporting || progressbarDisplayed">
             </div>
 
             <!-- SELECT ALL -->
@@ -55,11 +56,12 @@
                 <div>
                     <label id="selectAllLangs">{{ 'SELECT_ALL_LANGUAGES' | translate }}</label>
                     <input type="checkbox" ng-click="updateLangs()" ng-model="selectAllLangs"
-                        aria-labelledby="selectAllLangs">
+                        aria-labelledby="selectAllLangs" ng-disabled="exporting || progressbarDisplayed">
                 </div>
                 <div>
                     <label id="selectAllDatasets">{{ 'SELECT_ALL_DATASETS' | translate }}</label>
-                    <input type="checkbox" ng-model="selectAllDatasets" aria-labelledby="selectAllDatasets">
+                    <input type="checkbox" ng-model="selectAllDatasets" aria-labelledby="selectAllDatasets"
+                        ng-disabled="progressbarDisplayed || exporting">
                 </div>
             </div>
 
@@ -68,7 +70,8 @@
                 <div>
                     <form id="datasetSelectorForm" class="inline" ng-show="!selectAllDatasets">
                         <select title="Nothing selected" name="dataset" class="selectpicker hidden-print"
-                            data-live-search="true" multiple>
+                            data-live-search="true" multiple ng-disabled="exporting || progressbarDisplayed"
+                            ng-class="(exporting || progressbarDisplayed) ? 'disabled' : ''">
                             <option disabled value="0">{{ 'SELECT_DATASET' | translate }}</option>
                             <option ng-repeat="dataset in datasets | orderBy : 'displayName'" ng-value="dataset.id"
                                 on-finish-render="ngRepeatFinished">{{dataset.displayName}}</option>
@@ -76,16 +79,19 @@
                     </form>
                     <form id="languageSelectorForm" class="inline" ng-show="!selectAllLangs">
                         <select title="Nothing selected" name="language" class="selectpicker hidden-print"
-                            data-live-search="true" multiple>
+                            data-live-search="true" multiple ng-disabled="exporting || progressbarDisplayed"
+                            ng-class="(exporting || progressbarDisplayed) ? 'disabled' : ''">
                             <option disabled value="0">{{ 'SELECT_LANGUAGE' | translate }}</option>
                             <option ng-repeat="language in availableLanguages | orderBy : 'locale'"
                                 ng-value="language.locale" on-finish-render="ngRepeatFinished"
-                                ng-selected="preferredLanguage==language.locale">{{ language.name }}
-                            </option>
+                                ng-selected="preferredLanguage===language.locale&&selectedDatasets.length>0">
+                                {{language.name}}</option>
                         </select>
                     </form>
                 </div>
-                <button ng-click="clearForm()" class="btn btn-default hidden-print">
+                <button ng-click="clearForm()" class="btn btn-default hidden-print"
+                    ng-class="(exporting || progressbarDisplayed) ? 'disabled' : ''"
+                    ng-disable="exporting || progressbarDisplayed">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
                 <div>

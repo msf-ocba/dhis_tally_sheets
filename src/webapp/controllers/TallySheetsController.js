@@ -94,13 +94,13 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
 
         $scope.clearForm = () => {
             $scope.availableLanguages = [];
-            $scope.selectedLocales = [];
             $scope.forms = [];
             $scope.selectedDatasets = [];
             $scope.progressbarDisplayed = false;
             $scope.selectorsLoaded = false;
             $scope.removedSections = [];
             $scope.selectAllDatasets = false;
+            $scope.selectedLocales = [];
 
             _.first(datasetSelectorForm.getElementsByTagName("select")).value = "";
             _.first(languageSelectorForm.getElementsByTagName("select")).value = "";
@@ -133,10 +133,21 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
                       dataSetName: header.displayName,
                   }));
 
+            $timeout(() => {
+                $(".selectpicker").selectpicker("refresh");
+                $(".selectpicker").selectpicker("render");
+            }, 200);
+
             if (!_.isEmpty(ids))
                 compositionRoot.exportToXlsx
                     .execute($resource, ids, realHeaders, $scope.selectedLocales, $scope.removedSections)
-                    .then(() => ($scope.exporting = false));
+                    .then(() => {
+                        $scope.exporting = false;
+                        $timeout(() => {
+                            $(".selectpicker").selectpicker("refresh");
+                            $(".selectpicker").selectpicker("render");
+                        }, 200);
+                    });
         };
 
         //In case they toggle the selectAllLang switch after selecting the desired datasets
@@ -173,24 +184,29 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
                 ? $scope.datasets
                 : $scope.datasets.filter(dataset => selectedIds.includes(dataset.id));
 
-            const availableLocales = _.uniq(
-                selectedDatasets
+            const availableLocales = _.uniq([
+                ...selectedDatasets
                     .map(dataset =>
                         dataset.translations?.flatMap(translation =>
                             translation.property === "NAME" ? [translation.locale.split("_")[0]] : []
                         )
                     )
-                    .flat()
-            );
+                    .flat(),
+                "en",
+            ]);
 
-            const availableLanguages = $scope.languages.filter(
-                lang =>
-                    availableLocales?.includes(lang.locale) || (lang.locale === "en" && !_.isEmpty(selectedDatasets))
-            );
+            const availableLanguages = $scope.languages.filter(lang => availableLocales?.includes(lang.locale));
 
             $scope.$apply(() => {
                 $scope.selectedDatasets = selectedDatasets;
-                $scope.availableLanguages = availableLanguages;
+                $scope.availableLanguages = _.isEmpty(selectedDatasets) ? [] : availableLanguages;
+                if (
+                    $scope.selectedLocales.length === 0 &&
+                    availableLocales?.includes($scope.preferredLanguage) &&
+                    !_.isEmpty(selectedDatasets)
+                ) {
+                    $scope.selectedLocales = [$scope.preferredLanguage];
+                }
                 if ($scope.selectAllLangs) $scope.selectedLocales = availableLocales;
             });
 
@@ -234,7 +250,13 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
                 })
                 .catch(err => {
                     console.error(err);
+                    $scope.progressbarDisplayed = false;
                     $scope.selectorsLoaded = true;
+
+                    $timeout(() => {
+                        $(".selectpicker").selectpicker("refresh");
+                        $(".selectpicker").selectpicker("render");
+                    });
                 });
         }
     },

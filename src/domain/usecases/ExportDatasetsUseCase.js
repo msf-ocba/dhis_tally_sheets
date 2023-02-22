@@ -49,17 +49,17 @@ export class ExportDatasetsUseCase {
 
                 const pickedTranslations = overridedDataSets.map(dataSet => ({
                     ...dataSet,
-                    pickedTranslations: _.intersection(
-                        locales,
-                        dataSet.translations
+                    pickedTranslations: _.intersection(locales, [
+                        "en", //add English for default
+                        ...dataSet.translations
                             .filter(translation => translation.property === "NAME")
-                            .map(translation => translation.locale.split("_")[0])
-                    ),
+                            .map(translation => translation.locale.split("_")[0]),
+                    ]),
                 }));
 
                 const translatedDatasets = pickedTranslations.flatMap(mapDataSetTranslations);
 
-                const mappedDatasets = getDataSets([...overridedDataSets, ...translatedDatasets]);
+                const mappedDatasets = getDataSets(translatedDatasets);
 
                 const dataSetsWithHeaders = mappedDatasets.map(dataSet => ({
                     ...dataSet,
@@ -203,7 +203,7 @@ function mapCategoryOption(categoryOption, locale) {
         displayFormName:
             getTranslationValue(categoryOption.translations, locale, "FORM_NAME") ??
             getTranslationValue(categoryOption.translations, locale, "NAME") ??
-            categoryOption.displayFormName,
+            (locale === "en" ? categoryOption.name : categoryOption.displayFormName),
     };
 }
 
@@ -211,11 +211,15 @@ function mapDataSetTranslations(dataSet) {
     return dataSet.pickedTranslations.map(locale => {
         const mappedDataset = {
             ...dataSet,
-            displayFormName: getTranslationValue(dataSet.translations, locale) ?? dataSet.displayFormName,
+            displayFormName:
+                getTranslationValue(dataSet.translations, locale) ??
+                (locale === "en" ? dataSet.name : dataSet.displayFormName),
             sections: dataSet.sections.map(section => ({
                 ...section,
                 //section does not have description available to translate??
-                displayName: getTranslationValue(section.translations, locale) ?? section.displayName,
+                displayName:
+                    getTranslationValue(section.translations, locale) ??
+                    (locale === "en" ? section.name : section.displayName),
                 categoryCombos: section.categoryCombos.map(categoryCombo => ({
                     ...categoryCombo,
                     categories: categoryCombo.categories.map(category => ({
@@ -223,11 +227,19 @@ function mapDataSetTranslations(dataSet) {
                     })),
                     categoryOptionCombos: categoryCombo.categoryOptionCombos.map(coc => {
                         const categoryOptions = coc.categoryOptions.map(co => mapCategoryOption(co, locale));
-                        const ids = coc.displayFormName
+                        const ids = (locale === "en" ? coc.name : coc.displayFormName)
                             .split(", ")
-                            .map(dco => coc.categoryOptions.find(co => co.displayFormName === dco)?.id);
+                            .map(
+                                dco =>
+                                    coc.categoryOptions.find(
+                                        co => (locale === "en" ? co.name : co.displayFormName) === dco
+                                    )?.id
+                            );
                         const displayFormName = ids
-                            .map(id => categoryOptions.find(co => co.id === id)?.displayFormName)
+                            .map(id => {
+                                const co = categoryOptions.find(co => co.id === id);
+                                return locale === "en" ? co?.name : co?.displayFormName;
+                            })
                             .join(", ");
 
                         return {
@@ -242,7 +254,7 @@ function mapDataSetTranslations(dataSet) {
                     displayFormName:
                         getTranslationValue(de.translations, locale, "FORM_NAME") ??
                         getTranslationValue(de.translations, locale, "NAME") ??
-                        de.displayFormName,
+                        (locale === "en" ? de.name : de.displayFormName),
                 })),
             })),
             dataSetElements: dataSet.dataSetElements.map(dse => ({
@@ -252,7 +264,7 @@ function mapDataSetTranslations(dataSet) {
                     displayFormName:
                         getTranslationValue(dse.dataElement.translations, locale, "FORM_NAME") ??
                         getTranslationValue(dse.dataElement.translations, locale, "NAME") ??
-                        dse.dataElement.displayFormName,
+                        (locale === "en" ? dse.dataElement.name : dse.dataElement.displayFormName),
                 },
             })),
         };

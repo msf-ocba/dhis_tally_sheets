@@ -19,14 +19,12 @@ export class DataSetsDhis2Repository {
     }
 }
 
-const common = "id,displayFormName,translations";
+const common = "id,name,displayFormName,translations";
 
 const fields = `
-	id,
-	name,
+	${common},
 	displayName,
 	formType,
-	displayFormName,
 	sections[
 		id,
 		translations,
@@ -38,6 +36,7 @@ const fields = `
 			categories[categoryOptions[${common}]],
 			categoryOptionCombos[
 				id,
+				name,
 				displayFormName,
 				categoryOptions[${common}]
 			]
@@ -46,5 +45,4 @@ const fields = `
 		greyedFields[dataElement,categoryOptionCombo]
 	],
 	dataSetElements[categoryCombo[id,displayName,categories[*],categoryOptionCombos[*]],dataElement[${common}]],
-	translations
 `.replaceAll(/\s/g, "");
