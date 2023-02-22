@@ -59,7 +59,7 @@ export class ExportDatasetsUseCase {
 
                 const translatedDatasets = pickedTranslations.flatMap(mapDataSetTranslations);
 
-                const mappedDatasets = getDataSets([...translatedDatasets, ...overridedDataSets]);
+                const mappedDatasets = getDataSets(_.isEmpty(locales) ? overridedDataSets : translatedDatasets);
 
                 const dataSetsWithHeaders = mappedDatasets.map(dataSet => ({
                     ...dataSet,
@@ -71,7 +71,13 @@ export class ExportDatasetsUseCase {
             .then(blobFiles => {
                 if (blobFiles.length > 1) {
                     const zip = new JSZip();
-                    blobFiles.forEach(file => zip.file(sanitizeFileName(file.name), file.blob));
+                    const names = [];
+                    blobFiles.forEach(file => {
+                        const name = sanitizeFileName(file.name);
+                        const idx = names.filter(s => s === name).length;
+                        zip.file(name + (idx ? ` (${idx})` : "") + ".xlsx", file.blob);
+                        names.push(name);
+                    });
 
                     return zip.generateAsync({ type: "blob" }).then(blob => {
                         saveAs(blob, "MSF-OCBA HMIS.zip");
