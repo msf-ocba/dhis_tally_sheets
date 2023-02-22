@@ -59,7 +59,7 @@ export class ExportDatasetsUseCase {
 
                 const translatedDatasets = pickedTranslations.flatMap(mapDataSetTranslations);
 
-                const mappedDatasets = getDataSets(_.isEmpty(locales) ? overridedDataSets : translatedDatasets);
+                const mappedDatasets = getDataSets([...overridedDataSets, ...translatedDatasets]);
 
                 const dataSetsWithHeaders = mappedDatasets.map(dataSet => ({
                     ...dataSet,
