@@ -254,7 +254,7 @@ function mapDataSetTranslations(dataSet) {
                     displayFormName:
                         getTranslationValue(de.translations, locale, "FORM_NAME") ??
                         getTranslationValue(de.translations, locale, "NAME") ??
-                        (locale === "en" ? de.formName : de.displayFormName),
+                        (locale === "en" ? de.formName ?? de.name : de.displayFormName),
                 })),
             })),
             dataSetElements: dataSet.dataSetElements.map(dse => ({
@@ -264,7 +264,9 @@ function mapDataSetTranslations(dataSet) {
                     displayFormName:
                         getTranslationValue(dse.dataElement.translations, locale, "FORM_NAME") ??
                         getTranslationValue(dse.dataElement.translations, locale, "NAME") ??
-                        (locale === "en" ? dse.dataElement.formName : dse.dataElement.displayFormName),
+                        (locale === "en"
+                            ? dse.dataElement.formName ?? dse.dataElement.name
+                            : dse.dataElement.displayFormName),
                 },
             })),
         };
