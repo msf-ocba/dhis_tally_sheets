@@ -213,7 +213,7 @@ function mapDataSetTranslations(dataSet) {
             ...dataSet,
             displayFormName:
                 getTranslationValue(dataSet.translations, locale) ??
-                (locale === "en" ? dataSet.name : dataSet.displayFormName),
+                (locale === "en" ? dataSet.formName ?? dataSet.name : dataSet.displayFormName),
             sections: dataSet.sections.map(section => ({
                 ...section,
                 //section does not have description available to translate??
@@ -254,7 +254,7 @@ function mapDataSetTranslations(dataSet) {
                     displayFormName:
                         getTranslationValue(de.translations, locale, "FORM_NAME") ??
                         getTranslationValue(de.translations, locale, "NAME") ??
-                        (locale === "en" ? de.name : de.displayFormName),
+                        (locale === "en" ? de.formName : de.displayFormName),
                 })),
             })),
             dataSetElements: dataSet.dataSetElements.map(dse => ({
@@ -264,7 +264,7 @@ function mapDataSetTranslations(dataSet) {
                     displayFormName:
                         getTranslationValue(dse.dataElement.translations, locale, "FORM_NAME") ??
                         getTranslationValue(dse.dataElement.translations, locale, "NAME") ??
-                        (locale === "en" ? dse.dataElement.name : dse.dataElement.displayFormName),
+                        (locale === "en" ? dse.dataElement.formName : dse.dataElement.displayFormName),
                 },
             })),
         };

@@ -23,6 +23,7 @@ const common = "id,name,displayFormName,translations";
 
 const fields = `
 	${common},
+	formName,
 	displayName,
 	formType,
 	sections[
@@ -41,8 +42,8 @@ const fields = `
 				categoryOptions[${common}]
 			]
 		],
-		dataElements[${common},categoryCombo],
+		dataElements[${common},formName,categoryCombo],
 		greyedFields[dataElement,categoryOptionCombo]
 	],
-	dataSetElements[categoryCombo[id,displayName,categories[*],categoryOptionCombos[*]],dataElement[${common}]],
+	dataSetElements[categoryCombo[id,displayName,categories[*],categoryOptionCombos[*]],dataElement[${common},formName]],
 `.replaceAll(/\s/g, "");
