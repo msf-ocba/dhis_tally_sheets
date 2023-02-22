@@ -5,6 +5,8 @@
     "HOME": "Principal",
     "SELECT_DATASET": "Selecione um conjunto de dados",
     "SELECT_LANGUAGE": "Selecione um idioma",
+    "SELECT_ALL_LANGUAGES": "Selecione todos os idiomas",
+    "SELECT_ALL_DATASETS": "Selecione todos os conjuntos de dados",
     "ADD_FORM": "Adicionar forma",
     "HEADERS": "Adicionar cabeçalho",
     "FACILITY": "Centro sanitário",

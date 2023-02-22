@@ -5,6 +5,8 @@
     "HOME": "Accueil",
     "SELECT_DATASET": "Sélectionnez un ensemble de données",
     "SELECT_LANGUAGE": "Sélectionnez une langue",
+    "SELECT_ALL_LANGUAGES": "Sélectionnez toutes les langues",
+    "SELECT_ALL_DATASETS": "Sélectionner tous les ensembles de données",
     "ADD_FORM": "Ajouter formulaire",
     "HEADERS": "Ajouter en-tête",
     "FACILITY": "Structure de santé",

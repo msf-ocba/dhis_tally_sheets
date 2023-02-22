@@ -5,6 +5,8 @@
     "HOME": "Inicio",
     "SELECT_DATASET": "Selecciona un set de datos",
     "SELECT_LANGUAGE": "Selecciona un idioma",
+    "SELECT_ALL_LANGUAGES": "Seleccionar todos los idiomas",
+    "SELECT_ALL_DATASETS": "Seleccionar todos los sets de datos",
     "ADD_FORM": "Añadir formulario",
     "HEADERS": "Incluir cabeceras",
     "FACILITY": "Centro sanitario",
