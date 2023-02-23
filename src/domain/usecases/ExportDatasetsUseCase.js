@@ -4,10 +4,27 @@ export class ExportDatasetsUseCase {
         this.dataSetsExportSpreadsheetRepository = dataSetsExportSpreadsheetRepository;
     }
 
-    execute($resource, dataSetsIds, headers, locales, removedSections) {
+    execute($resource, dataSetsIds, _headers, locales, removedSections) {
+        const translations$ = _.fromPairs(
+            locales.map(locale => [
+                locale,
+                fetch(`../../../languages/${locale}.json`)
+                    .then(response => response.json())
+                    .catch(() => undefined),
+            ])
+        );
+        const promises$ = Object.keys(translations$).map(prop => translations$[prop] ?? Promise.resolve(null));
+        const translations = Promise.all(promises$).then(results => {
+            return Object.keys(translations$).reduce(
+                (acc, task, i) => Object.assign(acc, { [Object.keys(translations$)[i]]: results[i] }),
+                {}
+            );
+        });
+
         return this.dataSetsDhis2Repository
             .get($resource, dataSetsIds)
-            .$promise.then(({ dataSets }) => {
+            .$promise.then(({ dataSets }) => translations.then(translations => ({ translations, dataSets })))
+            .then(({ dataSets, translations }) => {
                 const dataSetsWithoutCommentsAndRemovedSections = dataSets.map(dataSet => ({
                     ...dataSet,
                     sections: dataSet.sections.filter(
@@ -61,10 +78,17 @@ export class ExportDatasetsUseCase {
 
                 const mappedDatasets = getDataSets(translatedDatasets);
 
-                const dataSetsWithHeaders = mappedDatasets.map(dataSet => ({
-                    ...dataSet,
-                    headers: headers.find(({ id }) => id === dataSet.id),
-                }));
+                const dataSetsWithHeaders = mappedDatasets.map(dataSet => {
+                    const healthFacility = translations[dataSet.pickedTranslations]?.FACILITY;
+                    const reportingPeriod = translations[dataSet.pickedTranslations]?.PERIOD;
+                    return {
+                        ...dataSet,
+                        headers: {
+                            healthFacility: healthFacility ? healthFacility + ": " : "",
+                            reportingPeriod: reportingPeriod ? reportingPeriod + ": " : "",
+                        },
+                    };
+                });
 
                 return this.dataSetsExportSpreadsheetRepository.createFiles(dataSetsWithHeaders);
             })
@@ -87,7 +111,8 @@ export class ExportDatasetsUseCase {
 
                     return file?.blob.then(blob => saveAs(blob, sanitizeFileName(file.name)));
                 }
-            });
+            })
+            .catch(err => console.error(err));
     }
 }
 
