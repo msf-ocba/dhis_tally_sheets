@@ -8,7 +8,7 @@ export class ExportDatasetsUseCase {
         const translations$ = _.fromPairs(
             locales.map(locale => [
                 locale,
-                fetch(`../../../languages/${locale}.json`)
+                fetch(`${location}/languages/${locale}.json`)
                     .then(response => response.json())
                     .catch(() => undefined),
             ])
@@ -299,3 +299,5 @@ function mapDataSetTranslations(dataSet) {
         return { ...mappedDataset, pickedTranslations: locale };
     });
 }
+
+const location = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
