@@ -158,15 +158,16 @@ export const TallySheetsController = TallySheets.controller("TallySheetsControll
                 ? $scope.datasets
                 : $scope.datasets.filter(dataset => selectedIds.includes(dataset.id));
 
-            const availableLocales = _.uniq(
-                selectedDatasets
+            const availableLocales = _.uniq([
+                ...selectedDatasets
                     .map(dataset =>
                         dataset.translations?.flatMap(translation =>
                             translation.property === "NAME" ? [translation.locale.split("_")[0]] : []
                         )
                     )
-                    .flat()
-            );
+                    .flat(),
+                "en",
+            ]);
 
             if ($scope.selectAllLangs) $scope.selectedLocales = availableLocales;
             else {
