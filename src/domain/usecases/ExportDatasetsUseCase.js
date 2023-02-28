@@ -6,7 +6,7 @@ export class ExportDatasetsUseCase {
 
     execute($resource, dataSetsIds, _headers, locales, removedSections) {
         const translations$ = _.fromPairs(
-            locales.map(locale => [
+            _.uniq([...locales, "en"]).map(locale => [
                 locale,
                 fetch(`${location}/languages/${locale}.json`)
                     .then(response => response.json())
@@ -79,8 +79,9 @@ export class ExportDatasetsUseCase {
                 const mappedDatasets = getDataSets(translatedDatasets);
 
                 const dataSetsWithHeaders = mappedDatasets.map(dataSet => {
-                    const healthFacility = translations[dataSet.pickedTranslations]?.FACILITY;
-                    const reportingPeriod = translations[dataSet.pickedTranslations]?.PERIOD;
+                    const healthFacility =
+                        translations[dataSet.pickedTranslations]?.FACILITY ?? translations.en.FACILITY;
+                    const reportingPeriod = translations[dataSet.pickedTranslations]?.PERIOD ?? translations.en.PERIOD;
                     return {
                         ...dataSet,
                         headers: {
